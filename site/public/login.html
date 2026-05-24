@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RestaurantOS | Secure B2B SaaS Gate</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "canvas-charcoal": "#0B0C0E",
+                        "premium-white": "#F4F5F6",
+                        "muted-steel": "#8E939E",
+                        "ice-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-fill": "rgba(25, 28, 41, 0.45)",
+                        "primary": "#E5C158",
+                        "primary-container": "#ffe08b"
+                    },
+                    spacing: {
+                        "nav-height": "72px",
+                        "margin-mobile": "24px",
+                        "grid-max-width": "1440px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Central Design System Stylesheet -->
+    <link href="css/global.css" rel="stylesheet"/>
+</head>
+<body class="bg-canvas-charcoal antialiased selection:bg-[#E5C158]/20 selection:text-premium-white min-h-screen flex items-center justify-center relative overflow-hidden">
+
+    <!-- Cinematic Background with Blurred Parallax Image -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden">
+        <img alt="Cinematic luxury restaurant backdrop" class="w-full h-full object-cover scale-105 transition-transform duration-700 ease-out" id="parallax-bg" src="assets/login_bg.png"/>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/85"></div>
+    </div>
+
+    <!-- Login Authentication Box Container -->
+    <main class="w-full max-w-[460px] px-margin-mobile py-12 z-10 reveal-element">
+        <div class="glass-card p-8 md:p-10 rounded-2xl border border-ice-border shadow-2xl space-y-8">
+            
+            <!-- Branding Header -->
+            <header class="text-center space-y-2">
+                <a href="index.html" class="inline-flex items-center gap-2.5 hover:opacity-85 transition-opacity spring-interaction">
+                    <span class="material-symbols-outlined text-[#E5C158] text-3xl font-extrabold">restaurant</span>
+                    <span class="text-2xl font-extrabold text-premium-white tracking-tight">Restaurant<span class="text-[#E5C158]">OS</span></span>
+                </a>
+                <p class="text-[9px] font-mono text-muted-steel uppercase tracking-widest">Enterprise Gastronomy Telemetry Terminal</p>
+            </header>
+
+            <!-- Login form fields -->
+            <form class="space-y-6" onsubmit="return false">
+                <!-- User ID -->
+                <div class="space-y-2">
+                    <label class="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Executive ID / Staff Email</label>
+                    <input id="email-field" class="w-full bg-transparent border-t-0 border-x-0 border-b border-ice-border py-2 px-0 font-mono text-sm text-premium-white focus:ring-0 focus:border-[#E5C158] transition-all placeholder:text-muted-steel/30" placeholder="owner@auragastronomy.com" type="email" value="owner@auragastronomy.com"/>
+                </div>
+
+                <!-- Security Key -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-end">
+                        <label class="font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Security Key / PIN</label>
+                        <a class="font-mono text-[8px] text-[#E5C158] uppercase tracking-widest hover:underline" href="#">Reset PIN</a>
+                    </div>
+                    <input id="pin-field" class="w-full bg-transparent border-t-0 border-x-0 border-b border-ice-border py-2 px-0 font-mono text-sm text-premium-white focus:ring-0 focus:border-[#E5C158] transition-all placeholder:text-muted-steel/30" placeholder="••••••••" type="password" value="880288"/>
+                </div>
+
+                <!-- Maintain session checkbox -->
+                <div class="flex items-center justify-between pt-2">
+                    <label class="flex items-center cursor-pointer group gap-3">
+                        <input class="sr-only peer" type="checkbox" checked/>
+                        <div class="w-9 h-5 bg-white/5 border border-ice-border rounded-full peer peer-checked:bg-[#E5C158] transition-colors relative">
+                            <div class="absolute left-0.5 top-0.5 bg-premium-white peer-checked:bg-canvas-charcoal w-3.5 h-3.5 rounded-full transition-transform peer-checked:translate-x-4"></div>
+                        </div>
+                        <span class="font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Maintain Session Keys</span>
+                    </label>
+                </div>
+
+                <!-- Authenticate Button -->
+                <button onclick="handleLoginSubmit()" id="auth-btn" class="w-full py-4 bg-[#E5C158] text-canvas-charcoal font-display-lg text-xs font-extrabold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-[#E5C158]/10 flex items-center justify-center gap-2 group spring-interaction">
+                    <span>ACCESS OPERATIONS MATRIX</span>
+                    <span class="material-symbols-outlined text-sm font-bold group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative flex items-center py-2 opacity-40">
+                <div class="flex-grow border-t border-ice-border"></div>
+                <span class="flex-shrink mx-4 font-mono text-[9px] uppercase tracking-widest text-muted-steel">Enterprise Credentials</span>
+                <div class="flex-grow border-t border-ice-border"></div>
+            </div>
+
+            <!-- Pre-defined accounts helper (Demonstrates multi-tenancy beautifully!) -->
+            <div class="space-y-3">
+                <h4 class="text-[9px] font-mono tracking-widest text-muted-steel uppercase text-center">Fast-Track Simulation Roles</h4>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="prefillRole('owner@auragastronomy.com', 'Owner')" class="py-2 rounded-lg bg-white/5 border border-ice-border text-[9px] font-mono text-premium-white hover:border-[#E5C158]/50 transition-all font-semibold">
+                        Owner HQ
+                    </button>
+                    <button onclick="prefillRole('chef.marcus@auragastronomy.com', 'Chef')" class="py-2 rounded-lg bg-white/5 border border-ice-border text-[9px] font-mono text-premium-white hover:border-[#E5C158]/50 transition-all font-semibold">
+                        Kitchen Chef
+                    </button>
+                    <button onclick="prefillRole('customer.guest@dining.com', 'Guest')" class="py-2 rounded-lg bg-white/5 border border-ice-border text-[9px] font-mono text-premium-white hover:border-[#E5C158]/50 transition-all font-semibold">
+                        Guest
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Section -->
+            <footer class="text-center pt-2">
+                <div class="flex items-center justify-center gap-1.5 text-muted-steel mb-2">
+                    <span class="material-symbols-outlined text-xs">lock</span>
+                    <span class="font-mono text-[8px] uppercase tracking-widest">TLS 1.3 Secure Operational Node</span>
+                </div>
+                <p class="text-[9px] text-muted-steel/60">© 2026 RestaurantOS. All operational terms apply.</p>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Core Javascript Modules -->
+    <script src="js/state.js"></script>
+    <script src="js/components.js"></script>
+
+    <!-- Authentication Simulation Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Parallax movement for cinematic background
+            document.addEventListener('mousemove', (e) => {
+                const bg = document.getElementById('parallax-bg');
+                if (!bg) return;
+                const x = (e.clientX / window.innerWidth - 0.5) * 15;
+                const y = (e.clientY / window.innerHeight - 0.5) * 15;
+                bg.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Prefill accounts in click simulation
+        function prefillRole(email, role) {
+            document.getElementById('email-field').value = email;
+            document.getElementById('pin-field').value = '880288';
+            window.selectedSimulationRole = role;
+            window.UI?.showToast(`Prefilled simulation credentials for ${role}`, 'info');
+        }
+
+        // Login Handler
+        function handleLoginSubmit() {
+            const btn = document.getElementById('auth-btn');
+            const email = document.getElementById('email-field').value;
+            if (!btn) return;
+
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span> AUTHENTICATING NODE...`;
+            btn.classList.add('opacity-85', 'pointer-events-none');
+
+            // Set role based on prefilled or email match
+            let role = window.selectedSimulationRole || 'Owner';
+            if (email.includes('chef')) role = 'Chef';
+            else if (email.includes('guest') || email.includes('customer')) role = 'Guest';
+
+            setTimeout(() => {
+                // Apply role selection back into global StateManager
+                window.AppStore?.switchRole(role);
+
+                btn.innerHTML = `<span class="material-symbols-outlined text-sm font-bold">check_circle</span> SYSTEM ACCESS GRANTED`;
+                btn.className = "w-full py-4 bg-green-500 text-premium-white font-display-lg text-xs font-extrabold rounded-xl flex items-center justify-center gap-2";
+                
+                window.UI?.showToast(`Welcome back, Elena. Session authorized under ${role} role.`, 'success');
+
+                setTimeout(() => {
+                    // Smart redirect depending on logged in operational modes
+                    if (role === 'Owner' || role === 'Chef') {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        window.location.href = 'chatbot.html';
+                    }
+                }, 800);
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RestaurantOS | The AI Operating System for Premium Food Brands</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "ice-border": "rgba(255, 255, 255, 0.08)",
+                    "outline-variant": "#4d4636",
+                    "tertiary-container": "#a5c6ff",
+                    "surface-dim": "#16130c",
+                    "on-secondary": "#2e3039",
+                    "surface-container": "#221f18",
+                    "surface-variant": "#38342c",
+                    "error-red": "#EF4444",
+                    "deep-surface": "#12141C",
+                    "primary-fixed": "#ffe08b",
+                    "secondary-fixed": "#e1e1ed",
+                    "on-tertiary-container": "#2f5284",
+                    "on-primary-container": "#644f00",
+                    "tertiary-fixed": "#d5e3ff",
+                    "on-surface-variant": "#d0c5b1",
+                    "inverse-on-surface": "#343028",
+                    "on-background": "#e9e1d6",
+                    "inverse-primary": "#745b00",
+                    "surface-tint": "#e7c35a",
+                    "on-primary-fixed-variant": "#584400",
+                    "on-primary-fixed": "#241a00",
+                    "on-error-container": "#ffdad6",
+                    "primary": "#ffde82",
+                    "surface-container-low": "#1e1b14",
+                    "on-tertiary-fixed": "#001b3c",
+                    "secondary-container": "#454650",
+                    "secondary": "#c5c6d1",
+                    "on-error": "#690005",
+                    "primary-container": "#e5c158",
+                    "primary-fixed-dim": "#e7c35a",
+                    "surface-container-lowest": "#110e08",
+                    "on-surface": "#e9e1d6",
+                    "background": "#16130c",
+                    "muted-steel": "#8E939E",
+                    "error": "#ffb4ab",
+                    "on-tertiary": "#033060",
+                    "on-secondary-fixed": "#191b23",
+                    "surface-bright": "#3d3930",
+                    "surface": "#16130c",
+                    "surface-container-high": "#2d2a22",
+                    "tertiary-fixed-dim": "#a8c8ff",
+                    "inverse-surface": "#e9e1d6",
+                    "glass-fill": "rgba(25, 28, 41, 0.45)",
+                    "canvas-charcoal": "#0B0C0E",
+                    "surface-container-highest": "#38342c",
+                    "tertiary": "#d3e1ff",
+                    "secondary-fixed-dim": "#c5c6d1",
+                    "on-secondary-fixed-variant": "#454650",
+                    "outline": "#99907d",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#234778",
+                    "on-secondary-container": "#b4b4bf",
+                    "premium-white": "#F4F5F6",
+                    "on-primary": "#3d2f00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "section-max": "8rem",
+                    "nav-height": "72px",
+                    "container-max": "1440px",
+                    "section-min": "4rem"
+            },
+            "fontFamily": {
+                    "body-lg": ["hankenGrotesk"],
+                    "caption": ["hankenGrotesk"],
+                    "metric-sm": ["Geist Mono"],
+                    "display-xl": ["hankenGrotesk"],
+                    "headline-md": ["hankenGrotesk"],
+                    "headline-lg": ["hankenGrotesk"],
+                    "body-md": ["hankenGrotesk"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "caption": ["12px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "metric-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-xl": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                    "headline-md": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0B0C0E;
+            color: #E9E1D6;
+            font-family: 'Hanken Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(25, 28, 41, 0.45);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #FFDE82, #F4F5F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .floating-effect {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 222, 130, 0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-canvas-charcoal">
+<!-- 1. TopNavBar -->
+<header class="fixed top-0 w-full h-[72px] z-50 backdrop-blur-xl bg-canvas-charcoal/80 border-b border-ice-border">
+<div class="flex justify-between items-center px-gutter h-nav-height max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tighter">
+                RestaurantOS
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md transition-all duration-300" href="#">Features</a>
+<a class="text-on-surface-variant font-medium font-body-md text-body-md hover:text-primary transition-all duration-300" href="#">Intelligence</a>
+<a class="text-on-surface-variant font-medium font-body-md text-body-md hover:text-primary transition-all duration-300" href="#">Pricing</a>
+<a class="text-on-surface-variant font-medium font-body-md text-body-md hover:text-primary transition-all duration-300" href="#">Partners</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden lg:block text-premium-white font-medium font-body-md px-4 py-2 hover:text-primary transition-colors">Sign In</button>
+<button class="bg-primary text-on-primary font-bold px-6 py-2 rounded-lg hover:scale-[1.02] active:scale-[0.98] transition-transform">
+                    Launch Admin
+                </button>
+</div>
+</div>
+</header>
+<main>
+<!-- 2. Hero Section -->
+<section class="relative min-h-screen pt-nav-height flex items-center px-gutter max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 w-full items-center">
+<!-- Left Content -->
+<div class="md:col-span-7 space-y-8">
+<div class="inline-flex items-center px-3 py-1 glass-card rounded-full gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-metric-sm text-metric-sm text-primary uppercase tracking-widest">v2.4 Live Intelligence</span>
+</div>
+<h1 class="font-display-xl text-display-xl text-premium-white leading-none">
+                        The AI Operating <span class="text-gradient">System</span> for Premium Food Brands.
+                    </h1>
+<p class="font-body-lg text-body-lg text-muted-steel max-w-xl">
+                        Precision intelligence for the modern table. Automate the complexity of high-end hospitality with real-time analytics and predictive guest experiences.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-primary text-on-primary font-bold px-8 py-4 rounded-xl hover:scale-[1.02] transition-transform flex items-center gap-2">
+                            Request Demo
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="glass-card text-premium-white font-medium px-8 py-4 rounded-xl hover:bg-white/10 transition-colors">
+                            View Case Studies
+                        </button>
+</div>
+</div>
+<!-- Right Visual: Live Stream Widget -->
+<div class="md:col-span-5 relative">
+<div class="floating-effect glass-card rounded-2xl p-6 border-ice-border shadow-2xl overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm font-bold text-premium-white">Live Order Stream</h3>
+<span class="material-symbols-outlined text-primary">sensors</span>
+</div>
+<div class="space-y-4">
+<!-- Order 1 -->
+<div class="flex items-center justify-between p-3 glass-card rounded-lg border-ice-border relative overflow-hidden">
+<div class="shimmer absolute inset-0 opacity-10"></div>
+<div class="flex gap-4 items-center">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">4</div>
+<div>
+<p class="font-body-md font-bold text-premium-white">Wild Risotto</p>
+<p class="font-caption text-caption text-muted-steel">Truffle Oil, Porcini</p>
+</div>
+</div>
+<div class="px-2 py-1 bg-primary/20 rounded text-[10px] font-bold text-primary border border-primary/30 uppercase tracking-tighter">
+                                    Preparing
+                                </div>
+</div>
+<!-- Order 2 -->
+<div class="flex items-center justify-between p-3 glass-card rounded-lg border-ice-border">
+<div class="flex gap-4 items-center">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">12</div>
+<div>
+<p class="font-body-md font-bold text-premium-white">A5 Wagyu</p>
+<p class="font-caption text-caption text-muted-steel">Garlic Jus, Asparagus</p>
+</div>
+</div>
+<div class="px-2 py-1 bg-green-500/20 rounded text-[10px] font-bold text-green-400 border border-green-500/30 uppercase tracking-tighter">
+                                    Served
+                                </div>
+</div>
+<!-- Order 3 -->
+<div class="flex items-center justify-between p-3 glass-card rounded-lg border-ice-border opacity-60">
+<div class="flex gap-4 items-center">
+<div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/40 font-bold">7</div>
+<div>
+<p class="font-body-md font-bold text-white/80">Oyster Platter</p>
+<p class="font-caption text-caption text-muted-steel">Champagne Mignonette</p>
+</div>
+</div>
+<div class="px-2 py-1 bg-white/10 rounded text-[10px] font-bold text-white/50 border border-white/20 uppercase tracking-tighter">
+                                    Completed
+                                </div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-ice-border flex justify-between items-center">
+<span class="font-metric-sm text-metric-sm text-muted-steel">Avg. Prep Time: <span class="text-primary">18.4m</span></span>
+<span class="material-symbols-outlined text-muted-steel text-sm">more_horiz</span>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-primary/20 blur-[120px] rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- 3. Features Grid -->
+<section class="py-section-max px-gutter max-w-container-max mx-auto">
+<div class="grid md:grid-cols-2 gap-8">
+<!-- Card 1: AI Engine -->
+<div class="glass-card p-10 rounded-3xl group hover:border-primary/30 transition-all duration-500">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-weight="fill">psychology</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-premium-white mb-4">AI Recommendation Engine</h2>
+<p class="font-body-lg text-body-lg text-muted-steel mb-8">
+                        Elevate every guest journey with hyper-personalized pairing suggestions and diet-aware modifications. Our engine analyzes historical preferences and local food trends to suggest the perfect upsell at the perfect moment.
+                    </p>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 glass-card rounded-full font-metric-sm text-metric-sm text-primary">Guest DNA Integration</span>
+<span class="px-4 py-2 glass-card rounded-full font-metric-sm text-metric-sm text-primary">Dynamic Pairings</span>
+</div>
+</div>
+<!-- Card 2: WhatsApp Automation -->
+<div class="glass-card p-10 rounded-3xl md:mt-12 group hover:border-primary/30 transition-all duration-500">
+<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">chat_bubble</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-premium-white mb-4">WhatsApp Ordering Automation</h2>
+<p class="font-body-lg text-body-lg text-muted-steel mb-8">
+                        Frictionless chat-to-table workflows. Allow guests to order, modify, or pay via their preferred messaging apps. Zero apps to download, zero friction—just precision service at their fingertips.
+                    </p>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 glass-card rounded-full font-metric-sm text-metric-sm text-primary">Natural Language Processing</span>
+<span class="px-4 py-2 glass-card rounded-full font-metric-sm text-metric-sm text-primary">Direct POS Sync</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Interactive Menu Preview -->
+<section class="py-section-max bg-deep-surface">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-premium-white mb-4">Curated Experiences</h2>
+<div class="flex gap-8 border-b border-ice-border">
+<button class="pb-4 text-primary font-bold border-b-2 border-primary transition-all">Entrees</button>
+<button class="pb-4 text-muted-steel font-medium hover:text-premium-white transition-all">Mains</button>
+<button class="pb-4 text-muted-steel font-medium hover:text-premium-white transition-all">Drinks</button>
+</div>
+</div>
+<button class="glass-card px-6 py-3 rounded-xl text-primary font-bold hover:bg-white/5 transition-colors">
+                        Explore Full Menu
+                    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 overflow-x-auto md:overflow-visible no-scrollbar">
+<!-- Food Card 1 -->
+<div class="glass-card rounded-3xl overflow-hidden group">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A top-down view of a gourmet scallop dish in a Michelin-starred restaurant setting. The scallops are seared to a golden perfection, garnished with micro-greens and a vibrant coral-colored puree. The lighting is moody and dramatic, focusing on the textures of the food against a dark ceramic plate. The overall aesthetic is ultra-modern, luxurious, and highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUrxz1a1H3mVtRdG9_HomXV-9VuejQwX913tLDUTG668CgzdHoBeLR04NigQpUYI0KaNY0TDZ0Uw_wxTQjNbE3MVwwVTkMDi26d38UN2huapk0Nu7kTqePydPoNRHo_NzFatv4BrKmoF3WwlpI_ZMxhagdwG-1aMxGrDJi5cwr8CMD-DfxApsM9197eIp7fmZG5uPebHvjmo3iBlnBSQP9D5OmSe148McKkYMI9fza09hS1uDt0MaFSxnODwUa2d20O3htKqzEjXSl"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm font-bold text-premium-white">Seared Scallops</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-metric-sm text-metric-sm">4.9</span>
+</div>
+</div>
+<p class="text-muted-steel font-body-md mb-6">U-10 scallops with parsnip silk and brown butter emulsion.</p>
+<div class="flex justify-between items-center">
+<div class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-primary tracking-widest border border-ice-border">Signature</div>
+<button class="glass-card px-4 py-2 rounded-lg text-premium-white hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+                                    Buy
+                                    <span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Food Card 2 -->
+<div class="glass-card rounded-3xl overflow-hidden group">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro shot of a signature dry-aged ribeye steak, sliced to reveal a perfect medium-rare pink center. The crust is charred and seasoned with flaky sea salt. The dish is presented on a minimalist black slate with a single sprig of charred rosemary. High-end editorial photography style with deep shadows and golden highlights reflecting off the juices." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7_YeZMQwo__1aI82n2DPxFgzSz3-deAlqcExidkQtfa2IqUJLhf0sUVloETnAzPFePQHdhp-hHY5SspJ17OQIwFMsuSzecRrTiSGTYjwm85HATAWY4hCAT7MH4d5qeM_8NxyQ6Fq9gHpgLq7DG0kMJa4-2eH5S3FbUT65qTQCSlWKJry-P0ljCO7B8kHsd5YbZw1XToKFd02zJ_8RbRRBR7-c6C8VKyZb4Lx1RRAZYtQrOLXBm15wRiU9aQpqvjtN4-YhpA0mfGxw"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm font-bold text-premium-white">Signature Steak</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-metric-sm text-metric-sm">5.0</span>
+</div>
+</div>
+<p class="text-muted-steel font-body-md mb-6">45-day dry-aged Wagyu ribeye, smoked rosemary, sea salt.</p>
+<div class="flex justify-between items-center">
+<div class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-primary tracking-widest border border-ice-border">Chef's Selection</div>
+<button class="glass-card px-4 py-2 rounded-lg text-premium-white hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+                                    Buy
+                                    <span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Food Card 3 -->
+<div class="glass-card rounded-3xl overflow-hidden group">
+<div class="h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A professional photograph of a luxury craft cocktail in a crystal coupe glass. The liquid is a clear, pale amber, topped with a delicate floral foam and a single edible flower. The background is a dark, upscale bar with soft bokeh from distant amber lights. The image conveys elegance, precision, and the art of mixology in a high-end restaurant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBivPo1_TzRB6Q9wFn-jig3N6vvzBEVsyQi1cYB4vtolFBKbXaoC7Z0yWL4oFU1rpnfEmY4rY2kD9oltoGpMDpWiuCKqDpoPFnBaVIT152HpXBCIsHhYdoiE6bKlK3iFRjeWvzJSIOXupnFOLkMHT0aZ2B5UEVply2spvCX3aNV1yYx1j3qxxVyiOr6pOwzrXsbcFNmnUFFDqiMz3HX8r8KDm-K2UJBhgUmttLNZg8E1IYxf5alueqWvYdzqqqxFWRakI4R_KXbdTCc"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm font-bold text-premium-white">Obsidian Gin</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-metric-sm text-metric-sm">4.8</span>
+</div>
+</div>
+<p class="text-muted-steel font-body-md mb-6">Artisanal gin, charcoal-infused tonic, yuzu, botanical mist.</p>
+<div class="flex justify-between items-center">
+<div class="px-3 py-1 bg-white/5 rounded-full text-[10px] uppercase font-bold text-primary tracking-widest border border-ice-border">Vegan</div>
+<button class="glass-card px-4 py-2 rounded-lg text-premium-white hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+                                    Buy
+                                    <span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. AI Booking Widget -->
+<section class="py-section-max px-gutter max-w-[1000px] mx-auto text-center">
+<h2 class="font-headline-lg text-headline-lg text-premium-white mb-4">Secure Your Table</h2>
+<p class="font-body-lg text-muted-steel mb-12">Let our AI concierge orchestrate your evening.</p>
+<div class="glass-card p-8 rounded-3xl border-primary/20 text-left">
+<div class="flex gap-4 mb-8 overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs">1</span>
+<span>Calendar</span>
+</div>
+<div class="h-[1px] w-12 bg-ice-border self-center"></div>
+<div class="flex items-center gap-2 text-muted-steel">
+<span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">2</span>
+<span>Time</span>
+</div>
+<div class="h-[1px] w-12 bg-ice-border self-center"></div>
+<div class="flex items-center gap-2 text-muted-steel">
+<span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">3</span>
+<span>Party</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-6">
+<div class="glass-card p-4 rounded-2xl">
+<h4 class="font-metric-sm text-metric-sm text-muted-steel mb-4 uppercase">Select Date</h4>
+<div class="grid grid-cols-7 gap-2 text-center text-sm">
+<span class="text-muted-steel">M</span><span class="text-muted-steel">T</span><span class="text-muted-steel">W</span><span class="text-muted-steel">T</span><span class="text-muted-steel">F</span><span class="text-muted-steel">S</span><span class="text-muted-steel">S</span>
+<button class="p-2 text-muted-steel">14</button>
+<button class="p-2 text-muted-steel">15</button>
+<button class="p-2 bg-primary text-on-primary font-bold rounded-lg shadow-lg">16</button>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors">17</button>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors">18</button>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors">19</button>
+<button class="p-2 hover:bg-white/5 rounded-lg transition-colors">20</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col justify-between">
+<div class="space-y-6">
+<div>
+<h4 class="font-metric-sm text-metric-sm text-muted-steel mb-2 uppercase">Preferred Time</h4>
+<div class="flex gap-2">
+<button class="px-4 py-2 glass-card rounded-lg hover:border-primary transition-colors">19:00</button>
+<button class="px-4 py-2 glass-card rounded-lg border-primary text-primary bg-primary/10">20:30</button>
+<button class="px-4 py-2 glass-card rounded-lg hover:border-primary transition-colors">21:45</button>
+</div>
+</div>
+<div>
+<h4 class="font-metric-sm text-metric-sm text-muted-steel mb-2 uppercase">Party Size</h4>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full glass-card flex items-center justify-center">-</button>
+<span class="text-2xl font-bold">2 Persons</span>
+<button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-primary">+</button>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-bold py-4 rounded-xl mt-8 hover:scale-[1.01] active:scale-95 transition-all">
+                            Confirm Intelligence Reservation
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- 6. Footer -->
+<footer class="w-full py-section-min bg-canvas-charcoal border-t border-ice-border">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex flex-col gap-2">
+<div class="text-on-surface font-bold text-headline-sm">RestaurantOS</div>
+<div class="font-caption text-caption text-muted-steel">© 2024 RestaurantOS Intelligence. Precision for the Modern Table.</div>
+</div>
+<div class="flex gap-8">
+<a class="font-caption text-caption text-muted-steel hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="font-caption text-caption text-muted-steel hover:text-primary transition-colors" href="#">Terms</a>
+<a class="font-caption text-caption text-muted-steel hover:text-primary transition-colors" href="#">API Status</a>
+<a class="font-caption text-caption text-muted-steel hover:text-primary transition-colors" href="#">Support</a>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-muted-steel hover:text-primary cursor-pointer transition-colors">language</span>
+<span class="material-symbols-outlined text-muted-steel hover:text-primary cursor-pointer transition-colors">notifications</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for order status updates
+        const orderBadges = document.querySelectorAll('.badge-status');
+        setInterval(() => {
+            const random = Math.random();
+            if(random > 0.7) {
+                // Future implementation: cycle order statuses randomly for visual dynamism
+            }
+        }, 3000);
+    </script>
+</body></html>

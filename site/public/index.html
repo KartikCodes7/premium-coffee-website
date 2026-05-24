@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RestaurantOS | Enterprise AI Hub for Premium Dining</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "canvas-charcoal": "#0B0C0E",
+                        "premium-white": "#F4F5F6",
+                        "muted-steel": "#8E939E",
+                        "ice-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-fill": "rgba(25, 28, 41, 0.45)",
+                        "primary": "#E5C158",
+                        "primary-container": "#ffe08b"
+                    },
+                    spacing: {
+                        "nav-height": "72px",
+                        "margin-mobile": "24px",
+                        "grid-max-width": "1440px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Central Design System Stylesheet -->
+    <link href="css/global.css" rel="stylesheet"/>
+</head>
+<body class="bg-canvas-charcoal selection:bg-[#E5C158]/20 selection:text-premium-white">
+
+    <!-- Global Reactive Header -->
+    <div id="global-header"></div>
+
+    <!-- Main Content Canvas -->
+    <main class="pt-nav-height">
+        
+        <!-- Hero Section -->
+        <section class="relative min-h-[calc(100vh-nav-height)] flex items-center px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-center">
+                
+                <!-- Left Column text -->
+                <div class="lg:col-span-7 space-y-8 reveal-element">
+                    <div class="inline-flex items-center px-3.5 py-1.5 glass-card rounded-full gap-2 border border-ice-border">
+                        <span class="w-2 h-2 rounded-full bg-[#E5C158] animate-pulse"></span>
+                        <span class="font-mono text-[9px] text-[#E5C158] uppercase tracking-widest">v2.6 Enterprise Intelligence Live</span>
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-premium-white leading-none tracking-tight">
+                        The AI Operating System for <span class="bg-gradient-to-r from-[#E5C158] to-premium-white bg-clip-text text-transparent">Premium Food Brands</span>.
+                    </h1>
+                    
+                    <p class="text-base md:text-lg text-muted-steel max-w-xl leading-relaxed">
+                        Automate fine dining and high-end hospitality operations. Orchestrate table pairings, real-time kitchen queues, and cohort telemetry inside a singular premium B2B environment.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="login.html" class="bg-[#E5C158] text-canvas-charcoal font-bold px-8 py-4 rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg flex items-center gap-2 spring-interaction text-sm">
+                            Launch Operations Console
+                            <span class="material-symbols-outlined font-bold text-sm">arrow_forward</span>
+                        </a>
+                        <a href="chatbot.html" class="glass-card text-premium-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 hover:border-[#E5C158]/50 transition-all text-sm border border-ice-border spring-interaction">
+                            Chat AI Sommelier
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column visual telemetry stream -->
+                <div class="lg:col-span-5 relative reveal-element" style="animation-delay: 0.15s;">
+                    <div class="floating-element glass-card rounded-2xl p-6 border border-ice-border shadow-2xl space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-bold text-premium-white flex items-center gap-2">
+                                HQ Operations Feed
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#E5C158] animate-ping"></span>
+                            </h3>
+                            <span class="material-symbols-outlined text-[#E5C158]">sensors</span>
+                        </div>
+
+                        <!-- Simulated order stream synced dynamically with state orders -->
+                        <div id="hero-order-stream" class="space-y-4">
+                            <!-- Injected dynamically via JS state -->
+                        </div>
+
+                        <div class="pt-4 border-t border-ice-border flex justify-between items-center text-xs font-mono">
+                            <span class="text-muted-steel">Avg. Pacing: <span class="text-[#E5C158] font-bold">18.4m</span></span>
+                            <a href="dashboard.html" class="text-[#E5C158] hover:underline flex items-center gap-1">
+                                Full Operations console
+                                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Ambient Glow -->
+                    <div class="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-[#E5C158]/10 blur-[120px] rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B Feature Section -->
+        <section class="py-20 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto space-y-12 reveal-element" style="animation-delay: 0.3s;">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <span class="text-[10px] font-mono tracking-widest text-[#E5C158] uppercase">Engineered for Excellence</span>
+                <h2 class="text-3xl font-extrabold text-premium-white tracking-tight">Enterprise Infrastructure Modules</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- AI Somm Card -->
+                <div class="glass-card p-8 md:p-10 rounded-2xl group hover:border-[#E5C158]/35 transition-all duration-500 space-y-6">
+                    <div class="w-14 h-14 bg-[#E5C158]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[#E5C158] text-2xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-premium-white tracking-tight">Sommelier & Concierge AI</h3>
+                    <p class="text-sm text-muted-steel leading-relaxed">
+                        Elevate every guest experience with hyper-personalized sommelier recommendations and diet-aware modifications. Upsell matching vintages dynamically at the optimal checkout window.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[10px] font-mono">
+                        <span class="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">Sommelier DNA</span>
+                        <span class="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">Direct Table Cart Sync</span>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Card -->
+                <div class="glass-card p-8 md:p-10 rounded-2xl group hover:border-[#E5C158]/35 transition-all duration-500 space-y-6">
+                    <div class="w-14 h-14 bg-[#E5C158]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[#E5C158] text-2xl">chat_bubble</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-premium-white tracking-tight">Operations Telemetry Terminal</h3>
+                    <p class="text-sm text-muted-steel leading-relaxed">
+                        Frictionless queue pacing. Synchronize cart entries and checkout authorizations directly to kitchen duty commander displays. Zero delay, absolute precision.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[10px] font-mono">
+                        <span class="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">Reactive State</span>
+                        <span class="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">B2B Role Simulation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Spec Menu Selector (Linked to live cart!) -->
+        <section class="py-20 bg-gradient-to-b from-[#12141C] to-canvas-charcoal border-y border-ice-border">
+            <div class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop space-y-12">
+                <div class="flex flex-col md:flex-row justify-between items-end gap-6">
+                    <div>
+                        <span class="text-[10px] font-mono tracking-widest text-[#E5C158] uppercase">Selected Experiences</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight mt-1">Curated Gastronomic Signature Dishes</h2>
+                    </div>
+                    <a href="chatbot.html" class="glass-card px-5 py-3 rounded-lg text-xs font-bold text-[#E5C158] border border-ice-border hover:border-[#E5C158]/50 transition-all spring-interaction">
+                        Consult AI Sommelier
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Dish 1: Scallops -->
+                    <div class="glass-card rounded-2xl overflow-hidden group border border-ice-border hover:border-[#E5C158]/35 transition-all">
+                        <div class="h-56 overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="assets/chatbot_scallops.png" alt="Seared Scallops"/>
+                        </div>
+                        <div class="p-5 space-y-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-sm font-bold text-premium-white">Seared Scallops</h3>
+                                <div class="flex items-center gap-1 text-[#E5C158] font-mono text-xs">
+                                    <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-muted-steel line-clamp-2">Hokkaido scallops with pea purée, crispy pancetta, and citrus emulsion.</p>
+                            
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="font-mono text-sm text-[#E5C158] font-bold">$38.00</span>
+                                <button onclick="buyMenuSpecial('seared-scallops', 'Seared Scallops', 38.00, 'assets/chatbot_scallops.png')" class="bg-white/5 border border-ice-border hover:border-[#E5C158]/50 text-premium-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 spring-interaction">
+                                    <span>Buy</span>
+                                    <span class="material-symbols-outlined text-xs font-bold">shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dish 2: Wagyu -->
+                    <div class="glass-card rounded-2xl overflow-hidden group border border-ice-border hover:border-[#E5C158]/35 transition-all">
+                        <div class="h-56 overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="assets/chatbot_steak.png" alt="Signature Wagyu"/>
+                        </div>
+                        <div class="p-5 space-y-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-sm font-bold text-premium-white">Signature Wagyu</h3>
+                                <div class="flex items-center gap-1 text-[#E5C158] font-mono text-xs">
+                                    <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span>5.0</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-muted-steel line-clamp-2">Grade A5 Kobe beef, butter-poached with smoked marrow jus and truffle mash.</p>
+                            
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="font-mono text-sm text-[#E5C158] font-bold">$124.00</span>
+                                <button onclick="buyMenuSpecial('wagyu-steak', 'Signature Wagyu', 124.00, 'assets/chatbot_steak.png')" class="bg-white/5 border border-ice-border hover:border-[#E5C158]/50 text-premium-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 spring-interaction">
+                                    <span>Buy</span>
+                                    <span class="material-symbols-outlined text-xs font-bold">shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drink 3: Cabernet -->
+                    <div class="glass-card rounded-2xl overflow-hidden group border border-ice-border hover:border-[#E5C158]/35 transition-all">
+                        <div class="h-56 overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="assets/order_gin.png" alt="Napa Valley Cabernet 2018"/>
+                        </div>
+                        <div class="p-5 space-y-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-sm font-bold text-premium-white">Napa Valley Cabernet 2018</h3>
+                                <div class="flex items-center gap-1 text-[#E5C158] font-mono text-xs">
+                                    <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-muted-steel line-clamp-2">Robust dark fruit profile, velvet tannins, pairing beautifully with dry-aged steak.</p>
+                            
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="font-mono text-sm text-[#E5C158] font-bold">$95.00</span>
+                                <button onclick="buyMenuSpecial('napa-cabernet', 'Napa Valley Cabernet 2018', 95.00, 'assets/order_gin.png')" class="bg-white/5 border border-ice-border hover:border-[#E5C158]/50 text-premium-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 spring-interaction">
+                                    <span>Buy</span>
+                                    <span class="material-symbols-outlined text-xs font-bold">shopping_cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Booking orchestration section -->
+        <section class="py-20 px-margin-mobile md:px-margin-desktop max-w-[960px] mx-auto text-center space-y-8 reveal-element">
+            <div>
+                <span class="text-[10px] font-mono tracking-widest text-[#E5C158] uppercase">Painless Planning</span>
+                <h2 class="text-3xl font-extrabold text-premium-white tracking-tight">Secure Guest Attendance</h2>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl border border-ice-border text-left grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <!-- Form variables -->
+                <div class="space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider mb-2">Dining Date</label>
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <button class="py-2 rounded-lg bg-[#E5C158]/10 text-[#E5C158] border border-[#E5C158]/35 font-bold">TONIGHT</button>
+                                <button class="py-2 rounded-lg bg-white/5 border border-ice-border hover:border-premium-white transition-colors">TOMORROW</button>
+                                <button class="py-2 rounded-lg bg-white/5 border border-ice-border hover:border-premium-white transition-colors">TUESDAY</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider mb-2">Preferred Window Hour</label>
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <button class="py-2 rounded-lg bg-white/5 border border-ice-border hover:border-premium-white transition-colors">18:00</button>
+                                <button class="py-2 rounded-lg bg-[#E5C158]/10 text-[#E5C158] border border-[#E5C158]/35 font-bold">20:30</button>
+                                <button class="py-2 rounded-lg bg-white/5 border border-ice-border hover:border-premium-white transition-colors">22:00</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="bookTableSimulation()" class="w-full py-4 rounded-xl bg-[#E5C158] text-canvas-charcoal font-display-lg text-xs font-extrabold hover:brightness-110 active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-2 spring-interaction">
+                        <span>CONFIRM INTELLIGENT RESERVATION</span>
+                        <span class="material-symbols-outlined text-sm font-bold">check_circle</span>
+                    </button>
+                </div>
+
+                <!-- Graphic display -->
+                <div class="bg-white/5 rounded-xl border border-ice-border p-5 space-y-4 flex flex-col justify-center">
+                    <h4 class="text-xs font-bold text-premium-white">Window Booth Selection</h4>
+                    <p class="text-xs text-muted-steel">AI Sommelier Concierge will lock in a prime glassmorphic window booth matching this telemetry configuration.</p>
+                    <div class="h-28 rounded-lg overflow-hidden border border-ice-border relative">
+                        <img class="w-full h-full object-cover" src="assets/login_bg.png" alt="Window Booth View">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <span class="text-[10px] font-mono bg-[#E5C158]/90 text-canvas-charcoal px-2.5 py-1 rounded font-bold uppercase tracking-wider">Booth 4 Selected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Standard Footer -->
+    <footer class="w-full py-12 bg-canvas-charcoal border-t border-ice-border">
+        <div class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col gap-1">
+                <span class="text-base font-bold text-premium-white">RestaurantOS</span>
+                <span class="text-[10px] font-mono text-muted-steel uppercase tracking-widest">Enterprise Precision for the Modern Table</span>
+            </div>
+            
+            <div class="flex gap-8 text-[11px] text-[#8E939E] font-mono">
+                <a class="hover:text-[#E5C158] transition-colors" href="login.html">HQ Admin</a>
+                <a class="hover:text-[#E5C158] transition-colors" href="chatbot.html">Concierge Sommelier</a>
+                <a class="hover:text-[#E5C158] transition-colors" href="order.html">Guest Checkout</a>
+                <a class="hover:text-[#E5C158] transition-colors" href="analytics.html">Analytics Hub</a>
+            </div>
+
+            <p class="text-[9px] text-muted-steel/60">© 2026 RestaurantOS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- B2B Operational Role Controller Widget -->
+    <div id="role-switcher-container"></div>
+
+    <!-- Core Javascript Modules -->
+    <script src="js/state.js"></script>
+    <script src="js/components.js"></script>
+
+    <!-- Page Sync Javascript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeroStream();
+
+            // Sync stream when operations change
+            window.AppStore?.addEventListener('statechange', () => {
+                renderHeroStream();
+            });
+        });
+
+        // --- Render Hero Orders Stream ---
+        function renderHeroStream() {
+            const stream = document.getElementById('hero-order-stream');
+            if (!stream) return;
+
+            const orders = window.AppStore?.getOrders() || [];
+            
+            // Limit to 3 items
+            const show = orders.slice(0, 3);
+            if (show.length === 0) {
+                stream.innerHTML = `<p class="text-xs text-muted-steel italic text-center py-4">No operations currently active.</p>`;
+                return;
+            }
+
+            stream.innerHTML = show.map((o, idx) => {
+                let badgeClass = 'bg-[#E5C158]/10 text-[#E5C158] border border-[#E5C158]/20';
+                if (o.status === 'Served') badgeClass = 'bg-green-500/10 text-green-400 border border-green-500/20';
+
+                return `
+                    <div class="flex items-center justify-between p-3.5 glass-card rounded-xl border border-ice-border relative overflow-hidden transition-all hover:border-[#E5C158]/20">
+                        ${idx === 0 ? '<div class="shimmer absolute inset-0 opacity-10"></div>' : ''}
+                        <div class="flex gap-4 items-center">
+                            <div class="w-8 h-8 rounded-full bg-[#E5C158]/10 flex items-center justify-center text-[#E5C158] font-bold font-mono text-xs">
+                                ${o.id.substring(4)}
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-premium-white">${o.name}</p>
+                                <p class="text-[10px] text-muted-steel truncate max-w-[200px]">${o.items}</p>
+                            </div>
+                        </div>
+                        <div class="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${badgeClass}">
+                            ${o.status}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- Menu specials buy click ---
+        function buyMenuSpecial(id, name, price, img) {
+            window.AppStore?.addToCart({
+                id,
+                name,
+                price,
+                qty: 1,
+                image: img,
+                options: { note: 'Lander special order' }
+            });
+        }
+
+        // --- Booking confirmation ---
+        function bookTableSimulation() {
+            window.AppStore?.addNotification("New reservation booked under Elena (4 guests) tonight at 20:30", "success");
+            window.UI?.showToast("Booth reservation booked! Directing to Sommelier chat.", "success");
+            setTimeout(() => {
+                window.location.href = 'chatbot.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

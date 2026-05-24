@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RestaurantOS | Secure Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;700;800&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Components JSON Mapping Logic Integrated via Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "ice-border": "rgba(255, 255, 255, 0.08)",
+              "secondary-fixed-dim": "#c5c6d1",
+              "primary-fixed-dim": "#e7c35a",
+              "surface-variant": "#343537",
+              "surface-container-high": "#292a2c",
+              "on-primary-fixed-variant": "#584400",
+              "secondary-fixed": "#e1e1ed",
+              "on-secondary-fixed": "#191b23",
+              "on-primary-fixed": "#241a00",
+              "error-red": "#EF4444",
+              "secondary": "#c5c6d1",
+              "on-tertiary-fixed": "#171c24",
+              "inverse-primary": "#745b00",
+              "on-secondary": "#2e3039",
+              "surface-container": "#1f2022",
+              "surface-container-highest": "#343537",
+              "on-error": "#690005",
+              "background": "#121315",
+              "glass-fill": "rgba(25, 28, 41, 0.45)",
+              "tertiary-fixed": "#dee2ee",
+              "primary-container": "#e5c158",
+              "primary": "#ffde82",
+              "secondary-container": "#454650",
+              "error": "#ffb4ab",
+              "on-surface": "#e3e2e5",
+              "surface-tint": "#e7c35a",
+              "on-error-container": "#ffdad6",
+              "surface-container-low": "#1b1c1e",
+              "surface-bright": "#38393b",
+              "on-primary": "#3d2f00",
+              "on-background": "#e3e2e5",
+              "on-surface-variant": "#d0c5b1",
+              "surface": "#121315",
+              "inverse-surface": "#e3e2e5",
+              "tertiary": "#dce1ed",
+              "on-secondary-fixed-variant": "#454650",
+              "primary-fixed": "#ffe08b",
+              "surface-dim": "#121315",
+              "outline-variant": "#4d4636",
+              "outline": "#99907d",
+              "premium-white": "#F4F5F6",
+              "surface-container-lowest": "#0d0e10",
+              "tertiary-container": "#c0c5d1",
+              "on-tertiary": "#2b313a",
+              "on-primary-container": "#644f00",
+              "error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#424751",
+              "tertiary-fixed-dim": "#c2c6d2",
+              "inverse-on-surface": "#303033",
+              "on-tertiary-container": "#4c525b",
+              "on-secondary-container": "#b4b4bf",
+              "canvas-charcoal": "#0b0c0e",
+              "muted-steel": "#99907d"
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+            spacing: {
+              "container-max": "1440px",
+              "section-gap-min": "4rem",
+              "gutter": "24px",
+              "sidebar-width": "280px",
+              "section-gap-max": "8rem",
+              "nav-height": "72px",
+              "margin-mobile": "24px",
+              "margin-desktop": "64px"
+            },
+            fontFamily: {
+              "label-mono": ["Geist Mono"],
+              "display-lg": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+              "headline-md": ["Hanken Grotesk"],
+              "metric-lg": ["Geist Mono"],
+              "display-lg-mobile": ["Hanken Grotesk"],
+              "body-lg": ["Hanken Grotesk"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      body {
+        background-color: #0b0c0e;
+        color: #e3e2e5;
+        font-family: 'Hanken Grotesk', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-card {
+        background: rgba(25, 28, 41, 0.45);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .ice-border {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .lux-gold-glow:focus {
+        box-shadow: 0 0 15px rgba(229, 193, 88, 0.2);
+        border-color: #ffde82;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .active-pill {
+        background: #ffde82;
+        color: #0b0c0e;
+      }
+      @keyframes waterfall {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-waterfall {
+        animation: waterfall 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      }
+    </style>
+</head>
+<body class="bg-canvas-charcoal selection:bg-primary/30 min-h-screen">
+<!-- TopAppBar Integration -->
+<header class="fixed top-0 w-full h-nav-height bg-surface/80 backdrop-blur-xl z-50 border-b border-ice-border">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-full">
+<button class="flex items-center gap-2 group transition-all duration-300">
+<span class="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-body-md text-body-md text-muted-steel group-hover:text-primary">Back to Menu</span>
+</button>
+<div class="absolute left-1/2 -translate-x-1/2 font-display-lg text-headline-md font-bold text-primary">
+                RestaurantOS
+            </div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-ice-border bg-glass-fill">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-mono text-label-mono text-secondary uppercase tracking-widest text-[10px]">Secure Checkout</span>
+</div>
+<button class="relative p-2 rounded-full hover:bg-surface-variant/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-on-surface">shopping_cart</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-[nav-height] max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- Asymmetric Layout Container -->
+<div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 items-start">
+<!-- Left Column: Cart & Customization -->
+<section class="space-y-12 animate-waterfall" style="animation-delay: 0.1s;">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-premium-white mb-2">Review Order</h1>
+<p class="font-body-lg text-body-lg text-muted-steel">Hand-selected culinary experiences prepared for your arrival.</p>
+</div>
+<!-- Cart Item 1 -->
+<div class="glass-card rounded-xl overflow-hidden p-6 md:p-8 space-y-8 group transition-all duration-500 hover:border-primary/30">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 border border-ice-border">
+<img alt="Signature Steak" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A macro close-up of a premium dry-aged signature steak, perfectly seared with crosshatch grill marks, resting on a dark slate plate. The meat is juicy and medium-rare, garnished with a sprig of fresh rosemary and sea salt crystals. The lighting is cinematic and low-key, highlighting the rich textures and golden-brown crust. Dark charcoal background with elegant golden highlights creates a luxury fine dining atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArzaDv8k4P8t4K9dLeyp2j3Fg2s_tSWwoaA027Y2nLPRDFWHag32YbVivUFflSpitxVEw43CT8jlqf_XQ1mnfxCTurxG4cYIlnD4m8mg9cAO0Z8Ehro-7tyEx8VjqyyIxSmNmTlScBgRYJ69JplUoX_4Gqz7F3WJiOoFvGPnBWiTEmO_HXa-tyG6hF36GNXHBGWxylELu5FJnYK9ikKq9vST_ecGRT7zvBgB4_1_eSXefqGIfGQExEoPul7eqvmnTs7OO6FEdiRvjX"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-premium-white">Signature Steak</h3>
+<p class="font-body-md text-body-md text-muted-steel mt-1">Prime 45-day dry aged ribeye, roasted bone marrow, red wine jus.</p>
+</div>
+<span class="font-metric-lg text-metric-lg text-primary">$124.00</span>
+</div>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-4 bg-surface-container rounded-full px-4 py-2 border border-ice-border">
+<button class="hover:text-primary transition-colors active:scale-90"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="font-label-mono text-label-mono w-4 text-center">01</span>
+<button class="hover:text-primary transition-colors active:scale-90"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<button class="text-error-red/70 hover:text-error-red font-label-mono text-label-mono transition-colors">REMOVE</button>
+</div>
+</div>
+</div>
+<!-- Customization Panel -->
+<div class="bg-surface-container-low/50 rounded-lg p-6 border border-ice-border space-y-6">
+<div>
+<label class="font-label-mono text-label-mono text-muted-steel uppercase tracking-widest text-[11px] block mb-4">Meat Temperature</label>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-2 rounded-full border border-ice-border font-body-md text-body-md hover:border-primary transition-all">Rare</button>
+<button class="px-5 py-2 rounded-full bg-primary text-canvas-charcoal font-body-md text-body-md font-bold transition-all shadow-lg shadow-primary/20">Medium-Rare</button>
+<button class="px-5 py-2 rounded-full border border-ice-border font-body-md text-body-md hover:border-primary transition-all">Medium</button>
+<button class="px-5 py-2 rounded-full border border-ice-border font-body-md text-body-md hover:border-primary transition-all">Well Done</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-ice-border">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span class="font-body-md text-body-md text-premium-white">Add Black Truffle Butter</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-mono text-label-mono text-muted-steel">+$5.00</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Cart Item 2 -->
+<div class="glass-card rounded-xl p-6 md:p-8 group transition-all duration-500 hover:border-primary/30">
+<div class="flex flex-col md:flex-row gap-6">
+<div class="w-full md:w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 border border-ice-border">
+<img alt="Obsidian Gin" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A sophisticated glass of artisanal Obsidian Gin cocktail served in a crystal tumbler with a single large clear ice cube. The liquid is dark and moody with botanical infusions, garnished with a twist of orange peel. The background is a dim, high-end speakeasy bar with subtle amber backlighting and polished dark wood textures. Cinematic lighting creates sharp reflections on the crystal glassware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHbBSOIIlnn9WPKdgPg9_bcLM2Mrqsd-4MbAr8YMtkXp75yZcKoaPb-kB4jlVNPao02B926QabkglS-ROh5xzPYpzLNqEu5zuFTJVhlFuwJgO444nbtxQcFce4woYid6ZBieBYcYTLsrEpk6wIVmY6yBkFytpiASRDbnigwcdiKMjJnjcMu0srfffNkp1mR_L_l54T70uObrn9vX8xHE-gRxFi5hFCxfFCt3dZ7a_QXx5Rtai2vU_IJ8BLTfD2JfK2PZjY8NV46Bti"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-headline-md text-premium-white">Obsidian Gin</h3>
+<p class="font-body-md text-body-md text-muted-steel mt-1">Charcoal-filtered botanical gin, black cardamom, artisanal tonic.</p>
+</div>
+<span class="font-metric-lg text-metric-lg text-primary">$28.00</span>
+</div>
+<div class="flex items-center justify-between mt-6">
+<div class="flex items-center gap-4 bg-surface-container rounded-full px-4 py-2 border border-ice-border">
+<button class="hover:text-primary transition-colors active:scale-90"><span class="material-symbols-outlined text-sm">remove</span></button>
+<span class="font-label-mono text-label-mono w-4 text-center">01</span>
+<button class="hover:text-primary transition-colors active:scale-90"><span class="material-symbols-outlined text-sm">add</span></button>
+</div>
+<button class="text-error-red/70 hover:text-error-red font-label-mono text-label-mono transition-colors">REMOVE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Special Instructions -->
+<div class="space-y-4">
+<h4 class="font-label-mono text-label-mono text-muted-steel uppercase tracking-widest text-[11px]">Special Instructions</h4>
+<textarea class="w-full glass-card rounded-lg p-6 font-body-md text-body-md text-premium-white focus:outline-none focus:border-primary lux-gold-glow transition-all min-h-[120px] placeholder:text-muted-steel/50" placeholder="Allergies, table preferences, or dietary requirements..."></textarea>
+</div>
+</section>
+<!-- Right Column: Receipt & Payment -->
+<aside class="sticky top-[104px] space-y-6 animate-waterfall" style="animation-delay: 0.3s;">
+<div class="glass-card rounded-xl overflow-hidden border border-ice-border">
+<div class="p-8 border-b border-ice-border">
+<h2 class="font-headline-md text-headline-md text-premium-white mb-6">Order Summary</h2>
+<div class="space-y-4">
+<div class="flex justify-between items-center font-body-md text-body-md text-muted-steel">
+<span>Subtotal</span>
+<span class="font-label-mono">$152.00</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md text-muted-steel">
+<span>Tax (8.875%)</span>
+<span class="font-label-mono">$13.49</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md text-muted-steel">
+<span>Service Charge (20%)</span>
+<span class="font-label-mono">$30.40</span>
+</div>
+</div>
+</div>
+<div class="p-8 bg-primary/5">
+<div class="flex justify-between items-center mb-8">
+<span class="font-headline-md text-headline-md text-premium-white">Total</span>
+<span class="font-metric-lg text-[32px] text-primary">$195.89</span>
+</div>
+<!-- Payment Method -->
+<div class="space-y-4 mb-8">
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-3 rounded-lg border border-primary bg-primary/10 text-primary transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-mono text-[12px]">APPLE PAY</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 rounded-lg border border-ice-border bg-surface-container text-muted-steel hover:text-premium-white hover:border-premium-white transition-all">
+<span class="material-symbols-outlined text-sm">credit_card</span>
+<span class="font-label-mono text-[12px]">CARD</span>
+</button>
+</div>
+<!-- Mock Card UI -->
+<div class="bg-surface-container rounded-lg p-4 border border-ice-border space-y-4">
+<div class="space-y-1">
+<label class="font-label-mono text-[10px] text-muted-steel uppercase">Cardholder Name</label>
+<input class="w-full bg-transparent border-none p-0 font-body-md text-premium-white focus:ring-0 placeholder:text-muted-steel/30" placeholder="JULIAN VANDERBILT" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-mono text-[10px] text-muted-steel uppercase">Card Number</label>
+<div class="flex items-center justify-between">
+<input class="w-full bg-transparent border-none p-0 font-metric-lg text-premium-white focus:ring-0 tracking-widest placeholder:text-muted-steel/30" placeholder="•••• •••• •••• 8842" type="text"/>
+<img alt="Mastercard" class="h-4 opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7bDel4keAEOh-z6ge6195Eg8QixQLT5heiCaLE1Oa4OIi35gG2-JIeQLI7W1dIVvATqJrCzuYPjmSzZcDppijz8A6j7opd2hkPETjWlOKD3ZNa8daoGov4uvNVSSLWPJdJVa9Xk6TmnvMw76boL7Dn9qVdSikpXxXAFasME1tbB9oYfCNUWrMS3ysG7niCSbKANq44D_8U1HXJpEis37T-xA0Z14hzIccO97QYeRphNIEaJ99aIA3qN5THbPr5lA69igq5XFrCXlL"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="font-label-mono text-[10px] text-muted-steel uppercase">Expiry</label>
+<input class="w-full bg-transparent border-none p-0 font-body-md text-premium-white focus:ring-0 placeholder:text-muted-steel/30" placeholder="04/28" type="text"/>
+</div>
+<div class="space-y-1 text-right">
+<label class="font-label-mono text-[10px] text-muted-steel uppercase">CVV</label>
+<input class="w-full bg-transparent border-none p-0 font-body-md text-premium-white focus:ring-0 text-right placeholder:text-muted-steel/30" placeholder="•••" type="password"/>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-5 rounded-lg bg-primary text-canvas-charcoal font-display-lg text-headline-md font-extrabold hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-2xl shadow-primary/20 flex items-center justify-center gap-3 group">
+                            COMPLETE ORDER
+                            <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+<p class="text-center mt-6 font-label-mono text-[10px] text-muted-steel uppercase tracking-widest opacity-60">
+                            Secured by RestaurantOS 256-bit encryption
+                        </p>
+</div>
+</div>
+<!-- Atmospheric Detail -->
+<div class="flex items-center gap-4 px-2 opacity-40">
+<div class="h-px flex-grow bg-gradient-to-r from-transparent to-muted-steel"></div>
+<span class="font-label-mono text-[10px]">EST. DELIVERY: 45 MIN</span>
+<div class="h-px flex-grow bg-gradient-to-l from-transparent to-muted-steel"></div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Add subtle parallax effect to glass cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            const x = (e.clientX - window.innerWidth / 2) / 100;
+            const y = (e.clientY - window.innerHeight / 2) / 100;
+            
+            cards.forEach(card => {
+                card.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body></html>

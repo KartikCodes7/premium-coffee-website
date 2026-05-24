@@ -1,0 +1,66 @@
+{
+  "name": "projects/11851955877669331089",
+  "projectId": "11851955877669331089",
+  "title": "RestaurantOS",
+  "visibility": "PRIVATE",
+  "projectType": "PROJECT_DESIGN",
+  "origin": "STITCH",
+  "deviceType": "DESKTOP",
+  "designTheme": {
+    "assetId": "1b397006364c4166b27aeb2c87c49672"
+  },
+  "screens": {
+    "index": {
+      "id": "fa178af925bd4f16a7065ea0990a8878",
+      "sourceScreen": "projects/11851955877669331089/screens/fa178af925bd4f16a7065ea0990a8878",
+      "width": 2560,
+      "height": 7232
+    },
+    "A premium, high-fidelity area chart showing weekly revenue trends for a luxury restaurant dashboard.": {
+      "id": "4caf12d37a9644dea200334987fbb224",
+      "sourceScreen": "projects/11851955877669331089/screens/4caf12d37a9644dea200334987fbb224",
+      "width": 1344,
+      "height": 768
+    },
+    "dashboard": {
+      "id": "63d942c2c864407f811045f94b055f50",
+      "sourceScreen": "projects/11851955877669331089/screens/63d942c2c864407f811045f94b055f50",
+      "width": 2560,
+      "height": 3120
+    },
+    "analytics": {
+      "id": "e927e55b47ae42e98b3b3bb6cb446e8a",
+      "sourceScreen": "projects/11851955877669331089/screens/e927e55b47ae42e98b3b3bb6cb446e8a",
+      "width": 2560,
+      "height": 2364
+    },
+    "chatbot": {
+      "id": "3cf7c8b614f64f979c1b0785035230fb",
+      "sourceScreen": "projects/11851955877669331089/screens/3cf7c8b614f64f979c1b0785035230fb",
+      "width": 2560,
+      "height": 2714
+    },
+    "order": {
+      "id": "28a6124beb8c44dba81e2c9ba6c58ad0",
+      "sourceScreen": "projects/11851955877669331089/screens/28a6124beb8c44dba81e2c9ba6c58ad0",
+      "width": 2560,
+      "height": 2186
+    },
+    "A stunning, high-fidelity, ultra-wide background for a luxury restaurant app. Deep charcoal and dark": {
+      "id": "6eab36880fe54dc19e9c8f7e1af69eeb",
+      "sourceScreen": "projects/11851955877669331089/screens/6eab36880fe54dc19e9c8f7e1af69eeb",
+      "width": 1376,
+      "height": 768
+    },
+    "login": {
+      "id": "bba7b1a5a4a048b0925e4d71c0e3791f",
+      "sourceScreen": "projects/11851955877669331089/screens/bba7b1a5a4a048b0925e4d71c0e3791f",
+      "width": 2560,
+      "height": 2048
+    }
+  },
+  "assets": {
+    "4caf12d37a9644dea200334987fbb224": "assets/asset_4caf12d37a9644dea200334987fbb224.png",
+    "6eab36880fe54dc19e9c8f7e1af69eeb": "assets/asset_6eab36880fe54dc19e9c8f7e1af69eeb.png"
+  }
+}

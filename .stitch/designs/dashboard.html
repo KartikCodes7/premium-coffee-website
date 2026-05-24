@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0B0C0E;
+            color: #e3e2e5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(25, 28, 41, 0.45);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .ice-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .lux-gold-glow {
+            box-shadow: 0 0 15px rgba(229, 193, 88, 0.2);
+        }
+        .stagger-reveal {
+            animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes reveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-minimized {
+            width: 80px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom Heatmap Opacities */
+        .heatmap-90 { background-color: rgba(229, 193, 88, 0.9); color: #0B0C0E; }
+        .heatmap-70 { background-color: rgba(229, 193, 88, 0.7); color: #0B0C0E; }
+        .heatmap-50 { background-color: rgba(229, 193, 88, 0.5); }
+        .heatmap-30 { background-color: rgba(229, 193, 88, 0.3); }
+        .heatmap-10 { background-color: rgba(229, 193, 88, 0.1); }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "ice-border": "rgba(255, 255, 255, 0.08)",
+                    "secondary-fixed": "#e1e1ed",
+                    "surface": "#121315",
+                    "tertiary-fixed": "#dee2ee",
+                    "primary-container": "#e5c158",
+                    "surface-container-lowest": "#0d0e10",
+                    "on-tertiary-fixed": "#171c24",
+                    "surface-tint": "#e7c35a",
+                    "on-secondary-container": "#b4b4bf",
+                    "on-tertiary-fixed-variant": "#424751",
+                    "primary-fixed": "#ffe08b",
+                    "inverse-surface": "#e3e2e5",
+                    "on-tertiary": "#2b313a",
+                    "primary": "#ffde82",
+                    "error-container": "#93000a",
+                    "surface-dim": "#121315",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "tertiary-container": "#c0c5d1",
+                    "on-surface": "#e3e2e5",
+                    "secondary-container": "#454650",
+                    "on-primary-fixed": "#241a00",
+                    "surface-container-high": "#292a2c",
+                    "surface-container": "#1f2022",
+                    "on-primary-container": "#644f00",
+                    "on-secondary": "#2e3039",
+                    "on-surface-variant": "#d0c5b1",
+                    "background": "#121315",
+                    "surface-variant": "#343537",
+                    "on-secondary-fixed-variant": "#454650",
+                    "on-tertiary-container": "#4c525b",
+                    "on-primary-fixed-variant": "#584400",
+                    "inverse-primary": "#745b00",
+                    "secondary": "#c5c6d1",
+                    "error-red": "#EF4444",
+                    "on-background": "#e3e2e5",
+                    "surface-bright": "#38393b",
+                    "surface-container-highest": "#343537",
+                    "premium-white": "#F4F5F6",
+                    "primary-fixed-dim": "#e7c35a",
+                    "secondary-fixed-dim": "#c5c6d1",
+                    "outline-variant": "#4d4636",
+                    "glass-fill": "rgba(25, 28, 41, 0.45)",
+                    "outline": "#99907d",
+                    "on-secondary-fixed": "#191b23",
+                    "inverse-on-surface": "#303033",
+                    "on-primary": "#3d2f00",
+                    "tertiary": "#dce1ed",
+                    "error": "#ffb4ab",
+                    "surface-container-low": "#1b1c1e",
+                    "tertiary-fixed-dim": "#c2c6d2"
+            },
+            "fontFamily": {
+                    "display": ["Hanken Grotesk", "sans-serif"],
+                    "metric": ["Geist Mono", "monospace"],
+                    "label-mono": ["Geist Mono", "monospace"],
+                    "headline-md": ["Hanken Grotesk", "sans-serif"],
+                    "body-md": ["Hanken Grotesk", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Sidebar (Minimized Navigation) -->
+<aside class="fixed left-0 top-0 h-full w-[80px] z-40 bg-surface-container-low border-r border-ice-border flex flex-col items-center py-8 gap-y-10">
+<div class="mb-4">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">restaurant</span>
+</div>
+<nav class="flex flex-col gap-y-6">
+<a class="p-3 text-on-secondary-container hover:bg-glass-fill rounded-xl transition-all duration-200" href="#" title="Dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+</a>
+<a class="p-3 text-on-secondary-container hover:bg-glass-fill rounded-xl transition-all duration-200" href="#" title="Orders">
+<span class="material-symbols-outlined">receipt_long</span>
+</a>
+<a class="p-3 text-primary border-l-2 border-primary bg-glass-fill rounded-xl transition-all duration-200 scale-[1.02]" href="#" title="Analytics">
+<span class="material-symbols-outlined">analytics</span>
+</a>
+<a class="p-3 text-on-secondary-container hover:bg-glass-fill rounded-xl transition-all duration-200" href="#" title="Settings">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-y-6">
+<a class="p-3 text-on-secondary-container hover:bg-glass-fill rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+</a>
+<div class="w-10 h-10 rounded-full border border-ice-border overflow-hidden">
+<img alt="Restaurant Logo" data-alt="A professional minimalist restaurant logo avatar against a dark background, featuring clean vector lines and a sophisticated aesthetic matching the charcoal and gold theme of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtNWH7EQVg2VlDndR3Lx97loiVpzQ42hCrGjkFxdPS4A21Ijy9vX3OfkaTwz5ZVEU3Ccx7XMM0St8JHHs8CF431CqM_hwxhb6_c7fzIt_ZQOKxfrrgPutGNmLT6gufxCsA7PIK1hDKOoWL3sBzZqt8s_ORJmeS6VW7Yxgo30iTdb7CQyEHmL1Hwetdpzcln5373Z68vwoxjwXA1IVsUDzfAEMzHxsw7iCOrqF81ReNfhUHMveqzGKvFk-QX05xvotMWdv_Vq5aZSvz"/>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[80px] min-h-screen p-gutter md:p-10 flex flex-col gap-10 max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 stagger-reveal" style="animation-delay: 0.1s;">
+<div>
+<h1 class="font-display text-4xl font-extrabold tracking-tight text-premium-white">Analytics Overview</h1>
+<p class="text-on-surface-variant font-label-mono mt-1">REAL-TIME OPERATIONAL INTELLIGENCE</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="glass-card flex items-center px-4 py-2 rounded-lg gap-3 ice-border cursor-pointer hover:bg-glass-fill transition-all">
+<span class="material-symbols-outlined text-sm text-primary">calendar_today</span>
+<span class="font-label-mono text-sm">Last 30 Days</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold text-sm flex items-center gap-2 hover:scale-[1.02] active:-translate-y-px transition-all lux-gold-glow">
+<span class="material-symbols-outlined text-sm">download</span>
+                    Export CSV
+                </button>
+</div>
+</header>
+<!-- SECTION 1: Key Metrics -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-reveal" style="animation-delay: 0.2s;">
+<!-- Revenue Card -->
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4 relative overflow-hidden group">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-mono text-xs uppercase tracking-widest">Total Revenue</span>
+<span class="text-green-400 font-label-mono text-xs flex items-center">+12.5% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="font-metric text-3xl text-premium-white">$142,850.00</div>
+<div class="h-10 w-full mt-2">
+<svg class="w-full h-full stroke-primary-container fill-none stroke-[2] opacity-80" viewbox="0 0 100 30">
+<path d="M0,25 Q10,20 20,22 T40,15 T60,18 T80,10 T100,5"></path>
+</svg>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary-container/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+</div>
+<!-- Orders Card -->
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-mono text-xs uppercase tracking-widest">Orders</span>
+<span class="text-green-400 font-label-mono text-xs flex items-center">+12.5% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="font-metric text-3xl text-premium-white">2,450</div>
+<div class="h-10 w-full mt-2">
+<svg class="w-full h-full stroke-primary-container fill-none stroke-[2] opacity-80" viewbox="0 0 100 30">
+<path d="M0,28 L20,20 L40,25 L60,10 L80,15 L100,5"></path>
+</svg>
+</div>
+</div>
+<!-- AOV Card -->
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-mono text-xs uppercase tracking-widest">Avg Order Value</span>
+<span class="text-green-400 font-label-mono text-xs flex items-center">+12.5% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="font-metric text-3xl text-premium-white">$58.30</div>
+<div class="h-10 w-full mt-2">
+<svg class="w-full h-full stroke-primary-container fill-none stroke-[2] opacity-80" viewbox="0 0 100 30">
+<path d="M0,20 C10,18 20,22 30,15 C40,8 50,12 60,15 C70,18 80,10 100,8"></path>
+</svg>
+</div>
+</div>
+<!-- Retention Card -->
+<div class="glass-card p-6 rounded-xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant font-label-mono text-xs uppercase tracking-widest">Returning Cust.</span>
+<span class="text-green-400 font-label-mono text-xs flex items-center">+12.5% <span class="material-symbols-outlined text-sm">trending_up</span></span>
+</div>
+<div class="font-metric text-3xl text-premium-white">68%</div>
+<div class="h-10 w-full mt-2">
+<svg class="w-full h-full stroke-primary-container fill-none stroke-[2] opacity-80" viewbox="0 0 100 30">
+<path d="M0,25 L30,22 L50,15 L70,18 L100,5"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Grid Analytics -->
+<section class="grid grid-cols-1 lg:grid-cols-5 gap-6 stagger-reveal" style="animation-delay: 0.3s;">
+<!-- Card 1: Popular Items (Large) -->
+<div class="glass-card p-8 rounded-xl lg:col-span-3 flex flex-col gap-8">
+<div class="flex justify-between items-center">
+<h2 class="font-display text-xl font-bold text-premium-white">Popular Items</h2>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">more_horiz</span>
+</div>
+<div class="flex flex-col gap-6">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-mono">
+<span>Signature Steak</span>
+<span>842 units</span>
+</div>
+<div class="h-3 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container lux-gold-glow rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-mono">
+<span>Obsidian Gin</span>
+<span>621 units</span>
+</div>
+<div class="h-3 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container lux-gold-glow rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-mono">
+<span>Seared Scallops</span>
+<span>540 units</span>
+</div>
+<div class="h-3 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container lux-gold-glow rounded-full" style="width: 55%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-label-mono">
+<span>Wild Risotto</span>
+<span>312 units</span>
+</div>
+<div class="h-3 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container lux-gold-glow rounded-full" style="width: 35%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Retention Heatmap (Medium) -->
+<div class="glass-card p-8 rounded-xl lg:col-span-2 flex flex-col gap-6 overflow-hidden">
+<h2 class="font-display text-xl font-bold text-premium-white">Cohort Retention</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-center border-separate border-spacing-1">
+<thead>
+<tr class="font-label-mono text-[10px] text-on-surface-variant uppercase">
+<th class="p-1">Cohort</th>
+<th class="p-1">W0</th>
+<th class="p-1">W2</th>
+<th class="p-1">W4</th>
+<th class="p-1">W6</th>
+</tr>
+</thead>
+<tbody class="font-metric text-xs">
+<tr>
+<td class="p-2 text-left font-label-mono text-[10px] uppercase text-on-surface-variant">May 01</td>
+<td class="p-2 heatmap-90 rounded">100%</td>
+<td class="p-2 heatmap-70 rounded">42%</td>
+<td class="p-2 heatmap-50 rounded">28%</td>
+<td class="p-2 heatmap-30 rounded">15%</td>
+</tr>
+<tr>
+<td class="p-2 text-left font-label-mono text-[10px] uppercase text-on-surface-variant">May 08</td>
+<td class="p-2 heatmap-90 rounded">100%</td>
+<td class="p-2 heatmap-70 rounded">38%</td>
+<td class="p-2 heatmap-30 rounded">12%</td>
+<td class="p-2 heatmap-10 rounded">8%</td>
+</tr>
+<tr>
+<td class="p-2 text-left font-label-mono text-[10px] uppercase text-on-surface-variant">May 15</td>
+<td class="p-2 heatmap-90 rounded">100%</td>
+<td class="p-2 heatmap-50 rounded">24%</td>
+<td class="p-2 heatmap-10 rounded">5%</td>
+<td class="p-2 heatmap-10 rounded">2%</td>
+</tr>
+<tr>
+<td class="p-2 text-left font-label-mono text-[10px] uppercase text-on-surface-variant">May 22</td>
+<td class="p-2 heatmap-90 rounded">100%</td>
+<td class="p-2 heatmap-70 rounded">45%</td>
+<td class="p-2 heatmap-30 rounded">18%</td>
+<td class="p-2 text-surface-variant">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- SECTION 3: Recent Transactions -->
+<section class="glass-card rounded-xl overflow-hidden stagger-reveal" style="animation-delay: 0.4s;">
+<div class="p-8 flex justify-between items-center border-b border-ice-border">
+<h2 class="font-display text-xl font-bold text-premium-white">Recent Transactions</h2>
+<button class="text-sm font-label-mono text-primary hover:underline">VIEW ALL</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-high font-label-mono text-xs text-on-surface-variant uppercase tracking-wider">
+<tr>
+<th class="px-8 py-4">Order ID</th>
+<th class="px-6 py-4">Date</th>
+<th class="px-6 py-4">Customer</th>
+<th class="px-6 py-4">Items</th>
+<th class="px-6 py-4">Total</th>
+<th class="px-6 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-ice-border font-body-md">
+<tr class="hover:bg-white/5 transition-colors duration-150">
+<td class="px-8 py-4 font-metric text-primary">#ROS-9241</td>
+<td class="px-6 py-4 text-on-surface-variant">Jun 12, 18:45</td>
+<td class="px-6 py-4 text-premium-white">Julianne Moore</td>
+<td class="px-6 py-4 text-sm">2x Steak, 1x Gin</td>
+<td class="px-6 py-4 font-metric">$184.50</td>
+<td class="px-6 py-4">
+<span class="bg-green-400/10 text-green-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-green-400/20">Completed</span>
+</td>
+</tr>
+<tr class="bg-white/[0.02] hover:bg-white/5 transition-colors duration-150">
+<td class="px-8 py-4 font-metric text-primary">#ROS-9240</td>
+<td class="px-6 py-4 text-on-surface-variant">Jun 12, 18:32</td>
+<td class="px-6 py-4 text-premium-white">Marcus Sterling</td>
+<td class="px-6 py-4 text-sm">4x Scallops, 2x Risotto</td>
+<td class="px-6 py-4 font-metric">$210.00</td>
+<td class="px-6 py-4">
+<span class="bg-primary-container/10 text-primary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-primary-container/20">Preparing</span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors duration-150">
+<td class="px-8 py-4 font-metric text-primary">#ROS-9239</td>
+<td class="px-6 py-4 text-on-surface-variant">Jun 12, 18:15</td>
+<td class="px-6 py-4 text-premium-white">Elena Rodriguez</td>
+<td class="px-6 py-4 text-sm">1x Risotto, 2x Wine</td>
+<td class="px-6 py-4 font-metric">$89.20</td>
+<td class="px-6 py-4">
+<span class="bg-error-red/10 text-error-red px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-error-red/20">Delayed</span>
+</td>
+</tr>
+<tr class="bg-white/[0.02] hover:bg-white/5 transition-colors duration-150">
+<td class="px-8 py-4 font-metric text-primary">#ROS-9238</td>
+<td class="px-6 py-4 text-on-surface-variant">Jun 12, 17:50</td>
+<td class="px-6 py-4 text-premium-white">Theodore Vane</td>
+<td class="px-6 py-4 text-sm">1x Steak, 3x Gin</td>
+<td class="px-6 py-4 font-metric">$156.00</td>
+<td class="px-6 py-4">
+<span class="bg-green-400/10 text-green-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-green-400/20">Completed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<script>
+        // Atmospheric effect: Subtle grain/noise over the canvas
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.createElement('div');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '9999';
+            canvas.style.opacity = '0.015';
+            canvas.style.background = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
+            document.body.appendChild(canvas);
+
+            // Micro-interaction for hover effects on charts
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px) scale(1.01)';
+                    card.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body></html>

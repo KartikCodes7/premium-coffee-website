@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RestaurantOS | Checkout & Secure Settlement</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "canvas-charcoal": "#0B0C0E",
+                        "premium-white": "#F4F5F6",
+                        "muted-steel": "#8E939E",
+                        "ice-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-fill": "rgba(25, 28, 41, 0.45)",
+                        "primary": "#E5C158",
+                        "primary-container": "#ffe08b"
+                    },
+                    spacing: {
+                        "nav-height": "72px",
+                        "margin-mobile": "24px",
+                        "grid-max-width": "1440px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Central Design System Stylesheet -->
+    <link href="css/global.css" rel="stylesheet"/>
+</head>
+<body class="bg-canvas-charcoal selection:bg-[#E5C158]/20 selection:text-premium-white min-h-screen">
+
+    <!-- Global Reactive Header -->
+    <div id="global-header"></div>
+
+    <!-- Main Container -->
+    <main class="pt-[nav-height] max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-12">
+        
+        <!-- Asymmetric Layout Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 items-start">
+            
+            <!-- Left Column: Checkout Cart Items -->
+            <section class="space-y-8 reveal-element">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-premium-white tracking-tight mb-2">Review Active Order</h1>
+                    <p class="text-sm text-muted-steel">Premium gastronomic selections prepared by our elite culinary team.</p>
+                </div>
+
+                <!-- Dynamic Cart Items Container -->
+                <div id="checkout-cart-list" class="space-y-6">
+                    <!-- Loaded dynamically via state -->
+                </div>
+
+                <!-- Special Preparation Instructions -->
+                <div class="space-y-3">
+                    <h4 class="text-[10px] font-mono tracking-widest text-muted-steel uppercase">Operational / Dietary Instructions</h4>
+                    <textarea id="dietary-notes" class="w-full glass-card rounded-xl p-5 font-body-md text-sm text-premium-white focus:outline-none focus:border-[#E5C158] transition-all min-h-[110px] placeholder:text-muted-steel/40" placeholder="Specify allergies, seating preferences, table number, or custom requests..."></textarea>
+                </div>
+            </section>
+
+            <!-- Right Column: Receipt summary and payment integration -->
+            <aside class="sticky top-[104px] space-y-6 reveal-element" style="animation-delay: 0.15s;">
+                <div class="glass-card rounded-xl overflow-hidden border border-ice-border shadow-2xl">
+                    <!-- Summary Calculations -->
+                    <div class="p-6 border-b border-ice-border space-y-4">
+                        <h2 class="text-lg font-bold text-premium-white tracking-tight">Receipt Bill Details</h2>
+                        
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs text-muted-steel">
+                                <span>Table Subtotal</span>
+                                <span class="font-mono text-premium-white" id="receipt-subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-muted-steel">
+                                <span>Service Charge (10%)</span>
+                                <span class="font-mono text-premium-white" id="receipt-service">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-muted-steel">
+                                <span>Est. Local Taxes & VAT (12.5%)</span>
+                                <span class="font-mono text-premium-white" id="receipt-tax">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Authorization Total -->
+                    <div class="p-6 bg-gradient-to-b from-[#E5C158]/5 to-transparent">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-sm font-bold text-premium-white">Grand Total Value</span>
+                            <span class="font-mono text-2xl text-[#E5C158] font-extrabold" id="receipt-total">$0.00</span>
+                        </div>
+
+                        <!-- Card Selection -->
+                        <div class="space-y-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3">
+                                <button class="flex items-center justify-center gap-2 py-3 rounded-lg border border-[#E5C158] bg-[#E5C158]/10 text-[#E5C158] transition-all">
+                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+                                    <span class="font-mono text-[10px] font-bold">DIGITAL WALLET</span>
+                                </button>
+                                <button class="flex items-center justify-center gap-2 py-3 rounded-lg border border-ice-border bg-white/5 text-[#8E939E] transition-all cursor-not-allowed">
+                                    <span class="material-symbols-outlined text-sm">credit_card</span>
+                                    <span class="font-mono text-[10px] font-bold">POS TERMINAL</span>
+                                </button>
+                            </div>
+
+                            <!-- Live Mirror Credit Card Mock-up -->
+                            <div class="glass-card rounded-xl p-5 border border-ice-border space-y-4 relative overflow-hidden bg-gradient-to-tr from-[#12141C] via-[#1A1C25] to-[#12141C]">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="material-symbols-outlined text-premium-white text-3xl font-light">credit_card</span>
+                                    <img alt="Mastercard" class="h-6 object-contain opacity-80" src="assets/order_mastercard.png"/>
+                                </div>
+                                
+                                <div class="space-y-1">
+                                    <label class="font-mono text-[8px] tracking-widest text-[#8E939E] uppercase">Cardholder Name</label>
+                                    <input id="card-name-input" class="w-full bg-transparent border-none p-0 font-body-md text-xs text-premium-white focus:ring-0 placeholder:text-muted-steel/30 uppercase" placeholder="JULIAN VANDERBILT" type="text" value="JULIAN VANDERBILT"/>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="font-mono text-[8px] tracking-widest text-[#8E939E] uppercase">Card Number</label>
+                                    <input id="card-num-input" class="w-full bg-transparent border-none p-0 font-mono text-sm text-[#E5C158] focus:ring-0 tracking-widest placeholder:text-muted-steel/30" placeholder="•••• •••• •••• 8842" type="text" value="5412 7500 8824 8842"/>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="font-mono text-[8px] tracking-widest text-[#8E939E] uppercase">Expiry</label>
+                                        <input id="card-expiry-input" class="w-full bg-transparent border-none p-0 font-body-md text-xs text-premium-white focus:ring-0 placeholder:text-muted-steel/30" placeholder="04/28" type="text" value="04/28"/>
+                                    </div>
+                                    <div class="space-y-1 text-right">
+                                        <label class="font-mono text-[8px] tracking-widest text-[#8E939E] uppercase block">CVV</label>
+                                        <input class="w-full bg-transparent border-none p-0 font-body-md text-xs text-premium-white focus:ring-0 text-right placeholder:text-muted-steel/30" placeholder="•••" type="password" value="883"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Submit Button -->
+                        <button onclick="authorizeCheckout()" class="w-full py-4.5 rounded-xl bg-[#E5C158] text-canvas-charcoal font-display-lg text-sm font-extrabold hover:brightness-110 active:scale-[0.98] transition-all shadow-2xl shadow-[#E5C158]/10 flex items-center justify-center gap-2 group spring-interaction">
+                            <span>AUTHORIZE TABLE PAYMENT</span>
+                            <span class="material-symbols-outlined font-bold text-sm group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
+                        </button>
+
+                        <p class="text-center mt-5 font-mono text-[8px] text-[#8E939E] uppercase tracking-widest opacity-60">
+                            Secured by RestaurantOS 256-bit PCI-DSS Gateway
+                        </p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Success Modal Splash -->
+    <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card max-w-md w-full p-8 rounded-2xl border border-ice-border shadow-2xl text-center space-y-6 transform scale-95 transition-all duration-300" id="success-modal-container">
+            <div class="w-16 h-16 rounded-full bg-[#E5C158]/10 border border-[#E5C158]/30 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-[#E5C158] text-3xl font-extrabold animate-bounce">check</span>
+            </div>
+            
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-premium-white tracking-tight">Table Authorization Success</h3>
+                <p class="text-xs text-[#8E939E]">Your premium dining ticket has been logged directly on the kitchen queue. The shift commander and chef have been notified.</p>
+            </div>
+
+            <div class="p-4 bg-white/5 rounded-xl border border-ice-border font-mono text-left text-xs space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-[#8E939E]">Transaction Ticket</span>
+                    <span class="text-premium-white font-bold" id="receipt-ticket-id">#OS-8902</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-[#8E939E]">Table Booth</span>
+                    <span class="text-[#E5C158] font-bold">Window Booth 4</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-[#8E939E]">Kitchen Status</span>
+                    <span class="text-green-400 font-bold flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping"></span>
+                        Preparing
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="dismissModalAndRedirect('chatbot.html')" class="py-3 bg-glass-fill border border-ice-border hover:border-[#E5C158]/50 text-premium-white font-bold text-xs rounded-xl transition-all spring-interaction">
+                    Return to Chat
+                </button>
+                <button onclick="dismissModalAndRedirect('dashboard.html')" class="py-3 bg-[#E5C158] text-canvas-charcoal font-bold text-xs rounded-xl hover:brightness-110 transition-all spring-interaction shadow-lg">
+                    Monitor Chef Ops
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- B2B Operational Role Controller Widget -->
+    <div id="role-switcher-container"></div>
+
+    <!-- Core Javascript Modules -->
+    <script src="js/state.js"></script>
+    <script src="js/components.js"></script>
+
+    <!-- Checkout Dynamic Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckoutList();
+            recalculateSummary();
+
+            // Re-render checklist on state change
+            window.AppStore?.addEventListener('statechange', () => {
+                renderCheckoutList();
+                recalculateSummary();
+            });
+
+            // Mirror input cardholder name
+            const nameInput = document.getElementById('card-name-input');
+            nameInput?.addEventListener('input', (e) => {
+                // Could trigger animated credit card reflections here
+            });
+        });
+
+        // --- Render Items in Checkout Area ---
+        function renderCheckoutList() {
+            const list = document.getElementById('checkout-cart-list');
+            if (!list) return;
+
+            const cart = window.AppStore?.getCart() || [];
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="glass-card rounded-xl p-10 text-center space-y-4">
+                        <span class="material-symbols-outlined text-5xl text-[#8E939E]/20">receipt_long</span>
+                        <div>
+                            <h3 class="text-base font-bold text-premium-white">Your checkout is clear</h3>
+                            <p class="text-xs text-[#8E939E] mt-1">Add culinary experiences on the sommelier chatbot page to proceed.</p>
+                        </div>
+                        <a href="chatbot.html" class="inline-block px-5 py-3 bg-[#E5C158] text-canvas-charcoal rounded-xl text-xs font-bold transition-all spring-interaction shadow-lg">
+                            Consult AI Sommelier
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = cart.map(item => {
+                // If it is Wagyu, show the meat temperature toggle as customized
+                let optionsHtml = '';
+                if (item.id === 'wagyu-steak' || item.name.includes('Wagyu')) {
+                    const temp = item.options.temperature || 'Medium Rare';
+                    optionsHtml = `
+                        <div class="bg-white/5 rounded-xl p-4 border border-ice-border space-y-4">
+                            <div>
+                                <label class="font-mono text-[9px] tracking-widest text-[#8E939E] uppercase block mb-3">Meat Preparation Temperature</label>
+                                <div class="flex flex-wrap gap-2">
+                                    ${['Rare', 'Medium Rare', 'Medium', 'Well Done'].map(t => `
+                                        <button onclick="setSteakTemp('${item.id}', '${t}')" class="px-4 py-1.5 rounded-full border text-xs transition-all ${temp === t ? 'bg-[#E5C158] text-canvas-charcoal font-bold border-[#E5C158] shadow-md' : 'border-ice-border text-[#8E939E] hover:border-premium-white' }">
+                                            ${t}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-3 border-t border-ice-border text-xs">
+                                <span class="text-premium-white flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[#E5C158] text-sm">workspace_premium</span>
+                                    Add Shaved Black Truffle
+                                </span>
+                                <span class="font-mono text-[#8E939E]">Included</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (Object.keys(item.options).length > 0) {
+                    optionsHtml = `
+                        <div class="bg-white/5 rounded-xl p-3 border border-ice-border text-xs text-[#8E939E] flex gap-2 items-center flex-wrap">
+                            <span class="material-symbols-outlined text-xs text-[#E5C158]">notes</span>
+                            ${Object.entries(item.options).map(([k, v]) => `<span>${v}</span>`).join(' • ')}
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="glass-card rounded-xl p-6 md:p-8 space-y-6 group hover:border-[#E5C158]/30 transition-all">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <img alt="${item.name}" class="w-full md:w-28 h-28 rounded-lg object-cover border border-ice-border" src="${item.image}"/>
+                            <div class="flex-grow flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-premium-white leading-snug">${item.name}</h3>
+                                        <p class="text-xs text-muted-steel mt-1">Pre-selected premium session addition.</p>
+                                    </div>
+                                    <span class="font-mono text-[#E5C158] text-base font-bold">$${(item.price * item.qty).toFixed(2)}</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-6">
+                                    <!-- Quantity selector -->
+                                    <div class="flex items-center gap-3 bg-white/5 rounded-full px-3.5 py-1.5 border border-ice-border">
+                                        <button onclick="adjustQty('${item.id}', -1)" class="hover:text-[#E5C158] transition-colors font-bold">-</button>
+                                        <span class="font-mono text-xs w-4 text-center">${item.qty}</span>
+                                        <button onclick="adjustQty('${item.id}', 1)" class="hover:text-[#E5C158] transition-colors font-bold">+</button>
+                                    </div>
+                                    <button onclick="removeItem('${item.id}')" class="text-red-400/70 hover:text-red-400 font-mono text-[10px] tracking-widest font-bold uppercase transition-colors">
+                                        REMOVE ITEM
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        ${optionsHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- Customization Functions ---
+        function setSteakTemp(id, temp) {
+            const item = window.AppStore?.getCart().find(i => i.id === id);
+            if (item) {
+                item.options.temperature = temp;
+                window.AppStore?._save(); // Force save & re-trigger render
+            }
+        }
+
+        function adjustQty(id, delta) {
+            const item = window.AppStore?.getCart().find(i => i.id === id);
+            if (item) {
+                window.AppStore?.updateCartQty(id, item.qty + delta);
+            }
+        }
+
+        function removeItem(id) {
+            window.AppStore?.removeFromCart(id);
+        }
+
+        // --- Recalculate Receipt Bill ---
+        function recalculateSummary() {
+            const subtotal = window.AppStore?.getCartSubtotal() || 0.00;
+            const service = subtotal * 0.10; // 10%
+            const tax = subtotal * 0.125; // 12.5% VAT
+            const total = subtotal + service + tax;
+
+            document.getElementById('receipt-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('receipt-service').innerText = `$${service.toFixed(2)}`;
+            document.getElementById('receipt-tax').innerText = `$${tax.toFixed(2)}`;
+            document.getElementById('receipt-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        // --- Authorize Checkout & Modal Splash ---
+        function authorizeCheckout() {
+            const cart = window.AppStore?.getCart() || [];
+            if (cart.length === 0) {
+                window.UI?.showToast("Cannot check out. Your cart is empty.", "error");
+                return;
+            }
+
+            const itemsStr = cart.map(i => `${i.name} (${i.qty}x)`).join(', ');
+            const subtotal = window.AppStore?.getCartSubtotal() || 0;
+            const service = subtotal * 0.10;
+            const tax = subtotal * 0.125;
+            const grandTotal = subtotal + service + tax;
+
+            // Submit order details directly to state (live orders queue!)
+            const orderId = '#OS-' + Math.floor(1000 + Math.random() * 9000);
+            window.AppStore?.addLiveOrder({
+                name: document.getElementById('card-name-input')?.value || 'Julian V.',
+                items: itemsStr,
+                total: grandTotal
+            });
+
+            // Show success modals
+            document.getElementById('receipt-ticket-id').innerText = orderId;
+            const modal = document.getElementById('success-modal');
+            const container = document.getElementById('success-modal-container');
+            if (modal && container) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                container.classList.remove('scale-95');
+            }
+
+            // Clear the local cart
+            window.AppStore?.clearCart();
+        }
+
+        function dismissModalAndRedirect(target) {
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+            }
+            setTimeout(() => {
+                window.location.href = target;
+            }, 200);
+        }
+    </script>
+</body>
+</html>

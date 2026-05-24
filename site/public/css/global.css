@@ -1,0 +1,127 @@
+/* RestaurantOS - Production Design System CSS */
+
+:root {
+    --glass-fill: rgba(25, 28, 41, 0.45);
+    --ice-border: rgba(255, 255, 255, 0.08);
+    --lux-gold: #E5C158;
+    --canvas-charcoal: #0B0C0E;
+    --premium-white: #F4F5F6;
+    --muted-steel: #8E939E;
+}
+
+body {
+    background-color: var(--canvas-charcoal);
+    color: var(--premium-white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--glass-fill);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--ice-border);
+}
+
+.user-bubble {
+    background: #12141C;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Spring Physics Micro-Interactions */
+.spring-interaction {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, background-color 0.2s;
+}
+
+.spring-interaction:hover {
+    transform: translateY(-4px) scale(1.02);
+}
+
+.spring-interaction:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* Minimal Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(229, 193, 88, 0.3); /* Muted Gold on hover */
+}
+
+/* Hide scrollbars but keep scrolling functionality */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Shimmer Skeletal Loader */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-loader {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 37%, rgba(255,255,255,0.03) 63%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+}
+
+/* Infinite Floating Animation for Hero Images */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.floating-element {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Active Gold Glow */
+.gold-glow {
+    box-shadow: 0 0 15px rgba(229, 193, 88, 0.15);
+}
+
+/* Material Symbols Setup */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Page Entry Animations */
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal-element {
+    animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

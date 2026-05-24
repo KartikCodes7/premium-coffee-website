@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RestaurantOS | AI Sommelier Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --glass-fill: rgba(25, 28, 41, 0.45);
+            --ice-border: rgba(255, 255, 255, 0.08);
+            --lux-gold: #E5C158;
+            --canvas-charcoal: #0B0C0E;
+        }
+
+        body {
+            background-color: var(--canvas-charcoal);
+            color: #F4F5F6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: var(--glass-fill);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--ice-border);
+        }
+
+        .user-bubble {
+            background: #12141C;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .spring-interaction {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .spring-interaction:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .spring-interaction:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#033060",
+                      "tertiary-container": "#a5c6ff",
+                      "on-primary-fixed-variant": "#584400",
+                      "error-container": "#93000a",
+                      "background": "#16130c",
+                      "on-secondary-container": "#b4b4bf",
+                      "on-secondary-fixed-variant": "#454650",
+                      "on-secondary": "#2e3039",
+                      "on-primary": "#3d2f00",
+                      "secondary": "#c5c6d1",
+                      "on-tertiary-container": "#2f5284",
+                      "surface-tint": "#e7c35a",
+                      "canvas-charcoal": "#0B0C0E",
+                      "surface": "#16130c",
+                      "on-secondary-fixed": "#191b23",
+                      "secondary-fixed": "#e1e1ed",
+                      "tertiary-fixed": "#d5e3ff",
+                      "on-background": "#e9e1d6",
+                      "on-tertiary-fixed-variant": "#234778",
+                      "on-primary-container": "#644f00",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed": "#241a00",
+                      "inverse-on-surface": "#343028",
+                      "surface-container-lowest": "#110e08",
+                      "premium-white": "#F4F5F6",
+                      "muted-steel": "#8E939E",
+                      "on-surface": "#e9e1d6",
+                      "tertiary-fixed-dim": "#a8c8ff",
+                      "inverse-surface": "#e9e1d6",
+                      "on-error": "#690005",
+                      "surface-bright": "#3d3930",
+                      "primary-fixed": "#ffe08b",
+                      "on-tertiary-fixed": "#001b3c",
+                      "surface-container-highest": "#38342c",
+                      "surface-dim": "#16130c",
+                      "on-surface-variant": "#d0c5b1",
+                      "ice-border": "rgba(255, 255, 255, 0.08)",
+                      "outline-variant": "#4d4636",
+                      "surface-container-high": "#2d2a22",
+                      "surface-container-low": "#1e1b14",
+                      "primary-container": "#e5c158",
+                      "secondary-container": "#454650",
+                      "error-red": "#EF4444",
+                      "inverse-primary": "#745b00",
+                      "outline": "#99907d",
+                      "surface-container": "#221f18",
+                      "tertiary": "#d3e1ff",
+                      "surface-variant": "#38342c",
+                      "on-error-container": "#ffdad6",
+                      "primary": "#ffde82",
+                      "glass-fill": "rgba(25, 28, 41, 0.45)",
+                      "primary-fixed-dim": "#e7c35a",
+                      "secondary-fixed-dim": "#c5c6d1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "nav-height": "72px",
+                      "margin-mobile": "20px",
+                      "grid-max-width": "1440px",
+                      "margin-desktop": "48px",
+                      "section-gap-min": "4rem",
+                      "gutter": "24px",
+                      "section-gap-max": "8rem"
+              },
+              "fontFamily": {
+                      "display-lg": ["plusJakartaSans"],
+                      "body-md": ["plusJakartaSans"],
+                      "headline-md": ["plusJakartaSans"],
+                      "headline-lg": ["plusJakartaSans"],
+                      "mono-metrics": ["JetBrains Mono"],
+                      "body-lg": ["plusJakartaSans"],
+                      "label-sm": ["plusJakartaSans"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-canvas-charcoal selection:bg-primary-container selection:text-canvas-charcoal">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full h-nav-height bg-surface/80 backdrop-blur-xl border-b border-ice-border z-50">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-full max-w-grid-max-width mx-auto">
+<div class="flex items-center gap-6">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-premium-white">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-display-lg text-headline-md font-bold text-primary tracking-tight">RestaurantOS</h1>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-muted-steel hover:text-premium-white transition-colors font-body-md text-body-md" href="#">Concierge</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">AI Sommelier</a>
+<a class="text-muted-steel hover:text-premium-white transition-colors font-body-md text-body-md" href="#">Reservations</a>
+</nav>
+<div class="relative cursor-pointer group spring-interaction">
+<span class="material-symbols-outlined text-premium-white text-2xl">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-primary text-canvas-charcoal text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">3</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-nav-height min-h-screen max-w-grid-max-width mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-gutter">
+<!-- Left: Chat Interface -->
+<section class="flex flex-col h-[calc(100vh-nav-height)] py-8 relative">
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-8 pb-32">
+<!-- AI Message -->
+<div class="flex gap-4 max-w-[85%]">
+<div class="w-10 h-10 rounded-full glass-card flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xl">smart_toy</span>
+</div>
+<div class="glass-card p-5 rounded-2xl rounded-tl-none border-l-2 border-l-primary/30">
+<p class="font-body-md text-body-md text-premium-white leading-relaxed">
+                            Good evening! I'm your AI Sommelier. I've noted you're looking at our evening specials. Would you like a wine pairing recommendation for our <span class="text-primary font-semibold">Signature Wagyu</span>, or perhaps a refreshing cocktail to start?
+                        </p>
+<span class="text-[10px] font-mono-metrics text-muted-steel mt-3 block uppercase tracking-widest">AI Concierge • 19:42</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 max-w-[85%] ml-auto flex-row-reverse">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-canvas-charcoal text-xl">person</span>
+</div>
+<div class="user-bubble p-5 rounded-2xl rounded-tr-none">
+<p class="font-body-md text-body-md text-premium-white leading-relaxed">
+                            What wines pair well with the Wagyu? I prefer something full-bodied but not overly oaky.
+                        </p>
+<span class="text-[10px] font-mono-metrics text-muted-steel mt-3 block uppercase tracking-widest text-right">You • 19:43</span>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex gap-4 max-w-[85%]">
+<div class="w-10 h-10 rounded-full glass-card flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xl">smart_toy</span>
+</div>
+<div class="glass-card p-5 rounded-2xl rounded-tl-none border-l-2 border-l-primary/30">
+<p class="font-body-md text-body-md text-premium-white leading-relaxed">
+                            Excellent choice. For a full-bodied Wagyu, I highly recommend our <span class="text-primary font-semibold">2018 Napa Valley Cabernet Sauvignon</span>. It offers dark fruit notes and velvet tannins that cut through the richness of the beef without the heavy vanilla profile of excessive oak. I've added it to your suggested pairings on the right.
+                        </p>
+<span class="text-[10px] font-mono-metrics text-muted-steel mt-3 block uppercase tracking-widest">AI Concierge • 19:44</span>
+</div>
+</div>
+</div>
+<!-- Bottom Interaction Area -->
+<div class="absolute bottom-0 left-0 w-full py-6 bg-gradient-to-t from-canvas-charcoal via-canvas-charcoal/90 to-transparent">
+<!-- Quick Actions -->
+<div class="flex gap-3 mb-4 overflow-x-auto pb-2 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full glass-card text-label-sm text-premium-white hover:border-primary/50 transition-all spring-interaction">Suggest gluten-free entrees</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full glass-card text-label-sm text-premium-white hover:border-primary/50 transition-all spring-interaction">What wines pair with the steak?</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full glass-card text-label-sm text-premium-white hover:border-primary/50 transition-all spring-interaction">Book table for 4 tonight</button>
+</div>
+<!-- Input Bar -->
+<div class="glass-card p-2 rounded-2xl flex items-center gap-2 group focus-within:border-primary/50 transition-all shadow-2xl">
+<div class="flex-1 px-4">
+<input class="w-full bg-transparent border-none focus:ring-0 text-body-md text-premium-white placeholder:text-muted-steel" placeholder="Ask the AI Sommelier or Menu Assistant..." type="text"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-muted-steel hover:text-primary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="bg-primary text-canvas-charcoal px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 spring-interaction shadow-lg">
+<span>Send</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Right: AI Recommendations -->
+<aside class="py-8 space-y-8 hidden lg:block overflow-y-auto h-[calc(100vh-nav-height)] custom-scrollbar">
+<div>
+<h2 class="font-headline-md text-headline-md text-premium-white mb-6 flex items-center gap-3">
+                    AI Recommended Pairings
+                    <span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</h2>
+<div class="space-y-6">
+<!-- Food Card 1 -->
+<div class="glass-card rounded-2xl overflow-hidden group spring-interaction">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500" data-alt="A high-fidelity culinary photograph of a Signature Wagyu steak, perfectly seared with a rich crust and pink medium-rare center, resting on a dark slate plate with a sprig of rosemary. The lighting is dramatic and warm, highlighting the fatty marbling of the meat. The overall aesthetic is dark, luxurious, and premium, echoing a Michelin-star restaurant environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_oo59TMXCZ4pC6yKKX0lFJqt4eDiKYJvoMaluarMYeMRzNYRoX67v9FfuBGP_qrib6FgQ0FE7IvQs62R4XHfGgfX-Itf6Y4DL-YbMtA33rY20BAXLMv60Le4yZAuRJ45hdR32xp5GU3FiY10lzF7KrGDzK4viK-1fdiL14MLOMdjzRRA3zObctHeN_wPAcFcu7zkqGD5ThXPqOqi-tLJ-4zwszRR9f2ZgDJPFYdtQIHOBikRUnorkTlUwezQZhm4uSE7L_09BeyhK"/>
+<div class="absolute top-3 right-3 glass-card px-2 py-1 rounded-lg flex items-center gap-1 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-mono-metrics">4.9</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-lg font-bold text-premium-white">Signature Wagyu</h3>
+<span class="font-mono-metrics text-primary text-lg">$124.00</span>
+</div>
+<p class="text-muted-steel font-body-md text-label-sm mb-4 line-clamp-2">
+                                Grade A5 Kobe beef, butter-poached with smoked marrow jus and truffle mash.
+                            </p>
+<button class="w-full bg-primary text-canvas-charcoal py-3 rounded-xl font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+<!-- Food Card 2 -->
+<div class="glass-card rounded-2xl overflow-hidden group spring-interaction">
+<div class="h-48 relative">
+<img class="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500" data-alt="Expertly plated seared scallops on a shallow designer ceramic bowl, garnished with microgreens and a vibrant saffron foam. The background is a dark, atmospheric restaurant table with subtle candle glow. The image uses shallow depth of field to emphasize the texture of the caramelization on the scallops. High-contrast, moody lighting with a touch of gold and charcoal tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASG0G5BhdqBLf9U_ZabpRaFqgZMRTQ3_e_TFxFLjTxtb8TYZinoLTX_oPpDi3UyTj419hn6qgqWavN8gQ-_uVz0NiT63pNRzsjuv3lMRXNkpIKviZJ-XSo__pJSvN3KToyn0yn8EEdf04suG9D4Vwra3TehqqKtrn4TbQXg8niLp-2wF_VN_Ol54O61MhGIgGEHGvsynh2XCbeBB4VsrFlN_8kvfRxP7lSpkWKqhMn3uqHBDOZiLA2Yx0LdVgQfTJiu-kkfq0jPsad"/>
+<div class="absolute top-3 right-3 glass-card px-2 py-1 rounded-lg flex items-center gap-1 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-mono-metrics">4.7</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-lg font-bold text-premium-white">Seared Scallops</h3>
+<span class="font-mono-metrics text-primary text-lg">$38.00</span>
+</div>
+<p class="text-muted-steel font-body-md text-label-sm mb-4 line-clamp-2">
+                                Hokkaido scallops with pea purée, crispy pancetta, and citrus emulsion.
+                            </p>
+<button class="w-full bg-primary text-canvas-charcoal py-3 rounded-xl font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Current Selection Checklist -->
+<div class="glass-card p-6 rounded-2xl">
+<h4 class="font-headline-md text-body-md font-bold text-premium-white mb-4 uppercase tracking-widest text-xs opacity-60">Current Selection</h4>
+<div class="space-y-4">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="w-5 h-5 rounded-md border border-primary flex items-center justify-center bg-primary/10">
+<span class="material-symbols-outlined text-primary text-sm font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-premium-white flex-1">Signature Wagyu Steak</span>
+<span class="font-mono-metrics text-muted-steel text-xs">$124</span>
+</div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="w-5 h-5 rounded-md border border-ice-border flex items-center justify-center"></div>
+<span class="font-body-md text-body-md text-muted-steel flex-1">Hokkaido Scallops</span>
+<span class="font-mono-metrics text-muted-steel text-xs">$38</span>
+</div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="w-5 h-5 rounded-md border border-primary flex items-center justify-center bg-primary/10">
+<span class="material-symbols-outlined text-primary text-sm font-bold">check</span>
+</div>
+<span class="font-body-md text-body-md text-premium-white flex-1">Napa Valley Cabernet 2018</span>
+<span class="font-mono-metrics text-muted-steel text-xs">$95</span>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-ice-border">
+<div class="flex justify-between items-center mb-6">
+<span class="text-muted-steel font-body-md">Subtotal</span>
+<span class="font-mono-metrics text-premium-white text-xl">$219.00</span>
+</div>
+<button class="w-full py-4 rounded-xl glass-card border-primary/20 text-primary font-bold hover:bg-primary hover:text-canvas-charcoal transition-all spring-interaction">
+                        View Bill Details
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+<script>
+        // Micro-interactions for input focus and spring effects
+        const chatInput = document.querySelector('input');
+        const inputContainer = chatInput?.parentElement.parentElement;
+
+        chatInput?.addEventListener('focus', () => {
+            inputContainer.classList.add('border-primary');
+            inputContainer.style.transform = 'scale(1.01)';
+        });
+
+        chatInput?.addEventListener('blur', () => {
+            inputContainer.classList.remove('border-primary');
+            inputContainer.style.transform = 'scale(1)';
+        });
+
+        // Simple typing simulation for AI
+        function simulateResponse() {
+            // Logic for visual feedback during "thinking"
+        }
+    </script>
+</body></html>
