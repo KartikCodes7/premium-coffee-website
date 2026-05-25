@@ -1,0 +1,120 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Multi-Tenant Restaurant Group Entity
+model Tenant {
+  id           String         @id @default(uuid())
+  name         String
+  slug         String         @unique
+  currency     String         @default("USD")
+  taxRate      Float          @default(0.125) // 12.5% VAT
+  serviceRate  Float          @default(0.10)  // 10.0% Service Charge
+  createdAt    DateTime       @default(now())
+  
+  users        User[]
+  menuItems    MenuItem[]
+  orders       Order[]
+  reservations Reservation[]
+  reviews      Review[]
+  activities   Notification[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      String   // 'OWNER' | 'CHEF' | 'STAFF' | 'CUSTOMER'
+  createdAt DateTime @default(now())
+  
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model MenuItem {
+  id          String   @id @default(uuid())
+  name        String
+  price       Float
+  category    String   // 'Entree' | 'Dessert' | 'Beverage'
+  image       String
+  rating      String   @default("5.0")
+  description String
+  createdAt   DateTime @default(now())
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  orderItems  OrderItem[]
+  reviews     Review[]
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  ticketNumber String      @unique
+  customerName String
+  total        Float
+  status       String      // 'Pending' | 'Preparing' | 'Served' | 'Completed'
+  time         String      // e.g. '19:42'
+  createdAt    DateTime    @default(now())
+
+  tenantId     String
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  orderItems   OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  quantity   Int      @default(1)
+  options    String   // stringified JSON options (e.g. {temperature: "Rare"})
+  
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+}
+
+model Reservation {
+  id          String   @id @default(uuid())
+  guestName   String
+  date        String   // 'TONIGHT' | 'TOMORROW' | 'TUESDAY'
+  hour        String   // '18:00' | '20:30' | '22:00'
+  guestsCount Int
+  booth       String
+  status      String   // 'Pending' | 'Confirmed' | 'Cancelled'
+  createdAt   DateTime @default(now())
+
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  rating       Int
+  sentimentScore Float   // AI analyzed value from -1.0 to 1.0
+  comment      String
+  createdAt    DateTime @default(now())
+
+  menuItemId   String
+  menuItem     MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  text      String
+  time      String   // e.g. '19:42'
+  type      String   // 'info' | 'success' | 'warning' | 'error'
+  createdAt DateTime @default(now())
+
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
