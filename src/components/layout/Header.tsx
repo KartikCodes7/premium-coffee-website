@@ -4,16 +4,31 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
-import { Utensils, ShoppingCart, UserCircle } from 'lucide-react';
+import { Utensils, ShoppingCart, UserCircle, Coffee, QrCode } from 'lucide-react';
 
 interface HeaderProps {
   onOpenCart: () => void;
 }
 
+/** Admin-only nav links — hidden when customer is in table mode */
+const adminNavLinks = [
+  { label: 'Ops Terminal', href: '/dashboard' },
+  { label: 'Analytics Hub', href: '/analytics' },
+  { label: 'QR Generator', href: '/qr-generator' },
+];
+
+/** Customer-facing nav links — always visible */
+const customerNavLinks = [
+  { label: 'Live Menu', href: '/menu' },
+  { label: 'AI Concierge', href: '/chatbot' },
+  { label: 'Checkout', href: '/order' },
+];
+
 export default function Header({ onOpenCart }: HeaderProps) {
   const pathname = usePathname();
   const session = useStore((state) => state.session);
   const cartCount = useStore((state) => state.getCartCount());
+  const tableNumber = useStore((state) => state.tableNumber);
   
   // Prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -21,14 +36,12 @@ export default function Header({ onOpenCart }: HeaderProps) {
     setMounted(true);
   }, []);
 
-  const navLinks = [
-    { label: 'QR Menu', href: '/qr' },
-    { label: 'Live Menu', href: '/menu' },
-    { label: 'AI Concierge', href: '/chatbot' },
-    { label: 'Checkout', href: '/order' },
-    { label: 'Ops Terminal', href: '/dashboard' },
-    { label: 'Analytics Hub', href: '/analytics' },
-  ];
+  const isCustomerMode = mounted && !!tableNumber;
+
+  // Build nav links based on mode
+  const navLinks = isCustomerMode
+    ? customerNavLinks
+    : [...customerNavLinks, ...adminNavLinks];
 
   return (
     <header className="fixed top-0 left-0 w-full h-nav-height bg-[#0C0705]/85 backdrop-blur-xl border-b border-ice-border z-50 transition-all">
@@ -36,7 +49,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
         
         {/* Logo and Tenant Info */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-3 spring-interaction">
+          <Link href={isCustomerMode ? '/menu' : '/'} className="flex items-center gap-3 spring-interaction">
             <Utensils className="text-[#C58A46] font-bold" size={32} />
             <div className="flex flex-col">
               <h1 className="font-display-lg text-headline-md font-extrabold text-[#C58A46] tracking-tight leading-none">
@@ -44,11 +57,24 @@ export default function Header({ onOpenCart }: HeaderProps) {
               </h1>
               {mounted && (
                 <span className="text-[9px] font-mono uppercase tracking-widest text-[#8E939E] mt-0.5">
-                  {session.restaurant}
+                  {isCustomerMode
+                    ? `Serving Table ${tableNumber} ☕`
+                    : session.restaurant}
                 </span>
               )}
             </div>
           </Link>
+
+          {/* Customer table badge */}
+          {isCustomerMode && (
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C58A46]/10 border border-[#C58A46]/20">
+              <Coffee className="h-3.5 w-3.5 text-[#C58A46]" />
+              <span className="text-[10px] font-mono font-bold text-[#C58A46] uppercase tracking-widest">
+                Table {tableNumber}
+              </span>
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            </div>
+          )}
         </div>
 
         {/* Navigation Tabs (Desktop) */}
@@ -98,17 +124,30 @@ export default function Header({ onOpenCart }: HeaderProps) {
             </button>
           </div>
 
-          {/* User / SaaS Role Indicator */}
+          {/* User / SaaS Role Indicator — show profile for admin, table badge for customer */}
           {mounted && (
             <div className="flex items-center gap-3 pl-4 border-l border-ice-border">
-              <div className="hidden lg:flex flex-col text-right">
-                <span className="text-xs font-semibold text-premium-white">{session.user}</span>
-                <span className="text-[9px] font-mono tracking-widest text-[#C58A46] uppercase">
-                  {session.role} Mode
-                </span>
-              </div>
-              <div className="w-8 h-8 rounded-full border border-ice-border overflow-hidden bg-glass-fill flex items-center justify-center cursor-pointer hover:border-[#E5C158]/50 transition-colors">
-                <UserCircle className="text-[#8E939E]" size={24} />
+              {isCustomerMode ? (
+                <div className="hidden lg:flex flex-col text-right">
+                  <span className="text-xs font-semibold text-premium-white">Guest</span>
+                  <span className="text-[9px] font-mono tracking-widest text-[#C58A46] uppercase">
+                    Table {tableNumber} ☕
+                  </span>
+                </div>
+              ) : (
+                <div className="hidden lg:flex flex-col text-right">
+                  <span className="text-xs font-semibold text-premium-white">{session.user}</span>
+                  <span className="text-[9px] font-mono tracking-widest text-[#C58A46] uppercase">
+                    {session.role} Mode
+                  </span>
+                </div>
+              )}
+              <div className="w-8 h-8 rounded-full border border-ice-border overflow-hidden bg-glass-fill flex items-center justify-center cursor-pointer hover:border-[#C58A46]/50 transition-colors">
+                {isCustomerMode ? (
+                  <Coffee className="text-[#C58A46]" size={20} />
+                ) : (
+                  <UserCircle className="text-[#8E939E]" size={24} />
+                )}
               </div>
             </div>
           )}

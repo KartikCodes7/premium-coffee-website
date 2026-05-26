@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from './Header';
 import CartSidebar from './CartSidebar';
 import RoleSwitcher from '../ui/RoleSwitcher';
@@ -14,10 +15,26 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 
+/**
+ * Routes where admin chrome (header, sidebar, role switcher) should be hidden
+ * — these are customer-facing scan/transition pages.
+ */
+const CHROMELESS_ROUTES = ['/qr', '/qr/scan'];
+
+/**
+ * Admin-only routes that customers should never see.
+ * If a customer (table session) tries to access these, redirect to menu.
+ */
+const ADMIN_ROUTES = ['/dashboard', '/analytics', '/qr-generator'];
+
 export default function AppLayout({ children }: AppLayoutProps) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [queryClient] = useState(() => new QueryClient());
   const [cartOpen, setCartOpen] = useState(false);
   const notifications = useStore((state) => state.notifications);
+  const tableNumber = useStore((state) => state.tableNumber);
+  const session = useStore((state) => state.session);
   const [activeToasts, setActiveToasts] = useState<NotificationItem[]>([]);
 
   // Prevent hydration mismatch
@@ -46,10 +63,38 @@ export default function AppLayout({ children }: AppLayoutProps) {
     });
   }, [notifications, mounted]);
 
+  // Determine layout mode
+  const isChromeless = CHROMELESS_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(route + '/')
+  );
+  const isAdminRoute = ADMIN_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(route + '/')
+  );
+  // Only enforce strict customer routing lock if they are actually a Guest
+  const isCustomerMode = mounted && !!tableNumber && session?.role === 'Guest';
+
+  // Customer trying to access admin routes — redirect directly to menu
+  useEffect(() => {
+    if (isCustomerMode && isAdminRoute) {
+      router.replace(`/menu?table=${tableNumber}`);
+    }
+  }, [isCustomerMode, isAdminRoute, router, tableNumber]);
+
   if (!mounted) {
     return (
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen bg-canvas-charcoal">{children}</div>
+      </QueryClientProvider>
+    );
+  }
+
+  // Chromeless mode: QR scan pages — no header, no sidebar, no floaters
+  if (isChromeless) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-canvas-charcoal text-premium-white font-sans">
+          {children}
+        </div>
       </QueryClientProvider>
     );
   }
@@ -66,8 +111,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
         {/* Cart Sidebar */}
         <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
 
-        {/* Float B2B Console Switcher */}
-        <RoleSwitcher />
+        {/* Float B2B Console Switcher — hide for customers */}
+        {!isCustomerMode && <RoleSwitcher />}
 
         {/* Persistent Floating AI Barista Chatbot */}
         <FloatingChatbot />
