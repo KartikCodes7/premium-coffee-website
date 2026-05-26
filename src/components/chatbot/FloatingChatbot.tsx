@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '@/store/useStore';
+import { useChatMutation } from '@/services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -30,6 +31,8 @@ export default function FloatingChatbot() {
   const addToCart = useStore((state) => state.addToCart);
   const addNotification = useStore((state) => state.addNotification);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  const chatMutation = useChatMutation();
 
   // Prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -86,18 +89,26 @@ export default function FloatingChatbot() {
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const lower = userText.toLowerCase();
-      const match = sommelierResponses.find(r =>
-        r.keywords.some(kw => lower.includes(kw))
-      );
-
-      const responseText = match ? match.text : fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-      const upsellItem = match ? match.item : null;
-
-      setIsTyping(false);
-      setMessages((prev) => [...prev, { id: Date.now() + 1, sender: 'ai', text: responseText, upsellItem }]);
-    }, 1200);
+    chatMutation.mutate(userText, {
+      onSuccess: (data) => {
+        setIsTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          { id: Date.now() + 1, sender: 'ai', text: data.text, upsellItem: data.upsellItem }
+        ]);
+      },
+      onError: (err) => {
+        setIsTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            sender: 'ai',
+            text: "My apologies. I encountered a minor networking delay while accessing our wine reserve logs. Please try again."
+          }
+        ]);
+      }
+    });
   };
 
   const handleAddUpsell = (item: { id: string; name: string; price: number; image: string }) => {

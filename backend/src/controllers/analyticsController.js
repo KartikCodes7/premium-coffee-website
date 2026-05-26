@@ -1,21 +1,65 @@
+const { prisma, isDbConnected, getOrCreateDefaultTenant } = require('../services/db');
 const getMemoryDb = (req) => req.db;
 
-exports.getAnalytics = (req, res) => {
+exports.getAnalytics = async (req, res) => {
   const db = getMemoryDb(req);
 
-  // Compute shift revenue dynamically
-  const shiftRevenue = db.orders
-    .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing')
-    .reduce((sum, o) => sum + o.total, 0);
-
-  // Compute gross sales
+  let shiftRevenue = 0;
+  let activeQueueCount = 0;
+  let alertsCount = 0;
   let grossRevenue = 142850.00;
   let totalOrdersCount = 2450;
+  let transactions = [];
 
-  db.orders.forEach(o => {
-    grossRevenue += o.total;
-    totalOrdersCount += 1;
-  });
+  if (isDbConnected) {
+    try {
+      const tenantId = await getOrCreateDefaultTenant();
+      const orders = await prisma.order.findMany({
+        where: { tenantId },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      const notifications = await prisma.notification.findMany({
+        where: { tenantId }
+      });
+
+      shiftRevenue = orders
+        .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing')
+        .reduce((sum, o) => sum + o.total, 0);
+
+      activeQueueCount = orders.filter(o => o.status === 'Preparing' || o.status === 'Pending').length;
+      alertsCount = notifications.length;
+
+      orders.forEach(o => {
+        grossRevenue += o.total;
+        totalOrdersCount += 1;
+      });
+
+      transactions = orders.map(o => ({
+        id: o.ticketNumber,
+        name: o.customerName,
+        items: 'Gastronomic culinary experience',
+        total: o.total,
+        status: o.status,
+        time: `Today, ${o.time}`
+      }));
+    } catch (e) {
+      console.error('[Prisma] Error getting analytics data:', e);
+    }
+  } else {
+    shiftRevenue = db.orders
+      .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing')
+      .reduce((sum, o) => sum + o.total, 0);
+
+    db.orders.forEach(o => {
+      grossRevenue += o.total;
+      totalOrdersCount += 1;
+    });
+
+    activeQueueCount = db.orders.filter(o => o.status === 'Preparing' || o.status === 'Pending').length;
+    alertsCount = db.notifications.length;
+    transactions = db.transactions;
+  }
 
   const popularItems = [
     { name: 'Signature Wagyu', sold: 842, percentage: 85 },
@@ -38,11 +82,11 @@ exports.getAnalytics = (req, res) => {
       avgOrderValue: 58.30,
       returningCohort: '68%',
       shiftRevenue,
-      activeQueueCount: db.orders.filter(o => o.status === 'Preparing' || o.status === 'Pending').length,
-      alertsCount: db.notifications.length
+      activeQueueCount,
+      alertsCount
     },
     popularItems,
     cohortData,
-    transactions: db.transactions
+    transactions
   });
 };

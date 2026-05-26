@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useStore } from '@/store/useStore';
+import { useChatMutation } from '@/services/api';
 
 interface Message {
   id: number;
@@ -23,6 +24,8 @@ export default function ChatbotPage() {
   const subtotal = useStore((state) => state.getCartSubtotal());
   const addToCart = useStore((state) => state.addToCart);
   const addNotification = useStore((state) => state.addNotification);
+  
+  const chatMutation = useChatMutation();
 
   // Chat States
   const [messages, setMessages] = useState<Message[]>([
@@ -100,27 +103,32 @@ export default function ChatbotPage() {
     setInputVal('');
     setIsTyping(true);
 
-    // 2. Simulate AI Processing
-    setTimeout(() => {
-      const lower = textToSend.toLowerCase();
-      const match = sommelierResponses.find((r) =>
-        r.keywords.some((kw) => lower.includes(kw))
-      );
-
-      const responseText = match ? match.text : fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-      const upsellItem = match ? match.item : null;
-
-      const aiMsg: Message = {
-        id: Date.now() + 1,
-        sender: 'ai',
-        text: responseText,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        upsellItem
-      };
-
-      setIsTyping(false);
-      setMessages((prev) => [...prev, aiMsg]);
-    }, 1200);
+    // 2. Post to backend
+    chatMutation.mutate(textToSend, {
+      onSuccess: (data) => {
+        const aiMsg: Message = {
+          id: Date.now() + 1,
+          sender: 'ai',
+          text: data.text,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          upsellItem: data.upsellItem
+        };
+        setIsTyping(false);
+        setMessages((prev) => [...prev, aiMsg]);
+      },
+      onError: (err) => {
+        setIsTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            sender: 'ai',
+            text: "My apologies. I encountered a minor networking delay while accessing our wine reserve logs. Please try again.",
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ]);
+      }
+    });
   };
 
   const handleQuickAdd = (item: { id: string; name: string; price: number; image: string }) => {

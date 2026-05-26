@@ -22,7 +22,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
 
   return (
     <aside
-      className={`bg-[#12141C]/90 border-r border-ice-border flex flex-col justify-between transition-all duration-300 z-40 ${
+      className={`bg-[#15100C]/90 border-r border-ice-border flex flex-col justify-between transition-all duration-300 z-40 ${
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -56,7 +56,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-[#E5C158]/10 text-[#E5C158] border-[#E5C158]/20 font-bold'
+                    ? 'bg-[#C58A46]/10 text-[#C58A46] border-[#C58A46]/20 font-bold'
                     : 'bg-transparent border-transparent text-[#8E939E] hover:text-premium-white hover:bg-white/5'
                 }`}
               >
@@ -69,7 +69,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       </div>
 
       {/* Profile/Role Details at Bottom */}
-      <div className="p-4 border-t border-ice-border bg-[#0B0C0E]/30 space-y-4">
+      <div className="p-4 border-t border-ice-border bg-[#0C0705]/30 space-y-4">
         <div className={`flex items-center gap-3 ${collapsed ? 'justify-center' : ''}`}>
           <div className="w-8 h-8 rounded-full border border-ice-border overflow-hidden bg-glass-fill flex items-center justify-center shrink-0">
             <span className="material-symbols-outlined text-[#8E939E] text-lg">account_circle</span>
@@ -79,7 +79,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
               <p className="text-xs font-bold text-premium-white truncate leading-tight">
                 {session.user}
               </p>
-              <p className="text-[9px] font-mono tracking-widest text-[#E5C158] uppercase truncate leading-none mt-1">
+              <p className="text-[9px] font-mono tracking-widest text-[#C58A46] uppercase truncate leading-none mt-1">
                 {session.role}
               </p>
             </div>

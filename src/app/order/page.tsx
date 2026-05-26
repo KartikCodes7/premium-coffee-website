@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
+import { useCreateOrderMutation } from '@/services/api';
 
 export default function OrderPage() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function OrderPage() {
   const clearCart = useStore((state) => state.clearCart);
   const addLiveOrder = useStore((state) => state.addLiveOrder);
   const addNotification = useStore((state) => state.addNotification);
+
+  const createOrderMutation = useCreateOrderMutation();
 
   // Form states
   const [dietaryNotes, setDietaryNotes] = useState('');
@@ -61,20 +64,34 @@ export default function OrderPage() {
     }
 
     const itemsStr = cart.map((i) => `${i.name} (${i.qty}x)`).join(', ');
-    const ticketId = '#OS-' + Math.floor(1000 + Math.random() * 9000);
 
-    // Add order to live queue
-    addLiveOrder({
-      name: cardName || 'Julian V.',
-      items: itemsStr,
-      total: grandTotal
-    });
+    // Add order to live queue on backend
+    createOrderMutation.mutate(
+      {
+        name: cardName || 'Julian V.',
+        items: itemsStr,
+        total: grandTotal
+      },
+      {
+        onSuccess: (data) => {
+          // Sync with local Zustand orders state
+          addLiveOrder({
+            name: data.name,
+            items: itemsStr,
+            total: data.total
+          });
 
-    setSuccessTicketId(ticketId);
-    setShowSuccess(true);
+          setSuccessTicketId(data.id);
+          setShowSuccess(true);
 
-    // Clear local cart
-    clearCart();
+          // Clear local cart
+          clearCart();
+        },
+        onError: () => {
+          addNotification('Payment authorization failed. Server offline.', 'error');
+        }
+      }
+    );
   };
 
   const handleDismissModal = (target: string) => {

@@ -7,12 +7,14 @@ import RoleSwitcher from '../ui/RoleSwitcher';
 import FloatingChatbot from '../chatbot/FloatingChatbot';
 import { useStore, NotificationItem } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  const [queryClient] = useState(() => new QueryClient());
   const [cartOpen, setCartOpen] = useState(false);
   const notifications = useStore((state) => state.notifications);
   const [activeToasts, setActiveToasts] = useState<NotificationItem[]>([]);
@@ -44,66 +46,72 @@ export default function AppLayout({ children }: AppLayoutProps) {
   }, [notifications, mounted]);
 
   if (!mounted) {
-    return <div className="min-h-screen bg-canvas-charcoal">{children}</div>;
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen bg-canvas-charcoal">{children}</div>
+      </QueryClientProvider>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-canvas-charcoal text-premium-white flex flex-col font-sans">
-      {/* Global Header */}
-      <Header onOpenCart={() => setCartOpen(true)} />
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen bg-canvas-charcoal text-premium-white flex flex-col font-sans">
+        {/* Global Header */}
+        <Header onOpenCart={() => setCartOpen(true)} />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">{children}</div>
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">{children}</div>
 
-      {/* Cart Sidebar */}
-      <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+        {/* Cart Sidebar */}
+        <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
 
-      {/* Float B2B Console Switcher */}
-      <RoleSwitcher />
+        {/* Float B2B Console Switcher */}
+        <RoleSwitcher />
 
-      {/* Persistent Floating AI Sommelier Chatbot */}
-      <FloatingChatbot />
+        {/* Persistent Floating AI Sommelier Chatbot */}
+        <FloatingChatbot />
 
-      {/* Toast Notification Container */}
-      <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
-        <AnimatePresence>
-          {activeToasts.map((toast) => {
-            let borderClass = 'border-l-[#E5C158]';
-            let icon = 'info';
-            let iconColor = 'text-[#E5C158]';
+        {/* Toast Notification Container */}
+        <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+          <AnimatePresence>
+            {activeToasts.map((toast) => {
+              let borderClass = 'border-l-[#C58A46]';
+              let icon = 'info';
+              let iconColor = 'text-[#C58A46]';
 
-            if (toast.type === 'success') {
-              borderClass = 'border-l-green-500';
-              icon = 'check_circle';
-              iconColor = 'text-green-400';
-            } else if (toast.type === 'warning') {
-              borderClass = 'border-l-amber-500';
-              icon = 'warning';
-              iconColor = 'text-amber-400';
-            } else if (toast.type === 'error') {
-              borderClass = 'border-l-red-500';
-              icon = 'error';
-              iconColor = 'text-red-400';
-            }
+              if (toast.type === 'success') {
+                borderClass = 'border-l-green-500';
+                icon = 'check_circle';
+                iconColor = 'text-green-400';
+              } else if (toast.type === 'warning') {
+                borderClass = 'border-l-amber-500';
+                icon = 'warning';
+                iconColor = 'text-amber-400';
+              } else if (toast.type === 'error') {
+                borderClass = 'border-l-red-500';
+                icon = 'error';
+                iconColor = 'text-red-400';
+              }
 
-            return (
-              <motion.div
-                key={toast.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className={`glass-card p-4 rounded-xl border-l-4 ${borderClass} flex items-center gap-3 shadow-2xl pointer-events-auto`}
-              >
-                <span className={`material-symbols-outlined ${iconColor}`}>{icon}</span>
-                <span className="text-xs font-medium text-premium-white flex-1">
-                  {toast.text}
-                </span>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+              return (
+                <motion.div
+                  key={toast.id}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className={`glass-card p-4 rounded-xl border-l-4 ${borderClass} flex items-center gap-3 shadow-2xl pointer-events-auto`}
+                >
+                  <span className={`material-symbols-outlined ${iconColor}`}>{icon}</span>
+                  <span className="text-xs font-medium text-premium-white flex-1">
+                    {toast.text}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </QueryClientProvider>
   );
 }

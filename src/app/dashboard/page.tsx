@@ -4,13 +4,26 @@ import React, { useState, useEffect } from 'react';
 import { useStore, LiveOrder, MenuItem, Reservation } from '@/store/useStore';
 import Sidebar from '@/components/layout/Sidebar';
 import Image from 'next/image';
+import {
+  useOrdersQuery,
+  useUpdateOrderStatusMutation,
+  useMenuQuery,
+  useUpdateMenuPriceMutation,
+  useAddMenuItemMutation,
+  useDeleteMenuItemMutation,
+  useReservationsQuery,
+  useCreateReservationMutation,
+  useConfirmReservationMutation,
+  useCancelReservationMutation,
+  useAnalyticsQuery
+} from '@/services/api';
 
 export default function DashboardPage() {
   const session = useStore((state) => state.session);
-  const orders = useStore((state) => state.orders);
-  const notifications = useStore((state) => state.notifications);
-  const menuItems = useStore((state) => state.menuItems);
-  const reservations = useStore((state) => state.reservations);
+  const localOrders = useStore((state) => state.orders);
+  const localNotifications = useStore((state) => state.notifications);
+  const localMenuItems = useStore((state) => state.menuItems);
+  const localReservations = useStore((state) => state.reservations);
 
   const addLiveOrder = useStore((state) => state.addLiveOrder);
   const updateOrderStatus = useStore((state) => state.updateOrderStatus);
@@ -23,8 +36,30 @@ export default function DashboardPage() {
 
   // Reservation Actions
   const addReservation = useStore((state) => state.addReservation);
-  const confirmReservation = useStore((state) => state.confirmReservation);
-  const cancelReservation = useStore((state) => state.cancelReservation);
+  const confirmReservationLocal = useStore((state) => state.confirmReservation);
+  const cancelReservationLocal = useStore((state) => state.cancelReservation);
+
+  // React Query Operations
+  const { data: serverOrders = [] } = useOrdersQuery();
+  const { data: serverMenuItems = [] } = useMenuQuery();
+  const { data: serverReservations = [] } = useReservationsQuery();
+  const { data: serverAnalytics } = useAnalyticsQuery();
+
+  const updateOrderStatusMutation = useUpdateOrderStatusMutation();
+  const updateMenuPriceMutation = useUpdateMenuPriceMutation();
+  const addMenuItemMutation = useAddMenuItemMutation();
+  const deleteMenuItemMutation = useDeleteMenuItemMutation();
+  const createReservationMutation = useCreateReservationMutation();
+  const confirmReservationMutation = useConfirmReservationMutation();
+  const cancelReservationMutation = useCancelReservationMutation();
+
+  // Unified data selectors with local offline backup!
+  const orders = serverOrders.length > 0 ? serverOrders : localOrders;
+  const menuItems = serverMenuItems.length > 0 ? serverMenuItems : localMenuItems;
+  const reservations = serverReservations.length > 0 ? serverReservations : localReservations;
+  
+  // Roster notifications fallback
+  const notifications = localNotifications;
 
   // Dashboard state tabs: overview | menu | reservations
   const [activeTab, setActiveTab] = useState('overview');
@@ -81,9 +116,19 @@ export default function DashboardPage() {
     e.preventDefault();
     if (!newMenuName || !newMenuPrice) return;
     
+    const parsedPrice = parseFloat(newMenuPrice);
+
     addMenuItem({
       name: newMenuName,
-      price: parseFloat(newMenuPrice),
+      price: parsedPrice,
+      category: newMenuCategory,
+      description: newMenuDesc || 'Luxury curated gastronomic signature culinary addition.',
+      image: newMenuCategory === 'Beverage' ? '/assets/order_gin.png' : '/assets/chatbot_steak.png'
+    });
+
+    addMenuItemMutation.mutate({
+      name: newMenuName,
+      price: parsedPrice,
       category: newMenuCategory,
       description: newMenuDesc || 'Luxury curated gastronomic signature culinary addition.',
       image: newMenuCategory === 'Beverage' ? '/assets/order_gin.png' : '/assets/chatbot_steak.png'
@@ -98,12 +143,23 @@ export default function DashboardPage() {
     e.preventDefault();
     if (!newGuestName) return;
 
+    const parsedCount = parseInt(newGuestsCount);
+    const resolvedBooth = `Booth ${Math.floor(1 + Math.random() * 8)}`;
+
     addReservation({
       guestName: newGuestName,
       date: newResDate,
       hour: newResHour,
-      guestsCount: parseInt(newGuestsCount),
-      booth: `Booth ${Math.floor(1 + Math.random() * 8)}`
+      guestsCount: parsedCount,
+      booth: resolvedBooth
+    });
+
+    createReservationMutation.mutate({
+      guestName: newGuestName,
+      date: newResDate,
+      hour: newResHour,
+      guestsCount: parsedCount,
+      booth: resolvedBooth
     });
 
     setNewGuestName('');
@@ -119,6 +175,7 @@ export default function DashboardPage() {
     const parsed = parseFloat(editingPrice);
     if (!isNaN(parsed)) {
       updateMenuPrice(itemId, parsed);
+      updateMenuPriceMutation.mutate({ id: itemId, price: parsed });
     }
     setEditingItemId(null);
   };
@@ -457,7 +514,10 @@ export default function DashboardPage() {
                               </button>
                             )}
                             <button
-                              onClick={() => deleteMenuItem(item.id)}
+                              onClick={() => {
+                                deleteMenuItem(item.id);
+                                deleteMenuItemMutation.mutate(item.id);
+                              }}
                               className="w-7 h-7 rounded-lg hover:bg-red-500/10 text-[#8E939E] hover:text-red-400 flex items-center justify-center transition-colors"
                             >
                               <span className="material-symbols-outlined text-sm">delete</span>
@@ -581,13 +641,19 @@ export default function DashboardPage() {
                               {res.status === 'Pending' && (
                                 <>
                                   <button
-                                    onClick={() => confirmReservation(res.id)}
+                                    onClick={() => {
+                                      confirmReservationLocal(res.id);
+                                      confirmReservationMutation.mutate(res.id);
+                                    }}
                                     className="px-2 py-1 bg-green-500 text-premium-white rounded font-bold text-[9px] hover:bg-green-600 transition-colors"
                                   >
                                     CONFIRM
                                   </button>
                                   <button
-                                    onClick={() => cancelReservation(res.id)}
+                                    onClick={() => {
+                                      cancelReservationLocal(res.id);
+                                      cancelReservationMutation.mutate(res.id);
+                                    }}
                                     className="px-2 py-1 bg-white/5 border border-ice-border text-premium-white rounded font-bold text-[9px] hover:bg-white/10 transition-colors"
                                   >
                                     CANCEL
@@ -685,5 +751,6 @@ export default function DashboardPage() {
 
   function handleOrderStatus(id: string, status: LiveOrder['status']) {
     updateOrderStatus(id, status);
+    updateOrderStatusMutation.mutate({ id, status });
   }
 }

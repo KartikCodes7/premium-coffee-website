@@ -59,6 +59,7 @@ interface RestaurantOSState {
   orders: LiveOrder[];
   menuItems: MenuItem[];
   reservations: Reservation[];
+  favoriteItemIds: string[];
 
   // Cart Actions
   addToCart: (item: Omit<CartItem, 'qty'> & { qty?: number }) => void;
@@ -75,6 +76,10 @@ interface RestaurantOSState {
   // Notifications Actions
   addNotification: (text: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
   clearNotifications: () => void;
+
+  // Favorites Actions
+  toggleFavorite: (id: string) => void;
+  isFavorite: (id: string) => boolean;
 
   // Orders Actions
   addLiveOrder: (order: { name: string; items: string; total: number }) => void;
@@ -122,6 +127,7 @@ export const useStore = create<RestaurantOSState>()(
         { id: 2, text: "New reservation: Elena Rostova (4 guests) at 20:30", time: "19:35", type: "success" },
         { id: 3, text: "Supply alert: Wagyu beef stock below threshold", time: "19:10", type: "warning" }
       ],
+      favoriteItemIds: [],
       orders: [
         { id: '#OS-8902', name: 'Elena R.', items: 'Signature Wagyu, Napa Valley 2018', total: 219.00, status: 'Preparing', time: '19:42' },
         { id: '#OS-8901', name: 'Marcus K.', items: 'Seared Scallops, Obsidian Gin', total: 54.00, status: 'Served', time: '19:20' }
@@ -235,6 +241,19 @@ export const useStore = create<RestaurantOSState>()(
       },
 
       clearNotifications: () => set({ notifications: [] }),
+
+      // Favorites Actions
+      toggleFavorite: (id) => {
+        const favorites = get().favoriteItemIds;
+        const already = favorites.includes(id);
+        const updated = already ? favorites.filter((x) => x !== id) : [id, ...favorites];
+        set({ favoriteItemIds: updated });
+        get().addNotification(already ? 'Removed from favorites' : 'Saved to favorites', already ? 'warning' : 'success');
+      },
+
+      isFavorite: (id) => {
+        return get().favoriteItemIds.includes(id);
+      },
 
       // Orders Actions
       addLiveOrder: (order) => {

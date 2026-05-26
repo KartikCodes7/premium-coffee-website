@@ -10,13 +10,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-canvas-charcoal: #0B0C0E;
-  --color-premium-white: #F4F5F6;
-  --color-muted-steel: #8E939E;
-  --color-ice-border: rgba(255, 255, 255, 0.08);
-  --color-glass-fill: rgba(25, 28, 41, 0.45);
-  --color-primary: #E5C158;
-  --color-primary-container: #ffe08b;
+  --color-canvas-charcoal: #0C0705;
+  --color-premium-white: #F6F0E8;
+  --color-muted-steel: #B9A89A;
+  --color-ice-border: rgba(246, 240, 232, 0.10);
+  --color-glass-fill: rgba(21, 16, 12, 0.56);
+  --color-primary: #C58A46;
+  --color-primary-container: #E7C39A;
 
   --spacing-nav-height: 72px;
   --spacing-margin-mobile: 24px;
@@ -44,8 +44,8 @@ body {
 }
 
 .user-bubble {
-  background: #12141C;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(21, 16, 12, 0.92);
+  border: 1px solid rgba(246, 240, 232, 0.06);
 }
 
 /* Spring Physics Micro-Interactions */
@@ -74,7 +74,7 @@ body {
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(229, 193, 88, 0.3); /* Muted Gold on hover */
+  background: rgba(197, 138, 70, 0.35);
 }
 
 /* Hide scrollbars but keep scrolling functionality */
@@ -121,7 +121,7 @@ body {
 
 /* Active Gold Glow */
 .gold-glow {
-  box-shadow: 0 0 15px rgba(229, 193, 88, 0.15);
+  box-shadow: 0 0 18px rgba(197, 138, 70, 0.18);
 }
 
 /* Material Symbols Setup */
@@ -130,11 +130,11 @@ body {
 }
 
 /* Heatmap Opacities matching Lux Theme */
-.heatmap-90 { background-color: rgba(229, 193, 88, 0.9); color: #0B0C0E; }
-.heatmap-70 { background-color: rgba(229, 193, 88, 0.7); color: #0B0C0E; }
-.heatmap-50 { background-color: rgba(229, 193, 88, 0.5); color: #0B0C0E; }
-.heatmap-30 { background-color: rgba(229, 193, 88, 0.3); color: #F4F5F6; }
-.heatmap-10 { background-color: rgba(229, 193, 88, 0.1); color: #8E939E; }
+.heatmap-90 { background-color: rgba(197, 138, 70, 0.9); color: #0C0705; }
+.heatmap-70 { background-color: rgba(197, 138, 70, 0.7); color: #0C0705; }
+.heatmap-50 { background-color: rgba(197, 138, 70, 0.5); color: #0C0705; }
+.heatmap-30 { background-color: rgba(197, 138, 70, 0.3); color: #F6F0E8; }
+.heatmap-10 { background-color: rgba(197, 138, 70, 0.1); color: #B9A89A; }
 
 @theme inline {
   --font-heading: var(--font-sans);
@@ -215,37 +215,37 @@ body {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #0C0705;
+  --foreground: #F6F0E8;
+  --card: #15100C;
+  --card-foreground: #F6F0E8;
+  --popover: #15100C;
+  --popover-foreground: #F6F0E8;
+  --primary: #C58A46;
+  --primary-foreground: #0C0705;
+  --secondary: rgba(246, 240, 232, 0.06);
+  --secondary-foreground: #F6F0E8;
+  --muted: rgba(246, 240, 232, 0.07);
+  --muted-foreground: #B9A89A;
+  --accent: rgba(197, 138, 70, 0.14);
+  --accent-foreground: #F6F0E8;
+  --destructive: #C24D3B;
+  --border: rgba(246, 240, 232, 0.10);
+  --input: rgba(246, 240, 232, 0.12);
+  --ring: rgba(197, 138, 70, 0.45);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #15100C;
+  --sidebar-foreground: #F6F0E8;
+  --sidebar-primary: #C58A46;
+  --sidebar-primary-foreground: #0C0705;
+  --sidebar-accent: rgba(197, 138, 70, 0.12);
+  --sidebar-accent-foreground: #F6F0E8;
+  --sidebar-border: rgba(246, 240, 232, 0.10);
+  --sidebar-ring: rgba(197, 138, 70, 0.45);
 }
 
 @layer base {

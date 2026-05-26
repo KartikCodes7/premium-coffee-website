@@ -47,12 +47,12 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md h-full bg-[#12141C] border-l border-ice-border shadow-2xl flex flex-col"
+              className="w-full max-w-md h-full bg-[#15100C] border-l border-ice-border shadow-2xl flex flex-col"
             >
               {/* Header */}
-              <div className="p-6 border-b border-ice-border flex justify-between items-center bg-[#0B0C0E]/50">
+              <div className="p-6 border-b border-ice-border flex justify-between items-center bg-[#0C0705]/50">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#E5C158]">shopping_bag</span>
+                  <span className="material-symbols-outlined text-[#C58A46]">shopping_bag</span>
                   <h2 className="text-lg font-bold text-premium-white tracking-tight">Active Table Bill</h2>
                 </div>
                 <button
@@ -72,7 +72,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                     <Link
                       href="/order"
                       onClick={onClose}
-                      className="px-4 py-2 bg-glass-fill border border-ice-border hover:border-[#E5C158]/50 text-xs font-semibold rounded-lg text-[#E5C158] transition-colors"
+                      className="px-4 py-2 bg-glass-fill border border-ice-border hover:border-[#C58A46]/50 text-xs font-semibold rounded-lg text-[#C58A46] transition-colors"
                     >
                       Browse Menu Specials
                     </Link>
@@ -92,7 +92,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                         <h3 className="text-xs font-bold text-premium-white leading-tight truncate">
                           {item.name}
                         </h3>
-                        <p className="text-[10px] text-[#E5C158] font-mono mt-1">
+                        <p className="text-[10px] text-[#C58A46] font-mono mt-1">
                           ${item.price.toFixed(2)}
                         </p>
                         {Object.keys(item.options).length > 0 && (
@@ -138,7 +138,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               </div>
 
               {/* Footer Summary */}
-              <div className="p-6 border-t border-ice-border bg-[#0B0C0E]/30 space-y-4">
+              <div className="p-6 border-t border-ice-border bg-[#0C0705]/30 space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-[#8E939E] text-xs">
                     <span>Subtotal</span>
@@ -152,7 +152,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   </div>
                   <div className="flex justify-between items-center border-t border-ice-border pt-3 mt-2 text-premium-white font-bold text-sm">
                     <span>Total Session Value</span>
-                    <span className="font-mono text-[#E5C158]">${total.toFixed(2)}</span>
+                    <span className="font-mono text-[#C58A46]">${total.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -160,7 +160,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   <Link
                     href="/order"
                     onClick={onClose}
-                    className="block w-full py-4 bg-[#E5C158] text-canvas-charcoal rounded-xl font-bold text-center text-sm hover:brightness-110 transition-all spring-interaction shadow-lg"
+                    className="block w-full py-4 bg-[#C58A46] text-canvas-charcoal rounded-xl font-bold text-center text-sm hover:brightness-110 transition-all spring-interaction shadow-lg"
                   >
                     Proceed to Secure Checkout
                   </Link>
