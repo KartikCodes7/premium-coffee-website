@@ -3,7 +3,7 @@
 import React, { useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Heart, Plus } from 'lucide-react';
+import { Heart, Plus, Star } from 'lucide-react';
 import type { CoffeeMenuItem } from './coffeeMenuData';
 
 type Props = {
@@ -116,21 +116,19 @@ export default function CoffeeMenuCard({
           </div>
         </div>
 
-        <div className="p-5 space-y-3 relative z-10">
+        <div className="p-6 space-y-4 relative z-10">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <h3 className="text-base font-extrabold tracking-tight text-premium-white truncate">
+              <h3 className="text-lg font-extrabold tracking-tight text-premium-white truncate">
                 {item.name}
               </h3>
-              <p className="text-xs text-muted-steel mt-1 line-clamp-2 leading-relaxed">
+              <p className="text-sm text-muted-steel mt-1.5 line-clamp-2 leading-relaxed">
                 {item.description}
               </p>
             </div>
             <div className="text-right shrink-0">
-              <div className="flex items-center justify-end gap-1 text-[#C58A46] font-mono text-xs">
-                <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  star
-                </span>
+              <div className="flex items-center justify-end gap-1 text-[#C58A46] font-mono text-sm">
+                <Star className="fill-current" size={14} />
                 <span className="font-bold">{item.rating.toFixed(1)}</span>
               </div>
               <p className="text-[10px] text-muted-steel font-mono uppercase tracking-widest mt-1">
@@ -139,8 +137,8 @@ export default function CoffeeMenuCard({
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <span className="font-mono text-lg font-extrabold text-[#C58A46]">
+          <div className="flex items-center justify-between pt-3 border-t border-ice-border/30">
+            <span className="font-mono text-xl font-extrabold text-[#C58A46] tracking-tight">
               ${item.price.toFixed(2)}
             </span>
 
@@ -151,11 +149,11 @@ export default function CoffeeMenuCard({
                 e.stopPropagation();
                 onQuickAdd();
               }}
-              className="relative h-10 px-4 rounded-xl border border-ice-border bg-white/5 hover:bg-white/10 hover:border-[#C58A46]/45 transition-all flex items-center gap-2 text-xs font-bold text-premium-white"
+              className="relative h-11 px-5 rounded-xl border border-ice-border bg-white/5 hover:bg-white/10 hover:border-[#C58A46]/45 transition-all flex items-center gap-2 text-sm font-bold text-premium-white overflow-hidden group"
             >
-              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(circle_at_30%_30%,rgba(197,138,70,0.20),transparent_55%)]" />
-              <Plus className="h-4 w-4 text-[#C58A46]" />
-              <span>Add</span>
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_30%_30%,rgba(197,138,70,0.20),transparent_55%)]" />
+              <Plus className="h-4 w-4 text-[#C58A46] relative z-10" />
+              <span className="relative z-10">Add</span>
             </motion.button>
           </div>
         </div>

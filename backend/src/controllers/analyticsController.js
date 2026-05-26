@@ -24,10 +24,10 @@ exports.getAnalytics = async (req, res) => {
       });
 
       shiftRevenue = orders
-        .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing')
+        .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing' || o.status === 'Ready')
         .reduce((sum, o) => sum + o.total, 0);
 
-      activeQueueCount = orders.filter(o => o.status === 'Preparing' || o.status === 'Pending').length;
+      activeQueueCount = orders.filter(o => o.status === 'Preparing' || o.status === 'Pending' || o.status === 'Ready').length;
       alertsCount = notifications.length;
 
       orders.forEach(o => {
@@ -38,7 +38,7 @@ exports.getAnalytics = async (req, res) => {
       transactions = orders.map(o => ({
         id: o.ticketNumber,
         name: o.customerName,
-        items: 'Gastronomic culinary experience',
+        items: 'Gourmet coffee & treats',
         total: o.total,
         status: o.status,
         time: `Today, ${o.time}`
@@ -48,7 +48,7 @@ exports.getAnalytics = async (req, res) => {
     }
   } else {
     shiftRevenue = db.orders
-      .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing')
+      .filter(o => o.status === 'Served' || o.status === 'Completed' || o.status === 'Preparing' || o.status === 'Ready')
       .reduce((sum, o) => sum + o.total, 0);
 
     db.orders.forEach(o => {
@@ -56,16 +56,16 @@ exports.getAnalytics = async (req, res) => {
       totalOrdersCount += 1;
     });
 
-    activeQueueCount = db.orders.filter(o => o.status === 'Preparing' || o.status === 'Pending').length;
+    activeQueueCount = db.orders.filter(o => o.status === 'Preparing' || o.status === 'Pending' || o.status === 'Ready').length;
     alertsCount = db.notifications.length;
     transactions = db.transactions;
   }
 
   const popularItems = [
-    { name: 'Signature Wagyu', sold: 842, percentage: 85 },
-    { name: 'Obsidian Gin & Tonic', sold: 621, percentage: 65 },
-    { name: 'Seared Scallops', sold: 540, percentage: 55 },
-    { name: 'Napa Valley Cabernet 2018', sold: 312, percentage: 35 }
+    { name: 'Silk Flat White', sold: 842, percentage: 85 },
+    { name: 'Nitro Cold Brew', sold: 621, percentage: 65 },
+    { name: 'Almond Croissant', sold: 540, percentage: 55 },
+    { name: 'Obsidian Iced Mocha', sold: 312, percentage: 35 }
   ];
 
   const cohortData = [
@@ -79,7 +79,7 @@ exports.getAnalytics = async (req, res) => {
     metrics: {
       grossRevenue,
       totalOrdersCount,
-      avgOrderValue: 58.30,
+      avgOrderValue: 12.50,
       returningCohort: '68%',
       shiftRevenue,
       activeQueueCount,

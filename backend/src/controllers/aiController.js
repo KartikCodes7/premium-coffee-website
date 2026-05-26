@@ -1,34 +1,34 @@
 const sommelierResponses = [
   {
-    keywords: ['wine', 'wagyu', 'steak', 'pair', 'red wine'],
-    text: "For our succulent **Signature Wagyu**, our Sommelier highly recommends the **2018 Napa Valley Cabernet Sauvignon** ($95/bottle). Its robust, velvet tannins slice beautifully through the rich Wagyu fat. Shall I add a bottle of this vintage to your selection?",
-    item: { id: 'napa-cabernet', name: 'Napa Valley Cabernet 2018', price: 95.00, image: '/assets/order_gin.png' }
+    keywords: ['sweet', 'sugar', 'caramel', 'honey'],
+    text: "For a sweet coffee experience, our AI Barista highly recommends our **Caramel Cloud Cappuccino** ($6.80) or **Saffron Honey Latte** ($7.20). Their rich, velvety microfoam and amber caramel drizzle are perfect sweeteners. Would you like me to add one to your checkout ticket?",
+    item: { id: 'caramel-cloud-cappuccino', name: 'Caramel Cloud Cappuccino', price: 6.80, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20cappuccino%20with%20thick%20foam%20and%20caramel%20drizzle%2C%20latte%20art%2C%20warm%20cafe%20lighting%2C%20high%2520contrast%2C%2520premium%2520coffee%2520photography%2C%25208k&image_size=portrait_4_3' }
   },
   {
-    keywords: ['scallop', 'seafood', 'white wine', 'chardonnay', 'chablis'],
-    text: "Our caramelized **Seared Scallops** pair impeccably with the crisp **Chablis Premier Cru 2020** ($110/bottle). The high acidity and bright mineral citrus notes highlight the delicate sweetness of Hokkaido shellfish. Would you like me to reserve a bottle for your table?",
-    item: { id: 'chablis-2020', name: 'Chablis Premier Cru 2020', price: 110.00, image: '/assets/order_gin.png' }
+    keywords: ['cold', 'iced', 'nitro', 'frappe'],
+    text: "Our signature **Nitro Cold Brew** ($6.20) is outstanding. It is nitrogen-infused on tap for a cascading, velvety head with a chocolate-forward body. For a sweeter cold drink, try the **Obsidian Iced Mocha** ($6.90). Shall I prepare one over crystal ice for you?",
+    item: { id: 'nitro-cold-brew', name: 'Nitro Cold Brew', price: 6.20, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%2520contrast%2C%25208k%2520beverage%2520photography&image_size=portrait_4_3' }
   },
   {
-    keywords: ['gluten', 'allergy', 'coeliac', 'wheat'],
-    text: "Absolutely. Our **Seared Scallops** with saffron emulsion and our **Signature Wagyu** (when prepared with marrow reduction instead of teriyaki marrow jus) are 100% gluten-free. I have notified the kitchen of this preference.",
+    keywords: ['cappuccino', 'flat white', 'latte', 'pair', 'combo'],
+    text: "A classic milk coffee like our **Silk Flat White** pairs exceptionally well with our warm, buttery **Almond Croissant** ($5.40) or our glazed **Atelier Cinnamon Roll** ($5.90). The flaky pastry layers highlight the espresso's ristretto caramel notes. Shall I add a pastry pairing to your bill?",
+    item: { id: 'almond-croissant', name: 'Almond Croissant', price: 5.40, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%2520premium%2520bakery%2520photography%2C%25208k%2C%2520shallow%2520depth%2520of%2520field&image_size=portrait_4_3' }
+  },
+  {
+    keywords: ['vegetarian', 'veg', 'meatless'],
+    text: "All our bakery pastries, desserts, and our gourmet **Caprese Melt** ($9.60) on toasted Ciabatta are 100% vegetarian. I have logged these preferences for your table.",
     item: null
   },
   {
     keywords: ['book', 'reserve', 'table', 'tonight'],
-    text: "I can coordinate a reservation for you instantly. I've locked in a prime glassmorphic window booth for **4 guests tonight at 20:30** under the name Elena. I have sent the confirmation via SMS.",
+    text: "Certainly. I have locked in a premium B2B window booth reservation for **2 guests tomorrow at 18:00** under the name Elena Rostova. Your table confirmation has been dispatched.",
     item: null
-  },
-  {
-    keywords: ['cocktail', 'drink', 'gin', 'obsidian'],
-    text: "Try our signature **Obsidian Gin & Tonic** ($22.00). It features cold-brewed butterfly pea flower infused gin, wild elderflower tonic, and a fresh rosemary sprig. Shall I prepare one at the bar for you?",
-    item: { id: 'obsidian-gin', name: 'Obsidian Gin & Tonic', price: 22.00, image: '/assets/order_gin.png' }
   }
 ];
 
 const fallbackResponses = [
-  "An excellent selection. Our master chefs prepare each signature dish to reflect modern gastronomy. Would you like me to arrange an optimal beverage accompaniment or record special preparation notes for the culinary crew?",
-  "Understood. I am adding that operational preference to your table context. What else can I assist you with regarding our premium evening menu?"
+  "An exquisite café selection. Our baristas grind every single-origin bean to order to capture maximum flavor. Would you like me to recommend a matching artisan pastry or lock in custom preparation notes?",
+  "Understood. Adding your operational preferences to your active table session. What else can I prepare for you today from our gourmet bar?"
 ];
 
 exports.processChat = async (req, res) => {
@@ -47,7 +47,7 @@ exports.processChat = async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are the AI Sommelier and Culinary Concierge for Aura Gastronomy. Keep responses premium, concise, and focused on upselling pairing wines (Cabernet, Chablis, Obsidian Gin) or table logs.'
+            content: 'You are the AI Barista and Culinary Concierge for Aura Premium Café. Keep responses premium, concise, and focused on upselling coffee pairings (Croissant, Flat White, Nitro Brew) or table reservations.'
           },
           { role: 'user', content: message }
         ]
@@ -56,10 +56,10 @@ exports.processChat = async (req, res) => {
       const text = response.choices[0].message.content;
       let upsellItem = null;
       const lower = message.toLowerCase();
-      if (lower.includes('wine') || lower.includes('steak') || lower.includes('wagyu')) {
-        upsellItem = { id: 'napa-cabernet', name: 'Napa Valley Cabernet 2018', price: 95.00, image: '/assets/order_gin.png' };
-      } else if (lower.includes('scallop') || lower.includes('seafood')) {
-        upsellItem = { id: 'chablis-2020', name: 'Chablis Premier Cru 2020', price: 110.00, image: '/assets/order_gin.png' };
+      if (lower.includes('sweet') || lower.includes('sugar') || lower.includes('honey')) {
+        upsellItem = { id: 'caramel-cloud-cappuccino', name: 'Caramel Cloud Cappuccino', price: 6.80, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20cappuccino%20with%20thick%20foam%20and%20caramel%20drizzle%2C%20latte%20art%2C%20warm%20cafe%20lighting%2C%20high%2520contrast%2C%2520premium%2520coffee%2520photography%2C%25208k&image_size=portrait_4_3' };
+      } else if (lower.includes('cold') || lower.includes('iced') || lower.includes('nitro')) {
+        upsellItem = { id: 'nitro-cold-brew', name: 'Nitro Cold Brew', price: 6.20, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%2520contrast%2C%25208k%2520beverage%2520photography&image_size=portrait_4_3' };
       }
 
       return res.json({ text, upsellItem });
@@ -78,5 +78,5 @@ exports.processChat = async (req, res) => {
 
   setTimeout(() => {
     res.json({ text, upsellItem });
-  }, 1000);
+  }, 800);
 };

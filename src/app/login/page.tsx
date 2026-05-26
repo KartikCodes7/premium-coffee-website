@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Utensils, ArrowRight, Loader2, CheckCircle, Lock } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 export default function LoginPage() {
@@ -90,7 +91,7 @@ export default function LoginPage() {
           {/* Branding Header */}
           <header className="text-center space-y-2">
             <Link href="/" className="inline-flex items-center gap-2.5 hover:opacity-85 transition-opacity spring-interaction">
-              <span className="material-symbols-outlined text-[#E5C158] text-3xl font-extrabold">restaurant</span>
+              <Utensils className="text-[#E5C158] font-extrabold" size={32} />
               <span className="text-2xl font-extrabold text-premium-white tracking-tight">
                 Restaurant<span className="text-[#E5C158]">OS</span>
               </span>
@@ -157,9 +158,7 @@ export default function LoginPage() {
                 className="w-full py-4 bg-[#E5C158] text-canvas-charcoal font-display-lg text-xs font-extrabold rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-[#E5C158]/10 flex items-center justify-center gap-2 group spring-interaction"
               >
                 <span>ACCESS OPERATIONS MATRIX</span>
-                <span className="material-symbols-outlined text-sm font-bold group-hover:translate-x-1 transition-transform">
-                  arrow_forward
-                </span>
+                <ArrowRight className="font-bold group-hover:translate-x-1 transition-transform" size={18} />
               </button>
             )}
 
@@ -168,7 +167,7 @@ export default function LoginPage() {
                 disabled
                 className="w-full py-4 bg-[#E5C158]/80 text-canvas-charcoal font-display-lg text-xs font-extrabold rounded-xl opacity-80 cursor-not-allowed flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                <Loader2 className="animate-spin" size={18} />
                 AUTHENTICATING NODE...
               </button>
             )}
@@ -178,7 +177,7 @@ export default function LoginPage() {
                 disabled
                 className="w-full py-4 bg-green-500 text-premium-white font-display-lg text-xs font-extrabold rounded-xl flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined text-sm font-bold animate-bounce">check_circle</span>
+                <CheckCircle className="font-bold animate-bounce" size={18} />
                 SYSTEM ACCESS GRANTED
               </button>
             )}
@@ -226,7 +225,7 @@ export default function LoginPage() {
           {/* Footer Section */}
           <footer className="text-center pt-2">
             <div className="flex items-center justify-center gap-1.5 text-muted-steel mb-2">
-              <span className="material-symbols-outlined text-xs">lock</span>
+              <Lock size={16} />
               <span className="font-mono text-[8px] uppercase tracking-widest leading-none">
                 TLS 1.3 Secure Operational Node
               </span>

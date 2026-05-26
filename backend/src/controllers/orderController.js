@@ -12,7 +12,7 @@ exports.getOrders = async (req, res) => {
       const formatted = orders.map(o => ({
         id: o.ticketNumber,
         name: o.customerName,
-        items: 'Gastronomic culinary experience',
+        items: 'Gourmet coffee & treats',
         total: o.total,
         status: o.status,
         time: o.time
@@ -130,7 +130,7 @@ exports.updateOrderStatus = async (req, res) => {
       return res.json({
         id: order.ticketNumber,
         name: order.customerName,
-        items: 'Gastronomic culinary experience',
+        items: 'Gourmet coffee & treats',
         total: order.total,
         status: order.status,
         time: order.time

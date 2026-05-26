@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: 'RestaurantOS | Enterprise AI Hub for Premium Dining',
-  description: 'Automate fine dining and high-end hospitality operations with real-time telemetry, AI Sommelier service, and modern SaaS consoles.',
+  title: 'RestaurantOS | Enterprise AI Hub for Premium Cafés',
+  description: 'Automate premium coffee shops, high-end bakeries, and boutique café operations with real-time telemetry, AI Barista concierge, and modern SaaS consoles.',
 };
 
 export default function RootLayout({

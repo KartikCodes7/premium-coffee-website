@@ -3,8 +3,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, Minus, Plus, Sparkles } from 'lucide-react';
-import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
+import { Heart, Minus, Plus, Sparkles, ArrowLeft } from 'lucide-react';
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import type { CoffeeMenuItem } from './coffeeMenuData';
 
@@ -47,6 +47,7 @@ export default function CoffeeMenuModal({
         showCloseButton={false}
         className="!top-0 !left-0 !translate-x-0 !translate-y-0 !w-[100vw] !h-[100dvh] !max-w-none !rounded-none !p-0 bg-canvas-charcoal/70 ring-0 border-0 overflow-hidden"
       >
+        <DialogTitle className="sr-only">{item?.name ?? 'Menu item details'}</DialogTitle>
         <div className="absolute inset-0">
           <motion.div
             className="absolute -inset-[30%] opacity-90"
@@ -79,7 +80,7 @@ export default function CoffeeMenuModal({
                     variant="outline"
                     className="bg-black/25 border-white/10 hover:border-[#C58A46]/40 hover:bg-black/35 text-premium-white"
                   >
-                    <span className="material-symbols-outlined text-sm">arrow_back</span>
+                    <ArrowLeft size={18} />
                     Back
                   </Button>
                 </DialogClose>
@@ -280,9 +281,7 @@ export default function CoffeeMenuModal({
                                   Pairing recommendation
                                 </p>
                               </div>
-                              <span className="material-symbols-outlined text-[#C58A46]">
-                                auto_awesome
-                              </span>
+                              <Sparkles className="text-[#C58A46]" size={24} />
                             </div>
                           ))}
                         </div>

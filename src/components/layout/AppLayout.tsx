@@ -8,6 +8,7 @@ import FloatingChatbot from '../chatbot/FloatingChatbot';
 import { useStore, NotificationItem } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -68,7 +69,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         {/* Float B2B Console Switcher */}
         <RoleSwitcher />
 
-        {/* Persistent Floating AI Sommelier Chatbot */}
+        {/* Persistent Floating AI Barista Chatbot */}
         <FloatingChatbot />
 
         {/* Toast Notification Container */}
@@ -76,20 +77,20 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <AnimatePresence>
             {activeToasts.map((toast) => {
               let borderClass = 'border-l-[#C58A46]';
-              let icon = 'info';
+              let Icon = Info;
               let iconColor = 'text-[#C58A46]';
 
               if (toast.type === 'success') {
                 borderClass = 'border-l-green-500';
-                icon = 'check_circle';
+                Icon = CheckCircle;
                 iconColor = 'text-green-400';
               } else if (toast.type === 'warning') {
                 borderClass = 'border-l-amber-500';
-                icon = 'warning';
+                Icon = AlertTriangle;
                 iconColor = 'text-amber-400';
               } else if (toast.type === 'error') {
                 borderClass = 'border-l-red-500';
-                icon = 'error';
+                Icon = XCircle;
                 iconColor = 'text-red-400';
               }
 
@@ -102,7 +103,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   transition={{ duration: 0.2 }}
                   className={`glass-card p-4 rounded-xl border-l-4 ${borderClass} flex items-center gap-3 shadow-2xl pointer-events-auto`}
                 >
-                  <span className={`material-symbols-outlined ${iconColor}`}>{icon}</span>
+                  <Icon className={iconColor} size={24} />
                   <span className="text-xs font-medium text-premium-white flex-1">
                     {toast.text}
                   </span>

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Utensils, ArrowRight, Loader2, CheckCircle, Lock } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 export default function SignupPage() {
@@ -82,7 +83,7 @@ export default function SignupPage() {
           {/* Header */}
           <header className="text-center space-y-2">
             <Link href="/" className="inline-flex items-center gap-2.5 hover:opacity-85 transition-opacity spring-interaction">
-              <span className="material-symbols-outlined text-[#E5C158] text-3xl font-extrabold">restaurant</span>
+              <Utensils className="text-[#E5C158] font-extrabold" size={32} />
               <span className="text-2xl font-extrabold text-premium-white tracking-tight">
                 Restaurant<span className="text-[#E5C158]">OS</span>
               </span>
@@ -161,9 +162,7 @@ export default function SignupPage() {
                 className="w-full py-3.5 bg-[#E5C158] text-canvas-charcoal font-bold text-xs rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-1 group spring-interaction"
               >
                 <span>PROVISION SAAS OPERATIONS CONSOLE</span>
-                <span className="material-symbols-outlined text-sm font-bold group-hover:translate-x-1 transition-transform">
-                  arrow_forward
-                </span>
+                <ArrowRight className="font-bold group-hover:translate-x-1 transition-transform" size={18} />
               </button>
             )}
 
@@ -172,7 +171,7 @@ export default function SignupPage() {
                 disabled
                 className="w-full py-3.5 bg-[#E5C158]/80 text-canvas-charcoal font-bold text-xs rounded-xl opacity-80 cursor-not-allowed flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                <Loader2 className="animate-spin" size={18} />
                 PROVISIONING DEPLOYMENT CLUSTER...
               </button>
             )}
@@ -182,7 +181,7 @@ export default function SignupPage() {
                 disabled
                 className="w-full py-3.5 bg-green-500 text-premium-white font-bold text-xs rounded-xl flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined text-sm font-bold animate-bounce">check_circle</span>
+                <CheckCircle className="font-bold animate-bounce" size={18} />
                 NODE PROVISIONED SUCCESSFULLY
               </button>
             )}
@@ -191,7 +190,7 @@ export default function SignupPage() {
           {/* Footer Section */}
           <footer className="text-center pt-2">
             <div className="flex items-center justify-center gap-1.5 text-muted-steel mb-2">
-              <span className="material-symbols-outlined text-xs">lock</span>
+              <Lock size={16} />
               <span className="font-mono text-[8px] uppercase tracking-widest leading-none">
                 Provisioning Node TLS 1.3 Secure
               </span>

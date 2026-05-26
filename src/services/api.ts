@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { LiveOrder, MenuItem, Reservation } from '@/store/useStore';
+import type { CoffeeMenuItem } from '@/components/coffee-menu/coffeeMenuData';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -66,6 +67,13 @@ export function useMenuQuery() {
   return useQuery<MenuItem[]>({
     queryKey: ['menu'],
     queryFn: () => apiFetch<MenuItem[]>('/menu'),
+  });
+}
+
+export function useQrMenuQuery() {
+  return useQuery<CoffeeMenuItem[]>({
+    queryKey: ['qr-menu'],
+    queryFn: () => apiFetch<CoffeeMenuItem[]>('/qr-menu'),
   });
 }
 

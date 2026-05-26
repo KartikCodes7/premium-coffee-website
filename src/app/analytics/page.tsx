@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import { motion } from 'framer-motion';
+import { Calendar, ChevronDown, Download, TrendingUp, BrainCircuit, MoreHorizontal } from 'lucide-react';
 
 export default function AnalyticsPage() {
   const orders = useStore((state) => state.orders);
@@ -31,8 +32,8 @@ export default function AnalyticsPage() {
 
   // Mock transactions history combined with live orders
   const historicalTransactions = [
-    { id: '#ROS-9241', time: 'Today, 18:45', name: 'Julianne Moore', items: 'Signature Wagyu (2x), Obsidian Gin & Tonic', total: 270.00, status: 'Served' },
-    { id: '#ROS-9238', time: 'Today, 17:50', name: 'Theodore Vane', items: 'Signature Wagyu, Napa Valley Cabernet 2018', total: 219.00, status: 'Served' }
+    { id: '#ROS-9241', time: 'Today, 09:15', name: 'Julianne Moore', items: 'Silk Flat White (2x), Almond Croissant (1x)', total: 17.20, status: 'Served' },
+    { id: '#ROS-9238', time: 'Today, 08:40', name: 'Theodore Vane', items: 'Nitro Cold Brew (1x), Atelier Cinnamon Roll (1x)', total: 12.10, status: 'Served' }
   ];
 
   const liveTransactions = orders.map((o) => ({
@@ -60,15 +61,15 @@ export default function AnalyticsPage() {
         
         <div className="flex items-center gap-4">
           <div className="glass-card flex items-center px-4 py-2.5 rounded-lg gap-3 border border-ice-border cursor-pointer hover:bg-glass-fill transition-all text-xs">
-            <span className="material-symbols-outlined text-sm text-[#E5C158]">calendar_today</span>
+            <Calendar className="text-sm text-[#C58A46]" size={18} />
             <span className="font-mono text-premium-white">Last 30 Days</span>
-            <span className="material-symbols-outlined text-sm text-premium-white">expand_more</span>
+            <ChevronDown className="text-sm text-premium-white" size={18} />
           </div>
           <button
             onClick={handleExportCsv}
-            className="bg-[#E5C158] text-canvas-charcoal px-5 py-2.5 rounded-lg font-bold text-xs flex items-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg spring-interaction"
+            className="bg-[#C58A46] text-canvas-charcoal px-5 py-2.5 rounded-lg font-bold text-xs flex items-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg spring-interaction"
           >
-            <span className="material-symbols-outlined text-sm font-bold">download</span>
+            <Download className="text-sm font-bold" size={18} />
             Export CSV
           </button>
         </div>
@@ -77,70 +78,90 @@ export default function AnalyticsPage() {
       {/* Sparkline Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Gross Revenue */}
-        <div className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#E5C158]/30 transition-all spring-interaction">
+        <motion.div
+          className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#C58A46]/30 transition-all spring-interaction"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0 * 0.1, duration: 0.5 }}
+        >
           <div className="flex justify-between items-start">
             <span className="text-[#8E939E] font-mono text-[10px] uppercase tracking-widest block">Gross Revenue</span>
             <span className="text-green-400 font-mono text-xs flex items-center gap-1">
-              +14.2% <span className="material-symbols-outlined text-sm">trending_up</span>
+              +14.2% <TrendingUp className="text-sm" size={18} />
             </span>
           </div>
-          <div className="font-mono text-3xl text-[#E5C158] font-bold">
+          <div className="font-mono text-3xl text-[#C58A46] font-bold">
             ${baseRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="h-10 w-full mt-1">
-            <svg className="w-full h-full stroke-[#E5C158] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
+            <svg className="w-full h-full stroke-[#C58A46] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
               <path d="M0,25 Q10,20 20,22 T40,15 T60,18 T80,10 T100,5"></path>
             </svg>
           </div>
-        </div>
+        </motion.div>
 
         {/* Shift Orders */}
-        <div className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#E5C158]/30 transition-all spring-interaction">
+        <motion.div
+          className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#C58A46]/30 transition-all spring-interaction"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 * 0.1, duration: 0.5 }}
+        >
           <div className="flex justify-between items-start">
             <span className="text-[#8E939E] font-mono text-[10px] uppercase tracking-widest block">Shift Orders</span>
             <span className="text-green-400 font-mono text-xs flex items-center gap-1">
-              +8.5% <span className="material-symbols-outlined text-sm">trending_up</span>
+              +8.5% <TrendingUp className="text-sm" size={18} />
             </span>
           </div>
           <div className="font-mono text-3xl text-premium-white font-bold">{baseOrdersCount.toLocaleString()}</div>
           <div className="h-10 w-full mt-1">
-            <svg className="w-full h-full stroke-[#E5C158] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
+            <svg className="w-full h-full stroke-[#C58A46] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
               <path d="M0,28 L20,20 L40,25 L60,10 L80,15 L100,5"></path>
             </svg>
           </div>
-        </div>
+        </motion.div>
 
         {/* Average Order Value */}
-        <div className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#E5C158]/30 transition-all spring-interaction">
+        <motion.div
+          className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#C58A46]/30 transition-all spring-interaction"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2 * 0.1, duration: 0.5 }}
+        >
           <div className="flex justify-between items-start">
             <span className="text-[#8E939E] font-mono text-[10px] uppercase tracking-widest block">Avg Order Value</span>
             <span className="text-green-400 font-mono text-xs flex items-center gap-1">
-              +3.2% <span className="material-symbols-outlined text-sm">trending_up</span>
+              +3.2% <TrendingUp className="text-sm" size={18} />
             </span>
           </div>
-          <div className="font-mono text-3xl text-premium-white font-bold">$58.30</div>
+          <div className="font-mono text-3xl text-premium-white font-bold">$12.50</div>
           <div className="h-10 w-full mt-1">
-            <svg className="w-full h-full stroke-[#E5C158] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
+            <svg className="w-full h-full stroke-[#C58A46] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
               <path d="M0,20 C10,18 20,22 30,15 C40,8 50,12 60,15 C70,18 80,10 100,8"></path>
             </svg>
           </div>
-        </div>
+        </motion.div>
 
         {/* Returning Cohorts */}
-        <div className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#E5C158]/30 transition-all spring-interaction">
+        <motion.div
+          className="glass-card p-6 rounded-xl flex flex-col gap-4 border border-ice-border hover:border-[#C58A46]/30 transition-all spring-interaction"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 3 * 0.1, duration: 0.5 }}
+        >
           <div className="flex justify-between items-start">
             <span className="text-[#8E939E] font-mono text-[10px] uppercase tracking-widest block">Returning Cohorts</span>
             <span className="text-green-400 font-mono text-xs flex items-center gap-1">
-              +12.0% <span className="material-symbols-outlined text-sm">trending_up</span>
+              +12.0% <TrendingUp className="text-sm" size={18} />
             </span>
           </div>
           <div className="font-mono text-3xl text-premium-white font-bold">68%</div>
           <div className="h-10 w-full mt-1">
-            <svg className="w-full h-full stroke-[#E5C158] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
+            <svg className="w-full h-full stroke-[#C58A46] fill-none stroke-[2] opacity-80" viewBox="0 0 100 30">
               <path d="M0,25 L30,22 L50,15 L70,18 L100,5"></path>
             </svg>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Advanced Telemetry Section: SVG Area Forecast Charts */}
@@ -151,15 +172,15 @@ export default function AnalyticsPage() {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-lg font-bold text-premium-white">Busiest Seating Cycles</h2>
-              <p className="text-xs text-[#8E939E]">Real-time dining room table seating capacities and tomorrow's AI forecasts.</p>
+              <p className="text-xs text-[#8E939E]">Real-time café traffic flow and barista queue demand.</p>
             </div>
             <div className="flex items-center gap-4 text-[10px] font-mono">
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 bg-[#E5C158] rounded"></span>
+                <span className="w-2.5 h-2.5 bg-[#C58A46] rounded"></span>
                 <span className="text-premium-white">Current (Live)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 border border-[#E5C158] border-dashed rounded"></span>
+                <span className="w-2.5 h-2.5 border border-[#C58A46] border-dashed rounded"></span>
                 <span className="text-muted-steel">AI Forecast</span>
               </div>
             </div>
@@ -170,41 +191,41 @@ export default function AnalyticsPage() {
             <svg className="w-full h-full" viewBox="0 0 500 150" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="glowGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#E5C158" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#E5C158" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#C58A46" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#C58A46" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
               {/* Shaded Area */}
               <path d="M0,130 Q50,110 100,120 T200,80 T300,50 T400,90 T500,60 L500,150 L0,150 Z" fill="url(#glowGrad)"></path>
               {/* Current Line */}
-              <path d="M0,130 Q50,110 100,120 T200,80 T300,50 T400,90 T500,60" fill="none" stroke="#E5C158" strokeWidth="2.5" strokeLinecap="round"></path>
+              <path d="M0,130 Q50,110 100,120 T200,80 T300,50 T400,90 T500,60" fill="none" stroke="#C58A46" strokeWidth="2.5" strokeLinecap="round"></path>
               {/* Forecast Line */}
-              <path d="M0,135 Q50,105 100,115 T200,75 T300,45 T400,80 T500,50" fill="none" stroke="#E5C158" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6"></path>
+              <path d="M0,135 Q50,105 100,115 T200,75 T300,45 T400,80 T500,50" fill="none" stroke="#C58A46" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6"></path>
             </svg>
             <div className="absolute bottom-0 left-0 w-full flex justify-between px-2 font-mono text-[9px] text-[#8E939E] uppercase tracking-wider pt-2 border-t border-ice-border/30">
-              <span>17:00</span>
-              <span>18:30</span>
-              <span>20:00 (Peak)</span>
-              <span>21:30</span>
-              <span>23:00</span>
+              <span>06:00</span>
+              <span>09:00</span>
+              <span>12:00 (Peak)</span>
+              <span>16:00</span>
+              <span>20:00</span>
             </div>
           </div>
         </div>
 
         {/* AI Operations Forecast Report card */}
-        <div className="glass-card p-6 md:p-8 rounded-xl space-y-6 border border-ice-border bg-gradient-to-br from-[#E5C158]/3 to-transparent">
-          <h3 className="text-xs font-bold text-[#E5C158] font-mono flex items-center gap-2 leading-none uppercase">
-            <span className="material-symbols-outlined text-base">psychology</span>
+        <div className="glass-card p-6 md:p-8 rounded-xl space-y-6 border border-ice-border bg-gradient-to-br from-[#C58A46]/3 to-transparent">
+          <h3 className="text-xs font-bold text-[#C58A46] font-mono flex items-center gap-2 leading-none uppercase">
+            <BrainCircuit className="text-base" size={20} />
             AI Analytics Report
           </h3>
           <div className="space-y-4 text-xs text-muted-steel leading-relaxed">
             <p>
-              <strong>Demand Forecasting</strong>: Seating capacity is expected to peak at <strong>88%</strong> tomorrow between 20:00 and 21:15 due to high pre-booking volume from VIP cohorts.
+              <strong>Demand Forecasting</strong>: Café traffic is expected to peak at <strong>88%</strong> capacity tomorrow between 08:00 and 10:30 due to high pre-order volume from loyalty cohorts.
             </p>
             <p>
-              <strong>Inventory Recommendation</strong>: Wagyu stocks will drop below safety thresholds by 21:00 if pacing velocities maintain their current +14% slope. Suggest activating sommelier sommelier prompts on white meat substitutes.
+              <strong>Inventory Recommendation</strong>: Premium Oat Milk supply will approach safety threshold by 14:00 if morning rush pacing maintains +14% slope. Suggest activating AI Barista prompts for almond milk alternatives.
             </p>
-            <div className="p-3 bg-white/5 rounded-xl border border-ice-border font-mono text-[10px] uppercase text-[#E5C158]">
+            <div className="p-3 bg-white/5 rounded-xl border border-ice-border font-mono text-[10px] uppercase text-[#C58A46]">
               Forecast Accuracy: 94.2%
             </div>
           </div>
@@ -218,46 +239,46 @@ export default function AnalyticsPage() {
         <div className="glass-card p-6 md:p-8 rounded-xl lg:col-span-3 flex flex-col gap-6 border border-ice-border">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-premium-white">Popular Menu Items</h2>
-            <span className="material-symbols-outlined text-[#8E939E] cursor-pointer">more_horiz</span>
+            <MoreHorizontal className="text-[#8E939E] cursor-pointer" size={24} />
           </div>
           <div className="flex flex-col gap-5">
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-mono text-[#8E939E]">
-                <span className="text-premium-white font-semibold">Signature Wagyu</span>
+                <span className="text-premium-white font-semibold">Silk Flat White</span>
                 <span>842 units sold</span>
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-ice-border">
-                <div className="h-full bg-[#E5C158] rounded-full shadow-lg" style={{ width: '85%' }}></div>
+                <div className="h-full bg-[#C58A46] rounded-full shadow-lg" style={{ width: '85%' }}></div>
               </div>
             </div>
             
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-mono text-[#8E939E]">
-                <span className="text-premium-white font-semibold">Obsidian Gin & Tonic</span>
+                <span className="text-premium-white font-semibold">Nitro Cold Brew</span>
                 <span>621 units sold</span>
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-ice-border">
-                <div className="h-full bg-[#E5C158] rounded-full shadow-lg" style={{ width: '65%' }}></div>
+                <div className="h-full bg-[#C58A46] rounded-full shadow-lg" style={{ width: '65%' }}></div>
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-mono text-[#8E939E]">
-                <span className="text-premium-white font-semibold">Seared Scallops</span>
+                <span className="text-premium-white font-semibold">Almond Croissant</span>
                 <span>540 units sold</span>
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-ice-border">
-                <div className="h-full bg-[#E5C158] rounded-full shadow-lg" style={{ width: '55%' }}></div>
+                <div className="h-full bg-[#C58A46] rounded-full shadow-lg" style={{ width: '55%' }}></div>
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-mono text-[#8E939E]">
-                <span className="text-premium-white font-semibold">Napa Valley Cabernet 2018</span>
+                <span className="text-premium-white font-semibold">Obsidian Iced Mocha</span>
                 <span>312 units sold</span>
               </div>
               <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-ice-border">
-                <div className="h-full bg-[#E5C158] rounded-full shadow-lg" style={{ width: '35%' }}></div>
+                <div className="h-full bg-[#C58A46] rounded-full shadow-lg" style={{ width: '35%' }}></div>
               </div>
             </div>
           </div>
@@ -318,7 +339,7 @@ export default function AnalyticsPage() {
           <h2 className="text-lg font-bold text-premium-white">Recent Transactions Telemetry</h2>
           <button
             onClick={() => addNotification('All transaction histories loaded.', 'info')}
-            className="text-xs font-mono text-[#E5C158] hover:underline font-bold uppercase"
+            className="text-xs font-mono text-[#C58A46] hover:underline font-bold uppercase"
           >
             VIEW ALL
           </button>
@@ -344,7 +365,7 @@ export default function AnalyticsPage() {
 
                 return (
                   <tr key={tx.id} className="hover:bg-white/5 transition-all duration-150 text-xs">
-                    <td className="px-8 py-4 font-mono text-[#E5C158] font-bold">{tx.id}</td>
+                    <td className="px-8 py-4 font-mono text-[#C58A46] font-bold">{tx.id}</td>
                     <td className="px-6 py-4 text-[#8E939E]">{tx.time}</td>
                     <td className="px-6 py-4 text-premium-white font-bold">{tx.name}</td>
                     <td className="px-6 py-4 text-[#8E939E] max-w-xs truncate">{tx.items}</td>

@@ -14,45 +14,45 @@ app.use(morgan('dev'));
 // Memory Fallback DB for local operations testing if PostgreSQL is not active
 const memoryDb = {
   orders: [
-    { id: '#OS-8902', name: 'Elena R.', items: 'Signature Wagyu, Napa Valley 2018', total: 219.00, status: 'Preparing', time: '19:42' },
-    { id: '#OS-8901', name: 'Marcus K.', items: 'Seared Scallops, Obsidian Gin', total: 54.00, status: 'Served', time: '19:20' }
+    { id: '#OS-8902', name: 'Elena R.', items: 'Silk Flat White (1x), Almond Croissant (1x)', total: 11.30, status: 'Preparing', time: '15:28' },
+    { id: '#OS-8901', name: 'Marcus K.', items: 'Nitro Cold Brew (1x), Truffle Egg Sandwich (1x)', total: 16.00, status: 'Served', time: '14:20' }
   ],
   notifications: [
-    { id: 1, text: "Table 4 requested sommelier guidance", time: "19:42", type: "info" },
-    { id: 2, text: "New reservation: Elena Rostova (4 guests) at 20:30", time: "19:35", type: "success" },
-    { id: 3, text: "Supply alert: Wagyu beef stock below threshold", time: "19:10", type: "warning" }
+    { id: 1, text: "Table 4 requested a waiter's assistance", time: "15:20", type: "info" },
+    { id: 2, text: "New reservation: Charles V. (2 guests) tomorrow at 18:00", time: "14:45", type: "success" },
+    { id: 3, text: "Supply alert: Premium Oat Milk stock below 20%", time: "11:10", type: "warning" }
   ],
   transactions: [
-    { id: '#ROS-9241', name: 'Julianne Moore', items: 'Signature Wagyu (2x), Obsidian Gin & Tonic', total: 270.00, status: 'Served', time: 'Today, 18:45' },
-    { id: '#ROS-9238', name: 'Theodore Vane', items: 'Signature Wagyu, Napa Valley Cabernet 2018', total: 219.00, status: 'Served', time: 'Today, 17:50' }
+    { id: '#ROS-9241', name: 'Julianne Moore', items: 'Obsidian Iced Mocha (2x), Atelier Cinnamon Roll (1x)', total: 19.70, status: 'Served', time: 'Today, 14:15' },
+    { id: '#ROS-9238', name: 'Theodore Vane', items: 'Silk Flat White (1x), Pastry (1x)', total: 11.30, status: 'Served', time: 'Today, 11:30' }
   ],
   menuItems: [
     {
-      id: 'seared-scallops',
-      name: 'Seared Scallops',
-      price: 38.00,
-      category: 'Entree',
-      image: '/assets/chatbot_scallops.png',
-      rating: '4.9',
-      description: 'Hokkaido scallops with pea purée, crispy pancetta, and citrus emulsion.'
-    },
-    {
-      id: 'wagyu-steak',
-      name: 'Signature Wagyu',
-      price: 124.00,
-      category: 'Entree',
-      image: '/assets/chatbot_steak.png',
-      rating: '5.0',
-      description: 'Grade A5 Kobe beef, butter-poached with smoked marrow jus and truffle mash.'
-    },
-    {
-      id: 'napa-cabernet',
-      name: 'Napa Valley Cabernet 2018',
-      price: 95.00,
-      category: 'Beverage',
-      image: '/assets/order_gin.png',
+      id: 'flat-white-silk',
+      name: 'Silk Flat White',
+      price: 5.90,
+      category: 'Hot Coffee',
+      image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20flat%20white%20in%20a%20minimalist%20porcelain%20cup%20with%20latte%20art%20rosette%2C%20warm%20amber%20lighting%2C%20cinematic%20shadows%2C%20coffee%20shop%20aesthetic%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
       rating: '4.8',
-      description: 'Robust Napa Valley vintage grape, aged in French oak barrels.'
+      description: 'Ristretto-forward, glossy microfoam, caramel warmth.'
+    },
+    {
+      id: 'nitro-cold-brew',
+      name: 'Nitro Cold Brew',
+      price: 6.20,
+      category: 'Cold Coffee',
+      image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%20contrast%2C%208k%20beverage%20photography&image_size=portrait_4_3',
+      rating: '4.9',
+      description: 'Cascade pour, creamy head, chocolate-forward cold extraction.'
+    },
+    {
+      id: 'almond-croissant',
+      name: 'Almond Croissant',
+      price: 5.40,
+      category: 'Bakery',
+      image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%20premium%20bakery%20photography%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
+      rating: '4.8',
+      description: 'Flaky layers, almond cream, toasted finish.'
     }
   ],
   reservations: [

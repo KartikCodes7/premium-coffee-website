@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Wifi, BrainCircuit, MessageSquare, Star, ShoppingCart, CheckCircle, Check } from 'lucide-react';
 
 export default function Homepage() {
   const router = useRouter();
@@ -30,28 +31,31 @@ export default function Homepage() {
 
   const signatureDishes = [
     {
-      id: 'seared-scallops',
-      name: 'Seared Scallops',
-      price: 38.00,
-      image: '/assets/chatbot_scallops.png',
+      id: 'nitro-cold-brew',
+      name: 'Nitro Cold Brew',
+      price: 6.20,
+      image:
+        'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%20contrast%2C%208k%20beverage%20photography&image_size=portrait_4_3',
       rating: '4.9',
-      description: 'Hokkaido scallops with pea purée, crispy pancetta, and citrus emulsion.'
+      description: 'Cascade pour, creamy head, chocolate-forward cold extraction.'
     },
     {
-      id: 'wagyu-steak',
-      name: 'Signature Wagyu',
-      price: 124.00,
-      image: '/assets/chatbot_steak.png',
-      rating: '5.0',
-      description: 'Grade A5 Kobe beef, butter-poached with smoked marrow jus and truffle mash.'
-    },
-    {
-      id: 'napa-cabernet',
-      name: 'Napa Valley Cabernet 2018',
-      price: 95.00,
-      image: '/assets/order_gin.png',
+      id: 'flat-white-silk',
+      name: 'Silk Flat White',
+      price: 5.90,
+      image:
+        'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20flat%20white%20in%20a%20minimalist%20porcelain%20cup%20with%20latte%20art%20rosette%2C%20warm%20amber%20lighting%2C%20cinematic%20shadows%2C%20coffee%20shop%20aesthetic%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
       rating: '4.8',
-      description: 'Robust dark fruit profile, velvet tannins, pairing beautifully with dry-aged steak.'
+      description: 'Ristretto-forward, glossy microfoam, caramel warmth.'
+    },
+    {
+      id: 'almond-croissant',
+      name: 'Almond Croissant',
+      price: 5.40,
+      image:
+        'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%20premium%20bakery%20photography%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
+      rating: '4.8',
+      description: 'Flaky layers, almond cream, toasted finish.'
     }
   ];
 
@@ -59,7 +63,7 @@ export default function Homepage() {
     {
       name: 'Elena Rostova',
       role: 'Owner, Aura Hospitality London',
-      text: 'Migrating our table logistics to RestaurantOS reduced kitchen pacing delays by 42%. The AI sommelier recommendations have driven wine ticket sales up by 38% since launch.',
+      text: 'Migrating our ordering stack to RestaurantOS reduced service delays by 42%. AI recommendations lifted add-on sales by 38% within the first month.',
       avatar: '/assets/avatar_manager.png'
     },
     {
@@ -91,8 +95,8 @@ export default function Homepage() {
     <main className="pt-nav-height flex-1 bg-canvas-charcoal relative overflow-hidden">
       
       {/* Background Cinematic blurred blobs */}
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-[#E5C158]/5 blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="absolute top-2/3 -right-32 w-[600px] h-[600px] bg-[#ffe08b]/5 blur-[140px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-[#C58A46]/6 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-2/3 -right-32 w-[600px] h-[600px] bg-[#E7C39A]/6 blur-[140px] rounded-full pointer-events-none"></div>
 
       {/* Cinematic Hero Section */}
       <section className="relative min-h-[calc(100vh-nav-height)] flex items-center px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto py-16">
@@ -106,37 +110,37 @@ export default function Homepage() {
             className="lg:col-span-7 space-y-8"
           >
             <div className="inline-flex items-center px-3.5 py-1.5 glass-card rounded-full gap-2 border border-ice-border">
-              <span className="w-2 h-2 rounded-full bg-[#E5C158] animate-pulse"></span>
-              <span className="font-mono text-[9px] text-[#E5C158] uppercase tracking-widest">
+              <span className="w-2 h-2 rounded-full bg-[#C58A46] animate-pulse"></span>
+              <span className="font-mono text-[9px] text-[#C58A46] uppercase tracking-widest">
                 v2.8 AI Neural Concierge Online
               </span>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-premium-white leading-tight tracking-tight">
               The AI Operating System for{' '}
-              <span className="bg-gradient-to-r from-[#E5C158] to-premium-white bg-clip-text text-transparent">
-                Premium Gastronomy
+              <span className="bg-gradient-to-r from-[#C58A46] to-premium-white bg-clip-text text-transparent">
+                Smart Ordering
               </span>
               .
             </h1>
             
             <p className="text-base md:text-lg text-muted-steel max-w-xl leading-relaxed">
-              Automate Michelin-star dining room queues, real-time sommelier pairings, and multi-tenant telemetry inside a unified B2B environment.
+              QR menu + cinematic item modals + AI recommendations — instantly synced to your live kitchen queue and ops dashboard.
             </p>
             
             <div className="flex flex-wrap gap-4 pt-2">
               <Link
-                href="/signup"
-                className="bg-[#E5C158] text-canvas-charcoal font-bold px-8 py-4 rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-[#E5C158]/20 flex items-center gap-2 spring-interaction text-sm"
+                href="/qr"
+                className="bg-[#C58A46] text-canvas-charcoal font-bold px-8 py-4 rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-[#C58A46]/20 flex items-center gap-2 spring-interaction text-sm"
               >
-                Launch Restaurant Sandbox
-                <span className="material-symbols-outlined font-bold text-sm">arrow_forward</span>
+                Start QR Order
+                <ArrowRight className="font-bold" size={18} />
               </Link>
               <Link
-                href="/chatbot"
-                className="glass-card text-premium-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 hover:border-[#E5C158]/50 transition-all text-sm border border-ice-border spring-interaction"
+                href="/dashboard"
+                className="glass-card text-premium-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 hover:border-[#C58A46]/50 transition-all text-sm border border-ice-border spring-interaction"
               >
-                Consult Sommelier Assistant
+                Open Ops Console
               </Link>
             </div>
           </motion.div>
@@ -152,15 +156,15 @@ export default function Homepage() {
               <div className="flex justify-between items-center">
                 <h3 className="text-sm font-bold text-premium-white flex items-center gap-2">
                   HQ Live Operations stream
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E5C158] animate-ping"></span>
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C58A46] animate-ping"></span>
                 </h3>
-                <span className="material-symbols-outlined text-[#E5C158]">sensors</span>
+                <Wifi className="text-[#C58A46]" size={24} />
               </div>
 
               {/* simulated tickets queue */}
               <div className="space-y-4">
                 {activeOrders.map((o, idx) => {
-                  let badgeClass = 'bg-[#E5C158]/10 text-[#E5C158] border border-[#E5C158]/20';
+                  let badgeClass = 'bg-[#C58A46]/10 text-[#C58A46] border border-[#C58A46]/20';
                   if (o.status === 'Served') {
                     badgeClass = 'bg-green-500/10 text-green-400 border border-green-500/20';
                   }
@@ -173,7 +177,7 @@ export default function Homepage() {
                       transition={{ delay: idx * 0.1 }}
                       className="flex items-center justify-between p-3.5 glass-card rounded-xl border border-ice-border relative overflow-hidden transition-all hover:border-[#E5C158]/20"
                     >
-                      {idx === 0 && <div className="shimmer absolute inset-0 opacity-10"></div>}
+                        {idx === 0 && <div className="shimmer absolute inset-0 opacity-10"></div>}
                       <div className="flex gap-4 items-center min-w-0">
                         <div className="w-8 h-8 rounded-full bg-[#E5C158]/10 flex items-center justify-center text-[#E5C158] font-bold font-mono text-xs shrink-0">
                           {o.id.substring(4)}
@@ -197,11 +201,11 @@ export default function Homepage() {
                 </span>
                 <Link href="/dashboard" className="text-[#E5C158] hover:underline flex items-center gap-1">
                   Full Operations console
-                  <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                  <ArrowRight size={16} />
                 </Link>
               </div>
             </div>
-            <div className="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-[#E5C158]/10 blur-[120px] rounded-full"></div>
+            <div className="absolute -z-10 -bottom-10 -right-10 w-64 h-64 bg-[#C58A46]/10 blur-[120px] rounded-full"></div>
           </motion.div>
         </div>
       </section>
@@ -243,17 +247,15 @@ export default function Homepage() {
           {/* Module 1 */}
           <div className="glass-card p-8 md:p-10 rounded-2xl group hover:border-[#E5C158]/35 transition-all duration-500 space-y-6">
             <div className="w-14 h-14 bg-[#E5C158]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <span className="material-symbols-outlined text-[#E5C158] text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                psychology
-              </span>
+              <BrainCircuit className="text-[#E5C158] fill-current" size={32} />
             </div>
-            <h3 className="text-xl font-bold text-premium-white tracking-tight">Sommelier & Concierge AI</h3>
+            <h3 className="text-xl font-bold text-premium-white tracking-tight">AI Concierge & Upsell Engine</h3>
             <p className="text-sm text-muted-steel leading-relaxed">
-              Elevate every guest experience with hyper-personalized sommelier recommendations and diet-aware modifications. Upsell matching vintages dynamically at the optimal checkout window.
+              Answer FAQs instantly, recommend combos, and upsell pairings at the perfect moment — without adding staff workload.
             </p>
             <div className="flex flex-wrap gap-2 text-[10px] font-mono">
               <span className="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">
-                Sommelier DNA
+                AI Recommendations
               </span>
               <span className="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">
                 Direct Table Cart Sync
@@ -264,7 +266,7 @@ export default function Homepage() {
           {/* Module 2 */}
           <div className="glass-card p-8 md:p-10 rounded-2xl group hover:border-[#E5C158]/35 transition-all duration-500 space-y-6">
             <div className="w-14 h-14 bg-[#E5C158]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <span className="material-symbols-outlined text-[#E5C158] text-2xl">chat_bubble</span>
+              <MessageSquare className="text-[#E5C158]" size={32} />
             </div>
             <h3 className="text-xl font-bold text-premium-white tracking-tight font-sans">
               Operations Telemetry Terminal
@@ -293,14 +295,14 @@ export default function Homepage() {
                 Selected Experiences
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight mt-1">
-                Curated Gastronomic Signature Dishes
+                Menu Highlights (Tap to add)
               </h2>
             </div>
             <Link
               href="/chatbot"
               className="glass-card px-5 py-3 rounded-lg text-xs font-bold text-[#E5C158] border border-ice-border hover:border-[#E5C158]/50 transition-all spring-interaction"
             >
-              Consult AI Sommelier
+              Open AI Concierge
             </Link>
           </div>
 
@@ -322,9 +324,7 @@ export default function Homepage() {
                   <div className="flex justify-between items-start">
                     <h3 className="text-sm font-bold text-premium-white">{dish.name}</h3>
                     <div className="flex items-center gap-1 text-[#E5C158] font-mono text-xs">
-                      <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        star
-                      </span>
+                      <Star className="fill-current" size={16} />
                       <span>{dish.rating}</span>
                     </div>
                   </div>
@@ -339,7 +339,7 @@ export default function Homepage() {
                       className="bg-white/5 border border-ice-border hover:border-[#E5C158]/50 text-premium-white px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 spring-interaction"
                     >
                       <span>Buy</span>
-                      <span className="material-symbols-outlined text-xs font-bold">shopping_cart</span>
+                      <ShoppingCart className="font-bold" size={16} />
                     </button>
                   </div>
                 </div>
@@ -411,14 +411,14 @@ export default function Homepage() {
               className="w-full py-4 rounded-xl bg-[#E5C158] text-canvas-charcoal font-display-lg text-xs font-extrabold hover:brightness-110 active:scale-[0.98] transition-all shadow-lg flex items-center justify-center gap-2 spring-interaction"
             >
               <span>CONFIRM INTELLIGENT RESERVATION</span>
-              <span className="material-symbols-outlined text-sm font-bold">check_circle</span>
+              <CheckCircle className="font-bold" size={18} />
             </button>
           </div>
 
           <div className="bg-white/5 rounded-xl border border-ice-border p-5 space-y-4 flex flex-col justify-center">
             <h4 className="text-xs font-bold text-premium-white">Window Booth Selection</h4>
             <p className="text-xs text-muted-steel">
-              AI Sommelier Concierge will lock in a prime glassmorphic window booth matching this telemetry configuration.
+              RestaurantOS will generate a smart ordering session tied to your table and route it to the right ops queue.
             </p>
             <div className="h-28 rounded-lg overflow-hidden border border-ice-border relative">
               <Image
@@ -508,15 +508,15 @@ export default function Homepage() {
                 </div>
                 <div className="border-t border-ice-border pt-6 space-y-3 text-xs text-muted-steel">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>1 Active Location</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
-                    <span>AI Sommelier Concierge</span>
+                    <Check className="text-[#E5C158]" size={18} />
+                    <span>AI Concierge</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Ops Telemetry Console</span>
                   </div>
                 </div>
@@ -541,19 +541,19 @@ export default function Homepage() {
                 </div>
                 <div className="border-t border-ice-border pt-6 space-y-3 text-xs text-muted-steel">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span className="text-premium-white font-semibold">3 Active Locations</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Hyper-personalized LLM Engine</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Advanced Retention cohort Analytics</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Role-Based Protected Access</span>
                   </div>
                 </div>
@@ -574,15 +574,15 @@ export default function Homepage() {
                 </div>
                 <div className="border-t border-ice-border pt-6 space-y-3 text-xs text-muted-steel">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Unlimited Locations</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>Dedicated cluster & SLA Uptime</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C158] text-sm">check</span>
+                    <Check className="text-[#E5C158]" size={18} />
                     <span>OpenAI API Dedicated Fine-Tuning</span>
                   </div>
                 </div>
@@ -610,7 +610,7 @@ export default function Homepage() {
               HQ Admin
             </Link>
             <Link className="hover:text-[#E5C158] transition-colors" href="/chatbot">
-              Concierge Sommelier
+              AI Concierge
             </Link>
             <Link className="hover:text-[#E5C158] transition-colors" href="/order">
               Guest Checkout

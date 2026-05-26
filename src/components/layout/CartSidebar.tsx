@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
+import { ShoppingBag, X, Receipt, Trash } from 'lucide-react';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -52,14 +53,14 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               {/* Header */}
               <div className="p-6 border-b border-ice-border flex justify-between items-center bg-[#0C0705]/50">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#C58A46]">shopping_bag</span>
+                  <ShoppingBag className="text-[#C58A46]" size={24} />
                   <h2 className="text-lg font-bold text-premium-white tracking-tight">Active Table Bill</h2>
                 </div>
                 <button
                   onClick={onClose}
                   className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 text-[#8E939E] hover:text-premium-white transition-colors"
                 >
-                  <span className="material-symbols-outlined">close</span>
+                  <X size={24} />
                 </button>
               </div>
 
@@ -67,7 +68,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
                 {cart.length === 0 ? (
                   <div className="h-64 flex flex-col items-center justify-center text-center space-y-3">
-                    <span className="material-symbols-outlined text-4xl text-[#8E939E]/30">receipt_long</span>
+                    <Receipt className="text-4xl text-[#8E939E]/30" size={40} />
                     <p className="text-sm text-[#8E939E]">No items selected for this table session.</p>
                     <Link
                       href="/order"
@@ -130,7 +131,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                         onClick={() => removeItem(item.id)}
                         className="w-8 h-8 rounded-full hover:bg-red-500/10 text-[#8E939E] hover:text-red-400 flex items-center justify-center transition-colors shrink-0"
                       >
-                        <span className="material-symbols-outlined text-sm">delete</span>
+                        <Trash className="text-sm" size={18} />
                       </button>
                     </div>
                   ))

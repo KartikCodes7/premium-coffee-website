@@ -1,13 +1,32 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useStore } from '@/store/useStore';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Coffee, ArrowRight, ShieldCheck, Compass, Check, Loader2, Sparkles, Award } from 'lucide-react';
+import { useStore } from '@/store/useStore';
+
+type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'Served';
 
 export default function OrderTrackingPage() {
+  return (
+    <Suspense fallback={
+      <main className="pt-nav-height max-w-md mx-auto px-margin-mobile py-10 space-y-8 flex-1 flex flex-col justify-center items-center">
+        <Loader2 className="animate-spin text-[#C58A46] w-8 h-8 mb-2" />
+        <span className="text-xs text-muted-steel uppercase tracking-widest font-mono">Synchronizing kitchen queue...</span>
+      </main>
+    }>
+      <OrderTrackingContent />
+    </Suspense>
+  );
+}
+
+function OrderTrackingContent() {
+  const searchParams = useSearchParams();
   const orders = useStore((state) => state.orders);
   const updateOrderStatus = useStore((state) => state.updateOrderStatus);
+  const tableNumber = useStore((state) => state.tableNumber);
 
   // Prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -15,172 +34,305 @@ export default function OrderTrackingPage() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  // Countdown timer state
+  const [minutesRemaining, setMinutesRemaining] = useState(8);
 
-  // Retrieve the latest order or fallback to a dummy active one
-  const activeOrder = orders.length > 0 ? orders[0] : {
-    id: '#OS-8902',
-    name: 'Elena R.',
-    items: 'Signature Wagyu, Napa Valley Cabernet 2018',
-    total: 219.00,
-    status: 'Preparing' as const,
-    time: '19:42'
-  };
+  useEffect(() => {
+    if (!mounted) return;
+    const interval = setInterval(() => {
+      setMinutesRemaining((prev) => (prev > 1 ? prev - 1 : 1));
+    }, 45000); // Decelerate countdown for realistic demo feel
+    return () => clearInterval(interval);
+  }, [mounted]);
 
+  // Find target order or degrade to seed fallback
+  const activeOrder = useMemo(() => {
+    const queryId = searchParams.get('id');
+    if (queryId) {
+      const found = orders.find(o => o.id === queryId);
+      if (found) return found;
+    }
+    return orders.length > 0 ? orders[0] : {
+      id: '#OS-8902',
+      name: 'Elena R.',
+      items: 'Silk Flat White (1x), Almond Croissant (1x)',
+      total: 11.30,
+      status: 'Preparing' as OrderStatus,
+      time: '15:28'
+    };
+  }, [orders, searchParams]);
+
+  // Define steps with clean B2B status colors and descriptions
   const steps = [
-    { label: 'TICKET LOGGED', status: 'Pending', icon: 'receipt_long', desc: 'Secure settlement approved. Sent directly to duty commander display.' },
-    { label: 'KITCHEN PREPARING', status: 'Preparing', icon: 'soup_kitchen', desc: 'Chef de Cuisine Marcus Kensington is poaching Kobe steaks.' },
-    { label: 'DISHES SERVED', status: 'Served', icon: 'restaurant', desc: 'Sommelier Christian L. has uncorked Napa Valley cabernets.' },
-    { label: 'SESSION ARCHIVED', status: 'Completed', icon: 'archive', desc: 'PCI-DSS gateway transaction settled and closed.' }
+    { label: 'Order Received', status: 'Pending', color: '#D97706', badgeClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20', desc: 'Secure B2B ticket approved and sent to barista terminal.' },
+    { label: 'Preparing', status: 'Preparing', color: '#2563EB', badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20', desc: 'Crafting signature coffee shots and infusing milk.' },
+    { label: 'Ready', status: 'Ready', color: '#16A34A', badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20', desc: 'Orders finished and ready at dispatcher dispatch counter.' },
+    { label: 'Served', status: 'Served', color: '#4B5563', badgeClass: 'bg-white/5 text-muted-steel border-white/10', desc: 'Delivered to Table with barista service.' }
   ];
 
-  // Determine current active step index
   const activeIndex = steps.findIndex((s) => s.status === activeOrder.status);
 
-  // Quick simulation controls to let user change status directly and watch it animate!
+  // Quick simulator control for local demos
   const advanceStep = () => {
     if (activeOrder.status === 'Pending') {
       updateOrderStatus(activeOrder.id, 'Preparing');
     } else if (activeOrder.status === 'Preparing') {
+      updateOrderStatus(activeOrder.id, 'Ready');
+    } else if (activeOrder.status === 'Ready') {
       updateOrderStatus(activeOrder.id, 'Served');
-    } else if (activeOrder.status === 'Served') {
-      updateOrderStatus(activeOrder.id, 'Completed');
     } else {
       updateOrderStatus(activeOrder.id, 'Pending');
     }
   };
 
+  if (!mounted) return null;
+
+  // Compute progress bar percentage
+  const progressPercent = activeOrder.status === 'Pending' ? 15 
+                        : activeOrder.status === 'Preparing' ? 50 
+                        : activeOrder.status === 'Ready' ? 85 
+                        : 100;
+
+  const isCompleted = activeOrder.status === 'Served';
+
   return (
-    <main className="pt-nav-height max-w-[960px] mx-auto px-margin-mobile md:px-margin-desktop py-16 space-y-12 flex-1 flex flex-col justify-center">
+    <main className="pt-nav-height max-w-md mx-auto px-margin-mobile py-10 space-y-8 flex-1 flex flex-col justify-center relative">
       
-      {/* Title */}
-      <div className="text-center space-y-3">
+      {/* 1. PREMIUM ORDER COMPLETION CELEBRATION */}
+      <AnimatePresence>
+        {isCompleted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.15 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 pointer-events-none overflow-hidden z-0"
+          >
+            {/* Subtle floating gold stars/celebrations */}
+            {Array.from({ length: 15 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full bg-[#C58A46]"
+                style={{
+                  width: 3 + Math.random() * 6,
+                  height: 3 + Math.random() * 6,
+                  left: `${Math.random() * 100}%`,
+                  top: `${100 + Math.random() * 20}%`
+                }}
+                animate={{
+                  y: -600,
+                  x: [0, (Math.random() - 0.5) * 60, 0],
+                  opacity: [0, 0.8, 0]
+                }}
+                transition={{
+                  duration: 4 + Math.random() * 3,
+                  repeat: Infinity,
+                  delay: Math.random() * 1.5
+                }}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Header */}
+      <section className="text-center space-y-4 relative z-10">
         <div className="inline-flex items-center px-3.5 py-1.5 glass-card rounded-full gap-2 border border-ice-border">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
-          <span className="font-mono text-[9px] text-green-400 uppercase tracking-widest font-bold">
-            Live Telemetry Pacing active
+          <span className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-[#C58A46] animate-pulse'}`}></span>
+          <span className="font-mono text-[9px] uppercase tracking-widest text-premium-white">
+            {isCompleted ? 'Barista Order Dispatched' : 'Active Café Pacing'}
           </span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold text-premium-white tracking-tight">
-          Gastronomic Ticket Telemetry
-        </h1>
-        <p className="text-sm text-muted-steel max-w-md mx-auto">
-          Synchronizing cart allocations, sommelier pairing configurations, and kitchen queue pacing.
-        </p>
-      </div>
-
-      {/* Ticket Details summary card */}
-      <div className="glass-card rounded-2xl p-6 md:p-8 border border-ice-border space-y-4 bg-gradient-to-br from-[#12141C] to-transparent">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-ice-border/50 pb-4">
-          <div>
-            <span className="font-mono text-[9px] text-[#8E939E] uppercase tracking-widest block">
-              Active Table Ticket
-            </span>
-            <span className="font-mono text-lg text-[#E5C158] font-bold">{activeOrder.id}</span>
-          </div>
-          <div>
-            <span className="font-mono text-[9px] text-[#8E939E] uppercase tracking-widest block text-left md:text-right">
-              Pacing Stage
-            </span>
-            <span className="px-2.5 py-0.5 rounded text-[9px] font-bold bg-[#E5C158]/10 text-[#E5C158] border border-[#E5C158]/20 uppercase">
-              {activeOrder.status}
-            </span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
-          <div className="space-y-1">
-            <span className="text-[#8E939E] uppercase tracking-wider font-mono text-[9px] block">Dishes Paced</span>
-            <p className="text-premium-white font-medium">{activeOrder.items}</p>
-          </div>
-          <div className="space-y-1 md:text-right">
-            <span className="text-[#8E939E] uppercase tracking-wider font-mono text-[9px] block">Tab Settled</span>
-            <p className="font-mono text-base text-premium-white font-bold">${activeOrder.total.toFixed(2)}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Visual Stepper Tracker */}
-      <div className="relative space-y-12 py-6">
         
-        {/* Connector vertical line for mobile / horizontal line for desktop */}
-        <div className="absolute left-6 top-10 bottom-10 w-0.5 bg-white/5 md:hidden"></div>
-        <div className="absolute left-10 right-10 top-14 h-0.5 bg-white/5 hidden md:block"></div>
+        {/* Wording "Your order is being prepared" */}
+        <h1 className="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight leading-tight">
+          {activeOrder.status === 'Pending' && 'Your order is approved ☕'}
+          {activeOrder.status === 'Preparing' && 'Your order is being prepared ☕'}
+          {activeOrder.status === 'Ready' && 'Your order is ready! ⚡'}
+          {activeOrder.status === 'Served' && 'Order successfully served! 🎉'}
+        </h1>
 
-        {/* Dynamic Connector highlighted progress line */}
-        {activeIndex !== -1 && (
-          <>
-            {/* Mobile Vertical highlighted line */}
-            <div
-              className="absolute left-6 top-10 w-0.5 bg-[#E5C158] md:hidden transition-all duration-500"
-              style={{ height: `${(activeIndex / (steps.length - 1)) * 80}%` }}
-            ></div>
-            {/* Desktop Horizontal highlighted line */}
-            <div
-              className="absolute left-10 top-14 h-0.5 bg-[#E5C158] hidden md:block transition-all duration-500"
-              style={{ width: `${(activeIndex / (steps.length - 1)) * 92}%` }}
-            ></div>
-          </>
+        {/* ETA countdown bar */}
+        {!isCompleted ? (
+          <p className="text-xs text-muted-steel">
+            Preparing — approx <span className="text-[#C58A46] font-mono font-bold">{minutesRemaining} min</span> remaining
+          </p>
+        ) : (
+          <p className="text-xs text-green-400 font-bold flex items-center justify-center gap-1">
+            <ShieldCheck className="h-4 w-4" />
+            Barista service logged at Table {tableNumber || '4'}
+          </p>
         )}
+      </section>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:text-center relative">
+      {/* Live progress indicator cup animation */}
+      <section className="flex flex-col items-center justify-center relative py-6 z-10">
+        <div className="relative w-28 h-28 flex items-center justify-center rounded-full glass-card border border-ice-border">
+          <AnimatePresence>
+            {!isCompleted ? (
+              <motion.div
+                key="steam"
+                className="absolute top-4 flex gap-1 justify-center z-10"
+              >
+                {/* Simulated coffee cup steam particles */}
+                {[0.2, 0.6, 1.0].map((delay, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="w-1 h-5 bg-[#C58A46] rounded-full blur-[1px]"
+                    animate={{
+                      y: [0, -14, 0],
+                      opacity: [0.1, 0.7, 0.1],
+                      scaleX: [1, 1.3, 1]
+                    }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      delay,
+                      ease: 'easeInOut'
+                    }}
+                  />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="complete"
+                className="absolute top-4 z-10"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: [0.2, 1, 0.2] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Sparkles className="h-6 w-6 text-[#C58A46]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <Coffee className={`h-10 w-10 text-[#C58A46] ${!isCompleted ? 'animate-pulse' : ''}`} />
+        </div>
+
+        {/* Dynamic progress bar countdown indicator */}
+        <div className="w-full max-w-xs mt-6 bg-white/5 rounded-full h-1.5 border border-white/5 overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-[#C58A46] to-[#E7C39A]"
+            initial={{ width: '0%' }}
+            animate={{ width: `${progressPercent}%` }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            style={{ boxShadow: '0 0 8px #C58A46' }}
+          />
+        </div>
+      </section>
+
+      {/* Ticket Details card */}
+      <section className="glass-card rounded-2xl p-5 border border-ice-border space-y-4 bg-gradient-to-br from-[#12141C] to-transparent z-10">
+        <div className="flex justify-between items-center border-b border-white/5 pb-3">
+          <div>
+            <span className="font-mono text-[8px] text-[#8E939E] uppercase tracking-widest block">Table Order Ticket</span>
+            <span className="font-mono text-sm text-[#C58A46] font-bold">{activeOrder.id}</span>
+          </div>
+          <div>
+            <span className="font-mono text-[8px] text-[#8E939E] uppercase tracking-widest block text-right">Tenancy</span>
+            <span className="font-mono text-[10px] text-premium-white font-bold">Aura Café</span>
+          </div>
+        </div>
+
+        <div className="space-y-3 text-xs leading-relaxed">
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-steel">Gourmet Selections</span>
+            <p className="text-premium-white font-medium text-right truncate max-w-[200px]">{activeOrder.items}</p>
+          </div>
+          <div className="flex justify-between items-center pt-2.5 border-t border-white/5">
+            <span className="text-muted-steel">Total Paid</span>
+            <span className="font-mono text-sm text-premium-white font-bold">${activeOrder.total.toFixed(2)}</span>
+          </div>
+        </div>
+      </section>
+
+      {/* B2B Mini Order Timeline */}
+      <section className="relative space-y-6 py-4 z-10">
+        <h3 className="text-[10px] font-mono tracking-widest text-muted-steel uppercase">Barista Preparation Steps</h3>
+
+        <div className="space-y-4 relative">
+          {/* Connector timeline line */}
+          <div className="absolute left-4.5 top-2 bottom-2 w-0.5 bg-white/5"></div>
+          {activeIndex !== -1 && (
+            <div
+              className="absolute left-4.5 top-2 w-0.5 bg-[#C58A46] transition-all duration-500"
+              style={{ height: `${(activeIndex / (steps.length - 1)) * 92}%` }}
+            />
+          )}
+
           {steps.map((step, idx) => {
-            const isCompleted = idx < activeIndex;
-            const isActive = idx === activeIndex;
-            
-            let circleClass = 'bg-white/5 border-ice-border text-muted-steel';
-            if (isCompleted) {
-              circleClass = 'bg-[#E5C158]/10 border-[#E5C158] text-[#E5C158]';
-            } else if (isActive) {
-              circleClass = 'bg-[#E5C158] border-[#E5C158] text-canvas-charcoal font-bold shadow-lg shadow-[#E5C158]/20';
+            const isFinished = idx < activeIndex;
+            const isCurrent = idx === activeIndex;
+            const stepConfig = steps[idx];
+
+            let circleClass = 'bg-white/5 border-white/10 text-muted-steel';
+            if (isFinished) {
+              circleClass = 'bg-[#C58A46]/10 border-[#C58A46] text-[#C58A46]';
+            } else if (isCurrent) {
+              circleClass = 'bg-[#C58A46] border-[#C58A46] text-canvas-charcoal font-bold';
             }
 
             return (
-              <div key={step.status} className="flex md:flex-col items-center md:items-center gap-6 md:gap-4 group">
-                {/* Circle step badge */}
-                <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 shrink-0 ${circleClass}`}>
-                  <span className="material-symbols-outlined text-xl">{step.icon}</span>
+              <div key={step.status} className="flex items-start gap-4 transition-all">
+                {/* Circle number */}
+                <div className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-500 ${circleClass}`}>
+                  {isFinished ? (
+                    <Check className="h-4.5 w-4.5 font-bold" />
+                  ) : isCurrent && !isCompleted ? (
+                    <Loader2 className="h-4.5 w-4.5 animate-spin" />
+                  ) : (
+                    <span className="text-[10px] font-mono font-bold">{idx + 1}</span>
+                  )}
                 </div>
 
-                {/* text */}
-                <div className="space-y-1 md:text-center text-left">
-                  <h4 className={`text-xs font-mono font-bold uppercase tracking-widest ${isActive ? 'text-[#E5C158]' : 'text-premium-white'}`}>
-                    {step.label}
-                  </h4>
-                  <p className="text-[10px] text-muted-steel leading-relaxed max-w-[200px] md:mx-auto">
-                    {step.desc}
-                  </p>
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <h4 className={`text-xs font-bold ${isCurrent ? 'text-[#C58A46]' : 'text-premium-white'}`}>
+                      {step.label}
+                    </h4>
+                    {isCurrent && (
+                      <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold uppercase tracking-wider ${stepConfig.badgeClass}`}>
+                        {step.status}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-muted-steel leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* Simulator quick-control Panel */}
-      <div className="glass-card p-5 rounded-xl border border-ice-border flex flex-col md:flex-row justify-between items-center gap-4 bg-gradient-to-tr from-[#12141C]/50 to-transparent">
-        <div className="text-left space-y-1">
-          <h4 className="text-xs font-bold text-premium-white font-mono">Operations Simulator Panel</h4>
-          <p className="text-[10px] text-muted-steel">Simulate shift actions to verify visual stepper layout pacing dynamically.</p>
-        </div>
-        
-        <div className="flex gap-3">
+      {/* B2B Operations Simulator Panel */}
+      <section className="glass-card p-4 rounded-xl border border-ice-border space-y-4 bg-gradient-to-tr from-[#12141C]/30 to-transparent z-10">
+        <div className="flex justify-between items-center">
+          <div className="text-left">
+            <h4 className="text-[10px] font-mono tracking-widest text-[#C58A46] uppercase">B2B Telemetry Control</h4>
+            <p className="text-[9px] text-muted-steel mt-0.5">Advance stages to trigger countdowns & celebration tones.</p>
+          </div>
           <button
             onClick={advanceStep}
-            className="px-4 py-2.5 rounded-lg bg-glass-fill border border-ice-border hover:border-[#E5C158]/50 text-xs font-bold text-[#E5C158] transition-all spring-interaction flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-lg bg-glass-fill border border-ice-border hover:border-[#C58A46]/50 text-[10px] font-bold text-[#C58A46] transition-all spring-interaction flex items-center gap-1"
           >
-            <span className="material-symbols-outlined text-sm">speed</span>
-            Simulate Next Shift Stage
+            Advance Status
           </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/5">
           <Link
-            href="/dashboard"
-            className="px-4 py-2.5 rounded-lg bg-white/5 border border-ice-border text-xs text-premium-white hover:bg-white/10 transition-all font-semibold"
+            href="/history"
+            className="py-2.5 rounded-lg bg-white/5 border border-ice-border text-[10px] font-bold text-premium-white text-center hover:bg-white/10 transition-all"
           >
-            Return to HQ terminal
+            Loyalty Profile
+          </Link>
+          <Link
+            href="/menu"
+            className="py-2.5 rounded-lg bg-white/5 border border-ice-border text-[10px] font-bold text-premium-white text-center hover:bg-white/10 transition-all"
+          >
+            Order More
           </Link>
         </div>
-      </div>
+      </section>
 
     </main>
   );

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
+import { Utensils, ShoppingCart, UserCircle } from 'lucide-react';
 
 interface HeaderProps {
   onOpenCart: () => void;
@@ -21,8 +22,9 @@ export default function Header({ onOpenCart }: HeaderProps) {
   }, []);
 
   const navLinks = [
-    { label: 'Coffee Menu', href: '/menu' },
-    { label: 'AI Sommelier', href: '/chatbot' },
+    { label: 'QR Menu', href: '/qr' },
+    { label: 'Live Menu', href: '/menu' },
+    { label: 'AI Concierge', href: '/chatbot' },
     { label: 'Checkout', href: '/order' },
     { label: 'Ops Terminal', href: '/dashboard' },
     { label: 'Analytics Hub', href: '/analytics' },
@@ -35,7 +37,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
         {/* Logo and Tenant Info */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-3 spring-interaction">
-            <span className="material-symbols-outlined text-[#C58A46] text-2xl font-bold">restaurant</span>
+            <Utensils className="text-[#C58A46] font-bold" size={32} />
             <div className="flex flex-col">
               <h1 className="font-display-lg text-headline-md font-extrabold text-[#C58A46] tracking-tight leading-none">
                 RestaurantOS
@@ -78,12 +80,22 @@ export default function Header({ onOpenCart }: HeaderProps) {
             onClick={onOpenCart}
             className="relative cursor-pointer group spring-interaction p-2"
           >
-            <span className="material-symbols-outlined text-premium-white text-2xl">shopping_cart</span>
+            <ShoppingCart className="lucide-icon text-premium-white" size={32} />
             {mounted && cartCount > 0 && (
               <span className="absolute top-0 right-0 bg-[#C58A46] text-canvas-charcoal text-[9px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg border border-canvas-charcoal">
                 {cartCount}
               </span>
             )}
+          </div>
+
+          {/* Mobile sticky cart bubble (touch-friendly) */}
+          <div className="md:hidden fixed bottom-16 right-4 z-50">
+            <button onClick={onOpenCart} aria-label="Open cart" className="w-14 h-14 rounded-full bg-[#C58A46] text-canvas-charcoal flex items-center justify-center shadow-2xl spring-interaction">
+              <ShoppingCart className="lucide-icon" size={20} />
+              {mounted && cartCount > 0 && (
+                <span className="absolute top-1 right-1 bg-canvas-charcoal text-[#C58A46] text-[9px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-[#0C0705]">{cartCount}</span>
+              )}
+            </button>
           </div>
 
           {/* User / SaaS Role Indicator */}
@@ -96,7 +108,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
                 </span>
               </div>
               <div className="w-8 h-8 rounded-full border border-ice-border overflow-hidden bg-glass-fill flex items-center justify-center cursor-pointer hover:border-[#E5C158]/50 transition-colors">
-                <span className="material-symbols-outlined text-[#8E939E] text-lg">account_circle</span>
+                <UserCircle className="text-[#8E939E]" size={24} />
               </div>
             </div>
           )}

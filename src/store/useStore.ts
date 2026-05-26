@@ -7,6 +7,7 @@ export interface CartItem {
   price: number;
   qty: number;
   image: string;
+  category?: string;
   options: Record<string, string>;
 }
 
@@ -28,7 +29,7 @@ export interface LiveOrder {
   name: string;
   items: string;
   total: number;
-  status: 'Pending' | 'Preparing' | 'Served' | 'Completed';
+  status: 'Pending' | 'Preparing' | 'Ready' | 'Served';
   time: string;
 }
 
@@ -36,7 +37,7 @@ export interface MenuItem {
   id: string;
   name: string;
   price: number;
-  category: 'Entree' | 'Dessert' | 'Beverage';
+  category: 'Hot Coffee' | 'Cold Coffee' | 'Signature Drinks' | 'Bakery' | 'Desserts' | 'Refreshers' | 'Sandwiches';
   image: string;
   rating: string;
   description: string;
@@ -60,6 +61,14 @@ interface RestaurantOSState {
   menuItems: MenuItem[];
   reservations: Reservation[];
   favoriteItemIds: string[];
+  tableNumber: string | null;
+  isOffline: boolean;
+  pastOrders: LiveOrder[];
+
+  // Global Context Actions
+  setTableNumber: (table: string | null) => void;
+  setOffline: (offline: boolean) => void;
+  callWaiter: () => void;
 
   // Cart Actions
   addToCart: (item: Omit<CartItem, 'qty'> & { qty?: number }) => void;
@@ -84,6 +93,7 @@ interface RestaurantOSState {
   // Orders Actions
   addLiveOrder: (order: { name: string; items: string; total: number }) => void;
   updateOrderStatus: (orderId: string, status: LiveOrder['status']) => void;
+  reorderPastOrder: (orderId: string) => void;
 
   // Menu Actions
   updateMenuPrice: (itemId: string, price: number) => void;
@@ -99,72 +109,85 @@ interface RestaurantOSState {
 export const useStore = create<RestaurantOSState>()(
   persist(
     (set, get) => ({
-      cart: [
-        {
-          id: 'wagyu-steak',
-          name: 'Signature Wagyu',
-          price: 124.00,
-          qty: 1,
-          image: '/assets/chatbot_steak.png',
-          options: { temperature: 'Medium Rare', sauce: 'Marrow Jus' }
-        },
-        {
-          id: 'napa-cabernet',
-          name: 'Napa Valley Cabernet 2018',
-          price: 95.00,
-          qty: 1,
-          image: '/assets/order_gin.png',
-          options: {}
-        }
-      ] as CartItem[],
+      cart: [] as CartItem[],
       session: {
         user: 'Elena Rostova',
         role: 'Owner',
-        restaurant: 'Aura Gastronomy (London)'
+        restaurant: 'Aura Premium Café (London)'
       },
       notifications: [
-        { id: 1, text: "Table 4 requested sommelier guidance", time: "19:42", type: "info" },
-        { id: 2, text: "New reservation: Elena Rostova (4 guests) at 20:30", time: "19:35", type: "success" },
-        { id: 3, text: "Supply alert: Wagyu beef stock below threshold", time: "19:10", type: "warning" }
+        { id: 1, text: "Table 4 requested a waiter's assistance", time: "15:20", type: "info" },
+        { id: 2, text: "New reservation: Charles V. (2 guests) tomorrow at 18:00", time: "14:45", type: "success" },
+        { id: 3, text: "Supply alert: Premium Oat Milk stock below 20%", time: "11:10", type: "warning" }
       ],
-      favoriteItemIds: [],
+      favoriteItemIds: ['flat-white-silk', 'nitro-cold-brew'],
       orders: [
-        { id: '#OS-8902', name: 'Elena R.', items: 'Signature Wagyu, Napa Valley 2018', total: 219.00, status: 'Preparing', time: '19:42' },
-        { id: '#OS-8901', name: 'Marcus K.', items: 'Seared Scallops, Obsidian Gin', total: 54.00, status: 'Served', time: '19:20' }
+        { id: '#OS-8902', name: 'Elena R.', items: 'Silk Flat White (1x), Almond Croissant (1x)', total: 11.30, status: 'Preparing', time: '15:28' },
+        { id: '#OS-8901', name: 'Marcus K.', items: 'Nitro Cold Brew (1x), Truffle Egg Sandwich (1x)', total: 16.00, status: 'Served', time: '14:20' }
       ],
       menuItems: [
         {
-          id: 'seared-scallops',
-          name: 'Seared Scallops',
-          price: 38.00,
-          category: 'Entree',
-          image: '/assets/chatbot_scallops.png',
-          rating: '4.9',
-          description: 'Hokkaido scallops with pea purée, crispy pancetta, and citrus emulsion.'
-        },
-        {
-          id: 'wagyu-steak',
-          name: 'Signature Wagyu',
-          price: 124.00,
-          category: 'Entree',
-          image: '/assets/chatbot_steak.png',
-          rating: '5.0',
-          description: 'Grade A5 Kobe beef, butter-poached with smoked marrow jus and truffle mash.'
-        },
-        {
-          id: 'napa-cabernet',
-          name: 'Napa Valley Cabernet 2018',
-          price: 95.00,
-          category: 'Beverage',
-          image: '/assets/order_gin.png',
+          id: 'flat-white-silk',
+          name: 'Silk Flat White',
+          price: 5.90,
+          category: 'Hot Coffee',
+          image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20flat%20white%20in%20a%20minimalist%20porcelain%20cup%20with%20latte%20art%20rosette%2C%20warm%20amber%20lighting%2C%20cinematic%20shadows%2C%20coffee%20shop%20aesthetic%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
           rating: '4.8',
-          description: 'Robust Napa Valley vintage grape, aged in French oak barrels.'
+          description: 'Ristretto-forward, glossy microfoam, caramel warmth.'
+        },
+        {
+          id: 'nitro-cold-brew',
+          name: 'Nitro Cold Brew',
+          price: 6.20,
+          category: 'Cold Coffee',
+          image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%20contrast%2C%208k%20beverage%20photography&image_size=portrait_4_3',
+          rating: '4.9',
+          description: 'Cascade pour, creamy head, chocolate-forward cold extraction.'
+        },
+        {
+          id: 'almond-croissant',
+          name: 'Almond Croissant',
+          price: 5.40,
+          category: 'Bakery',
+          image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%20premium%20bakery%20photography%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
+          rating: '4.8',
+          description: 'Flaky layers, almond cream, toasted finish.'
         }
       ],
       reservations: [
         { id: 'RES-01', guestName: 'Elena Rostova', date: 'TONIGHT', hour: '20:30', guestsCount: 4, booth: 'Window Booth 4', status: 'Confirmed' },
         { id: 'RES-02', guestName: 'Charles V.', date: 'TOMORROW', hour: '18:00', guestsCount: 2, booth: 'Booth 2', status: 'Pending' }
       ],
+      tableNumber: null,
+      isOffline: false,
+      pastOrders: [
+        { id: '#OS-7821', name: 'You', items: 'Noir Cortado (1x), Espresso Tiramisu (1x)', total: 13.00, status: 'Served', time: 'Yesterday, 14:15' },
+        { id: '#OS-7603', name: 'You', items: 'Iced Vanilla Latte (1x), Atelier Cinnamon Roll (1x)', total: 12.00, status: 'Served', time: 'May 24, 09:30' }
+      ],
+
+      // Global Context Actions
+      setTableNumber: (table) => set({ tableNumber: table }),
+      setOffline: (offline) => {
+        set({ isOffline: offline });
+        get().addNotification(
+          offline ? 'B2B Telemetry offline: Reconnecting to kitchen...' : 'B2B Telemetry active: Live kitchen queue linked!',
+          offline ? 'error' : 'success'
+        );
+      },
+      callWaiter: () => {
+        const table = get().tableNumber || '4';
+        get().addNotification(`Call Waiter: Dispatching specialist to Table ${table}...`, 'info');
+        
+        // Custom B2B Telemetry Alert inside the system
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const newNotification: NotificationItem = {
+          id: Date.now(),
+          text: `Table ${table} requested assistance`,
+          time,
+          type: 'warning'
+        };
+        set({ notifications: [newNotification, ...get().notifications].slice(0, 10) });
+      },
 
       // Cart Actions
       addToCart: (item) => {
@@ -278,6 +301,42 @@ export const useStore = create<RestaurantOSState>()(
           )
         });
         get().addNotification(`Order ${orderId} updated to ${status}`, 'info');
+      },
+
+      reorderPastOrder: (orderId) => {
+        const past = get().pastOrders.find(o => o.id === orderId);
+        if (!past) return;
+        
+        // Seed past items into active cart (simulating adding the items)
+        get().addNotification('Restoring past menu items to cart...', 'success');
+        
+        // Parse items string (e.g. "Noir Cortado (1x), Espresso Tiramisu (1x)")
+        const regex = /([a-zA-Z\s]+)\((\d+)x\)/g;
+        let match;
+        const itemsToFind: { name: string, qty: number }[] = [];
+        
+        while ((match = regex.exec(past.items)) !== null) {
+          itemsToFind.push({
+            name: match[1].trim(),
+            qty: parseInt(match[2])
+          });
+        }
+
+        // Add matching items from menuItems or default list to cart
+        itemsToFind.forEach(item => {
+          // Look up menu item in current store
+          const found = get().menuItems.find(m => m.name.toLowerCase() === item.name.toLowerCase()) || 
+                        { id: item.name.toLowerCase().replace(/\s+/g, '-'), name: item.name, price: 6.00, image: '/assets/placeholder.png', category: 'Hot Coffee', rating: '5.0', description: 'Gourmet selection' };
+          
+          get().addToCart({
+            id: found.id,
+            name: found.name,
+            price: found.price,
+            image: found.image,
+            qty: item.qty,
+            options: { note: 'Reordered' }
+          });
+        });
       },
 
       // Menu Actions

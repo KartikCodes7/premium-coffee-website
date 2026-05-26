@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import { usePathname, useRouter } from 'next/navigation';
+import { Sliders, Activity, ClipboardList, Utensils } from 'lucide-react';
 
 export default function RoleSwitcher() {
   const session = useStore((state) => state.session);
@@ -52,7 +53,7 @@ export default function RoleSwitcher() {
           onClick={() => setIsOpen(!isOpen)}
           className="glass-card p-3 rounded-full flex items-center gap-2 shadow-2xl hover:border-[#C58A46]/50 transition-colors spring-interaction"
         >
-          <span className="material-symbols-outlined text-[#C58A46] animate-pulse">tune</span>
+          <Sliders className="text-[#C58A46] animate-pulse" size={24} />
           <span className="text-xs font-semibold text-premium-white pr-2">
             {session.role} Console
           </span>
@@ -78,7 +79,7 @@ export default function RoleSwitcher() {
                 }`}
               >
                 <span>Owner/HQ Overview</span>
-                <span className="material-symbols-outlined text-xs">monitoring</span>
+                <Activity size={16} />
               </button>
               
               <button
@@ -90,7 +91,7 @@ export default function RoleSwitcher() {
                 }`}
               >
                 <span>Kitchen Chef View</span>
-                <span className="material-symbols-outlined text-xs">restaurant_menu</span>
+                <ClipboardList size={16} />
               </button>
 
               <button
@@ -102,7 +103,7 @@ export default function RoleSwitcher() {
                 }`}
               >
                 <span>Customer Guest Flow</span>
-                <span className="material-symbols-outlined text-xs">local_dining</span>
+                <Utensils size={16} />
               </button>
 
               <h3 className="text-[9px] font-mono tracking-widest text-[#8E939E] uppercase px-2 mt-3 mb-2">

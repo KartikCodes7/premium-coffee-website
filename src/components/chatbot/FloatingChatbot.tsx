@@ -6,6 +6,7 @@ import { useChatMutation } from '@/services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { Bot, X, User, Send } from 'lucide-react';
 
 interface FloatingMessage {
   id: number;
@@ -25,7 +26,7 @@ export default function FloatingChatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<FloatingMessage[]>([
-    { id: 1, sender: 'ai', text: 'Good evening! I am your AI Sommelier and Culinary Concierge. How can I elevate your dining experience tonight?' }
+    { id: 1, sender: 'ai', text: 'Hello! I am your AI Barista Concierge. How can I elevate your premium coffee experience today?' }
   ]);
 
   const addToCart = useStore((state) => state.addToCart);
@@ -50,35 +51,35 @@ export default function FloatingChatbot() {
 
   const sommelierResponses = [
     {
-      keywords: ['wine', 'wagyu', 'steak', 'pair', 'red wine'],
-      text: "For our succulent **Signature Wagyu**, our Sommelier highly recommends the **2018 Napa Valley Cabernet Sauvignon** ($95/bottle). Its robust, velvet tannins slice beautifully through the rich Wagyu fat. Shall I add a bottle of this vintage to your selection?",
-      item: { id: 'napa-cabernet', name: 'Napa Valley Cabernet 2018', price: 95.00, image: '/assets/order_gin.png' }
+      keywords: ['sweet', 'sugar', 'caramel', 'honey'],
+      text: "For a sweet coffee experience, our AI Barista highly recommends our **Caramel Cloud Cappuccino** ($6.80) or **Saffron Honey Latte** ($7.20). Their rich, velvety microfoam and amber caramel drizzle are perfect sweeteners. Would you like me to add one to your checkout ticket?",
+      item: { id: 'caramel-cloud-cappuccino', name: 'Caramel Cloud Cappuccino', price: 6.80, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20cappuccino%20with%20thick%20foam%20and%20caramel%20drizzle%2C%20latte%20art%2C%20warm%20cafe%20lighting%2C%20high%2520contrast%2C%2520premium%2520coffee%2520photography%2C%25208k&image_size=portrait_4_3' }
     },
     {
-      keywords: ['scallop', 'seafood', 'white wine', 'chardonnay', 'chablis'],
-      text: "Our caramelized **Seared Scallops** pair impeccably with the crisp **Chablis Premier Cru 2020** ($110/bottle). The high acidity and bright mineral citrus notes highlight the delicate sweetness of Hokkaido shellfish. Would you like me to reserve a bottle for your table?",
-      item: { id: 'chablis-2020', name: 'Chablis Premier Cru 2020', price: 110.00, image: '/assets/order_gin.png' }
+      keywords: ['cold', 'iced', 'nitro', 'frappe'],
+      text: "Our signature **Nitro Cold Brew** ($6.20) is outstanding. It is nitrogen-infused on tap for a cascading, velvety head with a chocolate-forward body. For a sweeter cold drink, try the **Obsidian Iced Mocha** ($6.90). Shall I prepare one over crystal ice for you?",
+      item: { id: 'nitro-cold-brew', name: 'Nitro Cold Brew', price: 6.20, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%2520contrast%2C%25208k%2520beverage%2520photography&image_size=portrait_4_3' }
     },
     {
-      keywords: ['gluten', 'allergy', 'coeliac', 'wheat'],
-      text: "Absolutely. Our **Seared Scallops** with saffron emulsion and our **Signature Wagyu** (when prepared with marrow reduction instead of teriyaki marrow jus) are 100% gluten-free. I have notified the kitchen of this preference.",
+      keywords: ['cappuccino', 'flat white', 'latte', 'pair', 'combo'],
+      text: "A classic milk coffee like our **Silk Flat White** pairs exceptionally well with our warm, buttery **Almond Croissant** ($5.40) or our glazed **Atelier Cinnamon Roll** ($5.90). The flaky pastry layers highlight the espresso's ristretto caramel notes. Shall I add a pastry pairing to your bill?",
+      item: { id: 'almond-croissant', name: 'Almond Croissant', price: 5.40, image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%2520premium%2520bakery%2520photography%2C%25208k%2C%2520shallow%2520depth%2520of%2520field&image_size=portrait_4_3' }
+    },
+    {
+      keywords: ['vegetarian', 'veg', 'meatless'],
+      text: "All our bakery pastries, desserts, and our gourmet **Caprese Melt** ($9.60) on toasted Ciabatta are 100% vegetarian. I have logged these preferences for your table.",
       item: null
     },
     {
       keywords: ['book', 'reserve', 'table', 'tonight'],
-      text: "I can coordinate a reservation for you instantly. I've locked in a prime glassmorphic window booth for **4 guests tonight at 20:30** under the name Elena. I have sent the confirmation via SMS.",
+      text: "Certainly. I have locked in a premium B2B window booth reservation for **2 guests tomorrow at 18:00** under the name Elena Rostova. Your table confirmation has been dispatched.",
       item: null
-    },
-    {
-      keywords: ['cocktail', 'drink', 'gin', 'obsidian'],
-      text: "Try our signature **Obsidian Gin & Tonic** ($22.00). It features cold-brewed butterfly pea flower infused gin, wild elderflower tonic, and a fresh rosemary sprig. Shall I prepare one at the bar for you?",
-      item: { id: 'obsidian-gin', name: 'Obsidian Gin & Tonic', price: 22.00, image: '/assets/order_gin.png' }
     }
   ];
 
   const fallbackResponses = [
-    "An excellent selection. Our master chefs prepare each signature dish to reflect modern gastronomy. Would you like me to arrange an optimal beverage accompaniment or record special preparation notes for the culinary crew?",
-    "Understood. I am adding that operational preference to your table context. What else can I assist you with regarding our premium evening menu?"
+    "An exquisite café selection. Our baristas grind every single-origin bean to order to capture maximum flavor. Would you like me to recommend a matching artisan pastry or lock in custom preparation notes?",
+    "Understood. Adding your operational preferences to your active table session. What else can I prepare for you today from our gourmet bar?"
   ];
 
   const handleSend = () => {
@@ -99,12 +100,21 @@ export default function FloatingChatbot() {
       },
       onError: (err) => {
         setIsTyping(false);
+        const lowerMessage = userText.toLowerCase();
+        const match = sommelierResponses.find(r =>
+          r.keywords.some(kw => lowerMessage.includes(kw))
+        );
+
+        const text = match ? match.text : fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+        const upsellItem = match ? match.item : null;
+
         setMessages((prev) => [
           ...prev,
           {
             id: Date.now() + 1,
             sender: 'ai',
-            text: "My apologies. I encountered a minor networking delay while accessing our wine reserve logs. Please try again."
+            text: text,
+            upsellItem: upsellItem
           }
         ]);
       }
@@ -117,9 +127,9 @@ export default function FloatingChatbot() {
       name: item.name,
       price: item.price,
       image: item.image,
-      options: { note: 'AI Sommelier Float Upsell' }
+      options: { note: 'AI Barista Float Upsell' }
     });
-    addNotification(`Added ${item.name} via AI Sommelier`, 'success');
+    addNotification(`Added ${item.name} via AI Barista`, 'success');
   };
 
   return (
@@ -135,14 +145,14 @@ export default function FloatingChatbot() {
             {/* Header */}
             <div className="p-4 border-b border-ice-border bg-[#0B0C0E]/50 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#E5C158] text-base animate-pulse">smart_toy</span>
-                <span className="text-xs font-bold text-premium-white">AI Sommelier Lounge</span>
+                <Bot className="text-[#C58A46] animate-pulse" size={20} />
+                <span className="text-xs font-bold text-premium-white">AI Barista Concierge</span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
                 className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/5 text-[#8E939E] hover:text-premium-white transition-colors"
               >
-                <span className="material-symbols-outlined text-sm">close</span>
+                <X size={18} />
               </button>
             </div>
 
@@ -152,24 +162,28 @@ export default function FloatingChatbot() {
                 const isUser = m.sender === 'user';
                 return (
                   <div key={m.id} className={`flex gap-3 max-w-[85%] ${isUser ? 'ml-auto flex-row-reverse' : ''}`}>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${isUser ? 'bg-primary-container text-canvas-charcoal' : 'glass-card text-[#E5C158]'}`}>
-                      <span className="material-symbols-outlined text-xs font-bold">{isUser ? 'person' : 'smart_toy'}</span>
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${isUser ? 'bg-primary-container text-canvas-charcoal' : 'glass-card text-[#C58A46]'}`}>
+                      {isUser ? (
+                        <User className="font-bold" size={16} />
+                      ) : (
+                        <Bot className="font-bold" size={16} />
+                      )}
                     </div>
-                    <div className={`p-3.5 rounded-xl text-xs space-y-2 leading-relaxed ${isUser ? 'bg-[#12141C] border border-white/5 rounded-tr-none text-premium-white' : 'glass-card border-l-2 border-l-[#E5C158]/40 rounded-tl-none text-premium-white'}`}>
+                    <div className={`p-3.5 rounded-xl text-xs space-y-2 leading-relaxed ${isUser ? 'bg-[#12141C] border border-white/5 rounded-tr-none text-premium-white' : 'glass-card border-l-2 border-l-[#C58A46]/40 rounded-tl-none text-premium-white'}`}>
                       <p
                         dangerouslySetInnerHTML={{
-                          __html: m.text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#E5C158] font-bold">$1</strong>')
+                          __html: m.text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#C58A46] font-bold">$1</strong>')
                         }}
                       />
                       {!isUser && m.upsellItem && (
                         <div className="p-2 bg-white/5 rounded-lg border border-ice-border flex items-center justify-between gap-3 mt-2">
                           <div className="min-w-0">
                             <p className="font-bold truncate text-[10px] text-premium-white">{m.upsellItem.name}</p>
-                            <p className="text-[9px] text-[#E5C158] font-mono">${m.upsellItem.price.toFixed(2)}</p>
+                            <p className="text-[9px] text-[#C58A46] font-mono">${m.upsellItem.price.toFixed(2)}</p>
                           </div>
                           <button
                             onClick={() => handleAddUpsell(m.upsellItem!)}
-                            className="px-2.5 py-1 bg-[#E5C158] text-canvas-charcoal font-bold text-[9px] rounded-md hover:brightness-110 shrink-0"
+                            className="px-2.5 py-1 bg-[#C58A46] text-canvas-charcoal font-bold text-[9px] rounded-md hover:brightness-110 shrink-0"
                           >
                             Add to Cart
                           </button>
@@ -183,9 +197,9 @@ export default function FloatingChatbot() {
               {isTyping && (
                 <div className="flex gap-3 max-w-[85%]">
                   <div className="w-7 h-7 rounded-full glass-card flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-[#E5C158] text-xs animate-pulse">smart_toy</span>
+                    <Bot className="text-[#C58A46] animate-pulse" size={16} />
                   </div>
-                  <div className="glass-card p-4 rounded-xl rounded-tl-none border-l-2 border-l-[#E5C158]/40 w-full shimmer-loader h-12"></div>
+                  <div className="glass-card p-4 rounded-xl rounded-tl-none border-l-2 border-l-[#C58A46]/40 w-full shimmer-loader h-12"></div>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -200,14 +214,14 @@ export default function FloatingChatbot() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleSend();
                 }}
-                placeholder="Ask sommelier pairings..."
-                className="flex-1 bg-white/5 border border-ice-border rounded-xl px-3 py-2 text-xs text-premium-white focus:outline-none focus:border-[#E5C158] transition-all placeholder:text-muted-steel/30"
+                placeholder="Ask our AI Barista..."
+                className="flex-1 bg-white/5 border border-ice-border rounded-xl px-3 py-2 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all placeholder:text-muted-steel/30"
               />
               <button
                 onClick={handleSend}
-                className="w-9 h-9 bg-[#E5C158] text-canvas-charcoal rounded-xl flex items-center justify-center hover:brightness-110 transition-colors shrink-0"
+                className="w-9 h-9 bg-[#C58A46] text-canvas-charcoal rounded-xl flex items-center justify-center hover:brightness-110 transition-colors shrink-0"
               >
-                <span className="material-symbols-outlined text-sm font-bold">send</span>
+                <Send className="font-bold" size={18} />
               </button>
             </div>
           </motion.div>
@@ -217,9 +231,9 @@ export default function FloatingChatbot() {
       {/* Floating round Robot badge button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-[#E5C158] text-canvas-charcoal rounded-full flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 transition-all spring-interaction"
+        className="w-14 h-14 bg-[#C58A46] text-canvas-charcoal rounded-full flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 transition-all spring-interaction"
       >
-        <span className="material-symbols-outlined text-2xl font-bold">smart_toy</span>
+        <Bot className="font-bold" size={32} />
       </button>
     </div>
   );
