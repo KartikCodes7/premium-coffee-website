@@ -7,7 +7,7 @@ import {
   Download,
   Copy,
   Check,
-  Coffee,
+  Bell,
   Printer,
   ChevronDown,
   ChevronUp,
@@ -96,7 +96,7 @@ export default function QRGeneratorPage() {
   const handleDownload = useCallback(async () => {
     setDownloading(true);
     try {
-      await downloadQR(singleTable);
+      await downloadQR(singleTable, `HospitalityOS-Table-${singleTable}-QR.png`);
     } catch (err) {
       console.error('Download error:', err);
     }
@@ -127,7 +127,7 @@ export default function QRGeneratorPage() {
 
   const handleBatchDownloadAll = useCallback(async () => {
     for (const qr of batchQRs) {
-      await downloadQR(qr.table, `RestaurantOS-Table-${qr.table}-QR.png`);
+      await downloadQR(qr.table, `HospitalityOS-Table-${qr.table}-QR.png`);
       // Small delay between downloads
       await new Promise((r) => setTimeout(r, 300));
     }
@@ -153,15 +153,15 @@ export default function QRGeneratorPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
             <Sparkles className="h-3.5 w-3.5 text-[#C58A46]" />
             <span className="font-mono text-[9px] uppercase tracking-widest text-[#C58A46]">
-              QR Ordering System • Admin
+              QR Ordering System • Operations Dashboard
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-premium-white leading-tight">
             Table QR Generator
           </h1>
           <p className="text-sm md:text-base text-muted-steel max-w-2xl leading-relaxed">
-            Generate high-resolution, printable QR codes for each table. Customers scan to instantly
-            access your premium café menu with table-linked ordering.
+            Generate high-resolution, printable QR codes for each table or room. Guests scan to instantly
+            access your premium menu with table-linked operations dispatch.
           </p>
         </motion.section>
 
@@ -185,7 +185,7 @@ export default function QRGeneratorPage() {
             <div className="space-y-3">
               <label className="flex items-center gap-2 text-xs font-semibold text-premium-white">
                 <Hash className="h-4 w-4 text-[#C58A46]" />
-                Table Number
+                Table / Room Number
               </label>
               <div className="flex items-center gap-3">
                 <button
@@ -318,13 +318,13 @@ export default function QRGeneratorPage() {
               {/* Table Label */}
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C58A46]/10 border border-[#C58A46]/20">
-                  <Coffee className="h-4 w-4 text-[#C58A46]" />
+                  <Bell className="h-4 w-4 text-[#C58A46]" />
                   <span className="text-sm font-bold text-[#C58A46]">
-                    Table {singleTable}
+                    Table / Room {singleTable}
                   </span>
                 </div>
                 <p className="text-[9px] font-mono text-muted-steel uppercase tracking-widest">
-                  Scan to order • Aura Premium Café
+                  Scan to order • Aura Grand Bistro
                 </p>
               </div>
             </div>
@@ -462,7 +462,7 @@ export default function QRGeneratorPage() {
                         />
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Coffee className="h-3 w-3 text-[#C58A46]" />
+                        <Bell className="h-3 w-3 text-[#C58A46]" />
                         <span className="text-xs font-bold text-premium-white">
                           Table {qr.table}
                         </span>
@@ -492,8 +492,8 @@ export default function QRGeneratorPage() {
               </h3>
               <p className="text-xs text-muted-steel leading-relaxed">
                 Download individual or batch QR codes at 1024×1024 resolution — optimized for
-                table tent cards, acrylic stands, and menu inserts. Each QR routes customers through
-                a premium scan animation before opening your live café menu.
+                table tent cards, acrylic stands, and menu inserts. Each QR routes guests through
+                a premium scan animation before opening your live menu.
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 {['1024px HD', 'Error Correction H', 'Print Optimized', 'Dark Luxury Theme'].map((tag) => (
@@ -545,7 +545,7 @@ export default function QRGeneratorPage() {
 
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C58A46]/10 border border-[#C58A46]/20">
-                  <Coffee className="h-4 w-4 text-[#C58A46]" />
+                  <Bell className="h-4 w-4 text-[#C58A46]" />
                   <span className="text-sm font-bold text-[#C58A46]">
                     Table {previewQR.table}
                   </span>
@@ -558,7 +558,7 @@ export default function QRGeneratorPage() {
               <div className="flex gap-3 w-full">
                 <button
                   onClick={async () => {
-                    await downloadQR(previewQR.table);
+                    await downloadQR(previewQR.table, `HospitalityOS-Table-${previewQR.table}-QR.png`);
                   }}
                   className="flex-1 h-11 rounded-xl bg-[#C58A46] text-canvas-charcoal font-bold text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all"
                 >

@@ -22,8 +22,8 @@ import { useSoundFeedback } from '@/hooks/useSoundFeedback';
 import { 
   Clock, Flame, CheckCircle2, CheckCircle, 
   TrendingUp, Utensils, Lightbulb, 
-  Banknote, Coffee, BellRing, Gauge, 
-  Search, Plus, Trash2, BrainCircuit, Save, Edit2, Trash, Calendar 
+  Banknote, BellRing, Gauge, 
+  Search, Plus, Trash2, BrainCircuit, Save, Edit2, Trash, Calendar, Bell, Check, Smartphone 
 } from 'lucide-react';
 
 // --- Priority Tag Utilities ---
@@ -31,7 +31,6 @@ const PRIORITY_TAGS = ['VIP', 'Rush', 'Large Order', null, null, null] as const;
 type PriorityTag = 'VIP' | 'Rush' | 'Large Order' | null;
 
 function getOrderPriority(orderId: string): PriorityTag {
-  // Deterministic pseudo-random based on order ID so tags persist across renders
   let hash = 0;
   for (let i = 0; i < orderId.length; i++) {
     hash = ((hash << 5) - hash) + orderId.charCodeAt(i);
@@ -65,10 +64,10 @@ const KANBAN_COLUMNS: { status: LiveOrder['status']; label: string; color: strin
 
 // --- AI Insights Data ---
 const AI_INSIGHTS = [
-  { icon: TrendingUp, text: 'Cold brews perform **38% better** after 5 PM. Consider promoting Nitro Cold Brew during evening shifts.' },
-  { icon: Utensils, text: 'Cappuccino + Croissant combos are **trending today**. Cross-sell upsell rate is at 84%.' },
-  { icon: Clock, text: 'Peak café traffic detected between **6–8 PM**. Recommend deploying additional barista coverage.' },
-  { icon: Lightbulb, text: 'Oat milk orders increased **22%** this week. Verify supply levels before weekend rush.' },
+  { icon: TrendingUp, text: 'Aged Angus Steak orders perform **42% better** during weekend dinner shifts. Ensure prep stations are stocked.' },
+  { icon: Utensils, text: 'Bistro Dining + Craft Cocktails are **trending today**. Cross-sell upsell rate is at 88%.' },
+  { icon: Clock, text: 'Peak dining traffic detected between **7–9 PM**. Recommend deploying additional operations coverage.' },
+  { icon: Lightbulb, text: 'Premium pastry orders increased **24%** this morning. Optimize baking cycles for peak hours.' },
 ];
 
 export default function DashboardPage() {
@@ -81,6 +80,7 @@ export default function DashboardPage() {
   const addLiveOrder = useStore((state) => state.addLiveOrder);
   const updateOrderStatus = useStore((state) => state.updateOrderStatus);
   const clearNotifications = useStore((state) => state.clearNotifications);
+  const completeNotification = useStore((state) => state.completeNotification);
 
   // Menu Actions
   const updateMenuPrice = useStore((state) => state.updateMenuPrice);
@@ -117,9 +117,20 @@ export default function DashboardPage() {
   // Dashboard state
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'Pending' | 'Preparing' | 'Ready' | 'Served'>('all');
+  const [tick, setTick] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [activeInsightIdx, setActiveInsightIdx] = useState(0);
+
+  // Tick elapsed orders timer
+  useEffect(() => {
+    if (!mounted) return;
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [mounted]);
 
   // Prevent hydration mismatch
   useEffect(() => { setMounted(true); }, []);
@@ -148,10 +159,10 @@ export default function DashboardPage() {
     const interval = setInterval(() => {
       const clientNames = ['Vanderbilt', 'Chloe D.', 'Sarah J.', 'Thomas A.', 'Sophie M.'];
       const dishChoices = [
-        { items: 'Noir Cortado (1x), Espresso Tiramisu (1x)', total: 13.00 },
+        { items: 'Rosemary Roast Chicken Ciabatta (1x), Espresso Tiramisu (1x)', total: 21.70 },
         { items: 'Iced Vanilla Latte (1x), Atelier Cinnamon Roll (1x)', total: 12.00 },
-        { items: 'Nitro Cold Brew (1x), Almond Croissant (1x)', total: 11.60 },
-        { items: 'Silk Flat White (2x), Pastry (1x)', total: 17.20 },
+        { items: 'Nitro Craft Brew (1x), Almond Croissant (1x)', total: 11.60 },
+        { items: 'Aged Angus Bistro Steak (1x), Yuzu Citrus Sparkler (1x)', total: 32.00 },
       ];
       const randomName = clientNames[Math.floor(Math.random() * clientNames.length)];
       const randomChoice = dishChoices[Math.floor(Math.random() * dishChoices.length)];
@@ -164,7 +175,7 @@ export default function DashboardPage() {
   // Form states for menu add
   const [newMenuName, setNewMenuName] = useState('');
   const [newMenuPrice, setNewMenuPrice] = useState('');
-  const [newMenuCategory, setNewMenuCategory] = useState<'Hot Coffee' | 'Cold Coffee' | 'Signature Drinks' | 'Bakery' | 'Desserts' | 'Refreshers' | 'Sandwiches'>('Hot Coffee');
+  const [newMenuCategory, setNewMenuCategory] = useState<'Bistro Dining' | 'Café Craft' | 'Signature Cocktails' | 'Pastries & Bakery' | 'Artisan Desserts'>('Café Craft');
   const [newMenuDesc, setNewMenuDesc] = useState('');
 
   // Form states for reservation add
@@ -190,9 +201,15 @@ export default function DashboardPage() {
     ? orders.filter((o) =>
         o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         o.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        o.items.toLowerCase().includes(searchQuery.toLowerCase())
+        o.items.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (o.tableNumber && o.tableNumber.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (o.phone && o.phone.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : orders;
+
+  const displayedColumns = activeFilter === 'all' 
+    ? KANBAN_COLUMNS 
+    : KANBAN_COLUMNS.filter((col) => col.status === activeFilter);
 
   const kanbanGroups = {
     Pending: filteredOrders.filter((o) => o.status === 'Pending'),
@@ -211,15 +228,42 @@ export default function DashboardPage() {
 
   const simulateCustomerTicket = () => {
     playSound('pip');
-    const clientNames = ['Julian V.', 'Thomas A.', 'Sophie M.', 'Elena R.'];
+    const clientNames = ['Rahul Patil', 'Aarav Mehta', 'Sophie Dubois', 'Elena Rostova', 'John Doe'];
+    const phoneNumbers = ['9876543210', '9821345678', '9765432109', '9911223344', '9123456780'];
+    const tables = ['1', '2', '3', '4', '5'];
+    const payments = ['UPI', 'POS', 'WALLET'];
+    const instructions = [
+      'Extra cheese on scramble',
+      'Gluten allergy warning',
+      'Serve beverages after food',
+      'No onions, extra roast',
+      ''
+    ];
     const dishChoices = [
       { items: 'Silk Flat White (1x), Almond Croissant (1x)', total: 11.30 },
-      { items: 'Nitro Cold Brew (1x), Truffle Egg Sandwich (1x)', total: 16.00 },
-      { items: 'Saffron Honey Latte (1x), Atelier Cinnamon Roll (1x)', total: 13.10 }
+      { items: 'Nitro Craft Brew (1x), Truffle Scramble Brioche (1x)', total: 17.70 },
+      { items: 'Aged Angus Bistro Steak (1x), Espresso Tiramisu (1x)', total: 32.40 }
     ];
-    const randomName = clientNames[Math.floor(Math.random() * clientNames.length)];
+    
+    const idx = Math.floor(Math.random() * clientNames.length);
+    const randomName = clientNames[idx];
+    const randomPhone = phoneNumbers[idx];
+    const randomTable = tables[Math.floor(Math.random() * tables.length)];
+    const randomPayment = payments[Math.floor(Math.random() * payments.length)];
+    const randomInstruction = instructions[Math.floor(Math.random() * instructions.length)];
     const randomChoice = dishChoices[Math.floor(Math.random() * dishChoices.length)];
-    addLiveOrder({ name: randomName, items: randomChoice.items, total: randomChoice.total });
+
+    addLiveOrder({
+      name: randomName,
+      phone: randomPhone,
+      tableNumber: randomTable,
+      paymentMethod: randomPayment,
+      specialInstructions: randomInstruction,
+      items: randomChoice.items,
+      total: randomChoice.total,
+      kotNumber: 'KOT-' + Math.floor(100 + Math.random() * 900),
+      createdAt: Date.now()
+    });
   };
 
   function handleOrderStatus(id: string, status: LiveOrder['status']) {
@@ -255,12 +299,12 @@ export default function DashboardPage() {
     const parsedPrice = parseFloat(newMenuPrice);
     addMenuItem({
       name: newMenuName, price: parsedPrice, category: newMenuCategory,
-      description: newMenuDesc || 'Luxury curated organic barista café signature.',
+      description: newMenuDesc || 'Luxury curated organic guest dining signature experience.',
       image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=gourmet%20artisan%20coffee%20beverage%20organic%20macro%20close%20up%20shot%20minimalist&image_size=portrait_4_3'
     });
     addMenuItemMutation.mutate({
       name: newMenuName, price: parsedPrice, category: newMenuCategory,
-      description: newMenuDesc || 'Luxury curated organic barista café signature.',
+      description: newMenuDesc || 'Luxury curated organic guest dining signature experience.',
       image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=gourmet%20artisan%20coffee%20beverage%20organic%20macro%20close%20up%20shot%20minimalist&image_size=portrait_4_3'
     });
     setNewMenuName(''); setNewMenuPrice(''); setNewMenuDesc('');
@@ -304,13 +348,13 @@ export default function DashboardPage() {
             <section className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight flex items-center gap-3 flex-wrap">
-                  Operations Console
+                  Operations Dashboard
                   <span className="text-[10px] font-mono px-2 py-1 rounded bg-[#C58A46]/10 text-[#C58A46] border border-[#C58A46]/20 uppercase">
-                    HQ Café Stream
+                    HQ Stream
                   </span>
                 </h1>
                 <p className="text-xs text-muted-steel mt-1">
-                  Real-time table tracking, active kitchen queue, and live operational chimes.
+                  Real-time table tracking, active service queue, and live operational chimes.
                 </p>
               </div>
 
@@ -327,7 +371,7 @@ export default function DashboardPage() {
                   className="px-4 py-2.5 rounded-lg bg-glass-fill border border-ice-border hover:border-[#C58A46]/50 text-xs font-bold text-[#C58A46] transition-all spring-interaction flex items-center gap-2"
                 >
                   <Plus className="font-bold" size={18} />
-                  Simulate Ticket
+                  Simulate Guest Request
                 </button>
                 <button
                   onClick={clearNotifications}
@@ -343,9 +387,9 @@ export default function DashboardPage() {
             <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {[
                 { label: 'Shift Revenue', value: `$${shiftRevenue.toFixed(2)}`, trend: '+18.4% vs last morning', trendColor: 'text-green-400', icon: Banknote, iconBg: 'bg-[#C58A46]/10 border-[#C58A46]/20', iconColor: 'text-[#C58A46]', valueColor: 'text-[#C58A46]' },
-                { label: 'Barista Queue', value: activeQueueCount.toString(), trend: 'Espresso extraction: 92%', trendColor: 'text-muted-steel', icon: Coffee, iconBg: 'bg-blue-500/10 border-blue-500/20', iconColor: 'text-blue-400', valueColor: 'text-premium-white' },
-                { label: 'Table Alerts', value: notifications.length.toString(), trend: 'Waiter dispatch requests', trendColor: 'text-amber-400', icon: BellRing, iconBg: 'bg-amber-500/10 border-amber-500/20', iconColor: 'text-amber-400', valueColor: 'text-premium-white' },
-                { label: 'Avg Prep Time', value: '6.2', trend: 'Excellent extraction metrics', trendColor: 'text-green-400', icon: Gauge, iconBg: 'bg-green-500/10 border-green-500/20', iconColor: 'text-green-400', valueColor: 'text-premium-white', suffix: 'min' },
+                { label: 'Operations Queue', value: activeQueueCount.toString(), trend: 'Throughput efficiency: 94%', trendColor: 'text-muted-steel', icon: Utensils, iconBg: 'bg-blue-500/10 border-blue-500/20', iconColor: 'text-blue-400', valueColor: 'text-premium-white' },
+                { label: 'Guest Service Alerts', value: notifications.length.toString(), trend: 'Active service requests', trendColor: 'text-amber-400', icon: BellRing, iconBg: 'bg-amber-500/10 border-amber-500/20', iconColor: 'text-amber-400', valueColor: 'text-premium-white' },
+                { label: 'Avg Prep Time', value: '6.2', trend: 'Excellent service metrics', trendColor: 'text-green-400', icon: Gauge, iconBg: 'bg-green-500/10 border-green-500/20', iconColor: 'text-green-400', valueColor: 'text-premium-white', suffix: 'min' },
               ].map((card, i) => (
                 <motion.div
                   key={card.label}
@@ -402,27 +446,63 @@ export default function DashboardPage() {
 
               {/* Left: Kanban Board */}
               <div className="space-y-4">
-                {/* Search Bar */}
-                <div className="relative">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8E939E]" size={20} />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search Table # or Order ID..."
-                    className="w-full bg-white/5 border border-ice-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all placeholder:text-muted-steel/30"
-                  />
+                {/* Operations Filter & Search Controls */}
+                <div className="space-y-3">
+                  {/* Quick Filters */}
+                  <div className="flex flex-wrap gap-1.5 p-1 bg-white/3 border border-ice-border rounded-xl">
+                    <button
+                      onClick={() => { playSound('pip'); setActiveFilter('all'); }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        activeFilter === 'all'
+                          ? 'bg-[#C58A46] text-canvas-charcoal font-extrabold shadow-md'
+                          : 'text-[#8E939E] hover:text-premium-white hover:bg-white/5'
+                      }`}
+                    >
+                      ALL QUEUES
+                    </button>
+                    {KANBAN_COLUMNS.map((col) => (
+                      <button
+                        key={col.status}
+                        onClick={() => { playSound('pip'); setActiveFilter(col.status); }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                          activeFilter === col.status
+                            ? 'text-canvas-charcoal font-extrabold shadow-md'
+                            : 'text-[#8E939E] hover:text-premium-white hover:bg-white/5'
+                        }`}
+                        style={{ backgroundColor: activeFilter === col.status ? col.color : undefined }}
+                      >
+                        <col.icon size={12} />
+                        {col.label.toUpperCase()} ({kanbanGroups[col.status].length})
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8E939E]" size={18} />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search by Guest Name, Phone, Table #, Order ID..."
+                      className="w-full bg-white/5 border border-ice-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all placeholder:text-muted-steel/30"
+                    />
+                  </div>
                 </div>
 
                 {/* Kanban Header */}
                 <h2 className="text-xs font-bold tracking-widest text-[#C58A46] uppercase flex items-center gap-2 font-mono">
-                  Active Barista Kitchen Queue
+                  Active Service Queue
                   <span className="inline-block w-2 h-2 rounded-full bg-[#C58A46] animate-ping"></span>
                 </h2>
 
-                {/* 4-Column Kanban Board */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                  {KANBAN_COLUMNS.map((col) => {
+                {/* Dynamic Kanban Board Grid */}
+                <div className={`grid gap-4 ${
+                  activeFilter === 'all' 
+                    ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4' 
+                    : 'grid-cols-1'
+                }`}>
+                  {displayedColumns.map((col) => {
                     const colOrders = kanbanGroups[col.status];
                     return (
                       <div key={col.status} className="space-y-3">
@@ -449,12 +529,26 @@ export default function DashboardPage() {
                                 <div className="flex justify-center mb-1">
                                   <col.icon className="text-white/10" size={32} />
                                 </div>
-                                <p className="text-[10px] text-muted-steel/50">No orders</p>
+                                <p className="text-[10px] text-muted-steel/50">No requests</p>
                               </motion.div>
                             ) : (
                               colOrders.map((order) => {
                                 const priority = getOrderPriority(order.id);
                                 const nextStatus = getNextStatus(order.status);
+                                
+                                // Dynamic ordered elapsed time helper
+                                const getElapsedString = (createdAt?: number, staticTime?: string) => {
+                                  if (!createdAt) return staticTime || 'Just now';
+                                  const diffMs = Date.now() - createdAt;
+                                  const diffMins = Math.floor(diffMs / 60000);
+                                  if (diffMins < 1) return 'Just now';
+                                  if (diffMins === 1) return '1 min ago';
+                                  if (diffMins < 60) return `${diffMins} mins ago`;
+                                  const diffHours = Math.floor(diffMins / 60);
+                                  if (diffHours === 1) return '1 hour ago';
+                                  return `${diffHours} hours ago`;
+                                };
+
                                 return (
                                   <motion.div
                                     key={order.id}
@@ -463,37 +557,92 @@ export default function DashboardPage() {
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                                     transition={{ duration: 0.3, ease: 'easeOut' }}
-                                    className="glass-card rounded-xl p-5 border border-ice-border hover:border-[#C58A46]/25 transition-all flex flex-col gap-4"
+                                    className="glass-card rounded-xl p-4 border border-ice-border hover:border-[#C58A46]/25 transition-all flex flex-col gap-3.5"
                                     style={{ borderLeftWidth: '3px', borderLeftColor: col.color }}
                                   >
-                                    {/* Ticket ID + Priority */}
-                                    <div className="flex items-center justify-between gap-2">
-                                      <span className="font-mono text-xs text-[#C58A46] font-bold">{order.id}</span>
+                                    {/* KOT Number Badge Header */}
+                                    <div className="flex items-center justify-between border-b border-white/5 pb-2">
                                       <div className="flex items-center gap-1.5">
+                                        <span className="font-mono text-[10px] bg-[#C58A46]/10 text-[#C58A46] border border-[#C58A46]/20 font-bold px-2 py-0.5 rounded">
+                                          {order.kotNumber || 'KOT-102'}
+                                        </span>
+                                        <span className="font-mono text-[9px] text-[#8E939E] font-medium">{order.id}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
                                         <PriorityBadge tag={priority} />
-                                        <span className="font-mono text-xs text-muted-steel">{order.time}</span>
+                                        {order.tableNumber && (
+                                          <span className="font-mono text-[10px] bg-[#C58A46]/15 text-[#C58A46] border border-[#C58A46]/30 px-1.5 py-0.5 rounded font-extrabold">
+                                            {order.tableNumber.includes('Room') || order.tableNumber.includes('Café') || order.tableNumber.includes('Coffee') || order.tableNumber.includes('Table') || order.tableNumber.includes('Lounge')
+                                              ? order.tableNumber
+                                              : `Table ${order.tableNumber}`}
+                                          </span>
+                                        )}
                                       </div>
                                     </div>
 
-                                    {/* Client & Items */}
-                                    <div>
-                                      <p className="text-sm font-bold text-premium-white">{order.name}</p>
-                                      <p className="text-sm text-muted-steel mt-1 leading-relaxed line-clamp-3">{order.items}</p>
+                                    {/* Guest Profile Box */}
+                                    <div className="space-y-1">
+                                      <div className="flex justify-between items-start gap-2">
+                                        <p className="text-xs font-bold text-premium-white tracking-tight leading-none uppercase">
+                                          {order.name}
+                                        </p>
+                                        <span className="text-[9px] font-bold text-[#C58A46] font-mono">
+                                          {order.paymentMethod || 'UPI'}
+                                        </span>
+                                      </div>
+                                      
+                                      {order.phone && (
+                                        <div className="flex items-center gap-1 text-[9px] text-muted-steel font-mono">
+                                          <Smartphone size={10} className="text-muted-steel/60" />
+                                          {order.phone}
+                                        </div>
+                                      )}
                                     </div>
 
-                                    {/* Total + Action */}
+                                    {/* High-Readability KOT Items List */}
+                                    <div className="bg-[#12141C]/40 rounded-lg p-2.5 border border-ice-border/40 space-y-1">
+                                      <span className="text-[8px] font-mono tracking-widest uppercase text-muted-steel/70 block">Items:</span>
+                                      <ul className="space-y-1">
+                                        {order.items.split(',').map((itemStr, idx) => {
+                                          const match = itemStr.trim().match(/(.+)\((\d+)x\)/);
+                                          const name = match ? match[1].trim() : itemStr.trim();
+                                          const qty = match ? match[2] : '1';
+                                          return (
+                                            <li key={idx} className="flex justify-between items-center text-xs text-premium-white pb-1 border-b border-white/3 last:border-0 last:pb-0 font-medium">
+                                              <span className="truncate pr-2">{name}</span>
+                                              <span className="font-mono bg-[#C58A46]/10 text-[#C58A46] px-1 rounded text-[9px] font-extrabold">x{qty}</span>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    </div>
+
+                                    {/* Special Instructions (High Contrast Highlight) */}
+                                    {order.specialInstructions && (
+                                      <div className="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] rounded-lg p-2.5 font-medium border-l-2 border-l-amber-500 flex flex-col gap-0.5 shadow-sm">
+                                        <span className="text-[8px] font-mono tracking-widest uppercase text-amber-400 font-bold block">Special Instructions:</span>
+                                        <p className="leading-tight">{order.specialInstructions}</p>
+                                      </div>
+                                    )}
+
+                                    {/* Bottom Footer Actions */}
                                     <div className="pt-2 border-t border-white/5 flex items-center justify-between gap-2">
-                                      <div className="flex items-center gap-3">
-                                        <span className="font-mono text-sm text-premium-white font-bold">${order.total.toFixed(2)}</span>
+                                      <div className="flex items-center gap-1 font-mono text-[9px] text-muted-steel">
+                                        <Clock size={10} className="text-[#C58A46]/80 animate-pulse" />
+                                        Ordered {getElapsedString(order.createdAt, order.time)}
+                                      </div>
+                                      
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-mono text-xs text-premium-white font-bold">${order.total.toFixed(2)}</span>
                                         {nextStatus ? (
                                           <button
                                             onClick={() => handleOrderStatus(order.id, nextStatus)}
-                                            className={`px-3 py-2 rounded-md text-xs font-bold uppercase transition-all spring-interaction ${getStatusActionColor(order.status)}`}
+                                            className={`px-2.5 py-1.5 rounded-md text-[9px] font-extrabold uppercase tracking-wide transition-all spring-interaction ${getStatusActionColor(order.status)}`}
                                           >
                                             {getStatusActionLabel(order.status)}
                                           </button>
                                         ) : (
-                                          <span className="text-xs text-muted-steel font-mono uppercase">Dispatched ✓</span>
+                                          <span className="text-[9px] text-green-400 font-mono uppercase tracking-wider font-bold">Served ✓</span>
                                         )}
                                       </div>
                                     </div>
@@ -521,7 +670,7 @@ export default function DashboardPage() {
                 >
                   <h3 className="text-[10px] font-bold text-[#C58A46] flex items-center gap-2 font-mono uppercase tracking-widest">
                     <BrainCircuit className="animate-pulse" size={18} />
-                    AI Barista Insights
+                    AI Concierge Insights
                   </h3>
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -569,10 +718,22 @@ export default function DashboardPage() {
                             animate={{ opacity: 1, x: 0, height: 'auto' }}
                             exit={{ opacity: 0, x: -20, height: 0 }}
                             transition={{ duration: 0.3 }}
-                            className={`p-3 bg-white/5 rounded-lg border-l-2 ${borderClass} text-xs flex justify-between gap-3 items-start`}
+                            className={`p-3 bg-white/5 rounded-lg border-l-2 ${borderClass} text-xs flex items-center justify-between gap-3`}
                           >
-                            <p className="text-premium-white flex-1 leading-snug">{n.text}</p>
-                            <span className="font-mono text-[9px] text-[#8E939E] shrink-0">{n.time}</span>
+                            <div className="flex-1 leading-snug">
+                              <p className="text-premium-white font-medium">{n.text}</p>
+                              <span className="font-mono text-[9px] text-[#8E939E] block mt-0.5">{n.time}</span>
+                            </div>
+                            <button
+                              onClick={() => {
+                                playSound('success');
+                                completeNotification(n.id);
+                              }}
+                              className="w-5 h-5 rounded-full bg-white/5 hover:bg-green-500/20 border border-white/10 hover:border-green-500/30 flex items-center justify-center text-[#8E939E] hover:text-green-400 transition-all shrink-0 cursor-pointer"
+                              title="Mark as completed"
+                            >
+                              <Check size={10} />
+                            </button>
                           </motion.div>
                         );
                       })}
@@ -585,7 +746,7 @@ export default function DashboardPage() {
                   <h3 className="text-[10px] font-bold text-premium-white font-mono uppercase tracking-widest">Shift Roster</h3>
                   <div className="space-y-2 text-xs text-muted-steel">
                     <div className="flex justify-between items-center border-b border-ice-border/50 pb-2">
-                      <span>Head Barista</span>
+                      <span>Head Chef</span>
                       <span className="text-premium-white font-semibold">Master Pierre</span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -605,7 +766,7 @@ export default function DashboardPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl font-extrabold text-premium-white tracking-tight">Menu Management</h1>
-                <p className="text-sm text-muted-steel mt-1">Audit active café recipes, modify pricing, and configure upsell tokens.</p>
+                <p className="text-sm text-muted-steel mt-1">Audit active gourmet dishes and recipes, modify pricing, and configure upsell tokens.</p>
               </div>
 
               <div className="glass-card rounded-xl border border-ice-border overflow-hidden">
@@ -622,7 +783,7 @@ export default function DashboardPage() {
                     {menuItems.map((item) => (
                       <tr key={item.id} className="hover:bg-white/3 transition-colors">
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
+                           <div className="flex items-center gap-3">
                             <Utensils className="text-[#C58A46]" size={20} />
                             <div>
                               <p className="font-bold">{item.name}</p>
@@ -670,42 +831,40 @@ export default function DashboardPage() {
 
             <aside className="glass-card p-6 rounded-xl border border-ice-border space-y-6">
               <div>
-                <h3 className="text-sm font-bold text-premium-white font-mono uppercase">Add Recipe Item</h3>
-                <p className="text-[10px] text-muted-steel mt-1">Inject a new café experience directly into the operational database.</p>
+                <h3 className="text-sm font-bold text-premium-white font-mono uppercase">Add Menu Item</h3>
+                <p className="text-[10px] text-muted-steel mt-1">Inject a new culinary experience directly into the operational database.</p>
               </div>
               <form onSubmit={handleCreateMenuItem} className="space-y-4">
                 <div className="space-y-1.5">
                   <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Recipe Title</label>
-                  <input type="text" required value={newMenuName} onChange={(e) => setNewMenuName(e.target.value)} placeholder="e.g. Saffron Honey Latte"
+                  <input type="text" required value={newMenuName} onChange={(e) => setNewMenuName(e.target.value)} placeholder="e.g. Aged Angus Bistro Steak"
                     className="w-full bg-white/5 border border-ice-border rounded-xl px-4 py-2 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all placeholder:text-muted-steel/20" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Item Price ($ USD)</label>
-                  <input type="text" required value={newMenuPrice} onChange={(e) => setNewMenuPrice(e.target.value)} placeholder="7.20"
+                  <input type="text" required value={newMenuPrice} onChange={(e) => setNewMenuPrice(e.target.value)} placeholder="24.50"
                     className="w-full bg-white/5 border border-ice-border rounded-xl px-4 py-2 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all placeholder:text-muted-steel/20" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Category</label>
                   <select value={newMenuCategory} onChange={(e) => setNewMenuCategory(e.target.value as any)}
                     className="w-full bg-canvas-charcoal border border-ice-border rounded-xl px-4 py-2 text-xs text-[#8E939E] focus:outline-none focus:border-[#C58A46] transition-all">
-                    <option value="Hot Coffee">Hot Coffee</option>
-                    <option value="Cold Coffee">Cold Coffee</option>
-                    <option value="Signature Drinks">Signature Drinks</option>
-                    <option value="Bakery">Bakery</option>
-                    <option value="Desserts">Desserts</option>
-                    <option value="Refreshers">Refreshers</option>
-                    <option value="Sandwiches">Sandwiches</option>
+                    <option value="Bistro Dining">Bistro Dining</option>
+                    <option value="Café Craft">Café Craft</option>
+                    <option value="Signature Cocktails">Signature Cocktails</option>
+                    <option value="Pastries & Bakery">Pastries & Bakery</option>
+                    <option value="Artisan Desserts">Artisan Desserts</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
                   <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Description</label>
                   <textarea value={newMenuDesc} onChange={(e) => setNewMenuDesc(e.target.value)}
-                    placeholder="Specify ingredients, milk choices, and standard pairing metadata..."
+                    placeholder="Specify ingredients and standard pairing metadata..."
                     className="w-full bg-white/5 border border-ice-border rounded-xl px-4 py-2 text-xs text-premium-white focus:outline-none focus:border-[#C58A46] transition-all min-h-[90px] placeholder:text-muted-steel/20" />
                 </div>
                 <button type="submit" className="w-full py-3 bg-[#C58A46] text-canvas-charcoal font-bold text-xs rounded-xl hover:brightness-110 transition-all shadow-lg flex items-center justify-center gap-1">
                   <Plus className="font-bold" size={18} />
-                  DEPLOY CAFE SPECIAL
+                  DEPLOY CULINARY SPECIAL
                 </button>
               </form>
             </aside>
@@ -718,7 +877,7 @@ export default function DashboardPage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl font-extrabold text-premium-white tracking-tight">Reservations Console</h1>
-                <p className="text-sm text-muted-steel mt-1">Audit active café table bookings and guest session allocation.</p>
+                <p className="text-sm text-muted-steel mt-1">Audit active guest table bookings and guest session allocation.</p>
               </div>
 
               <div className="glass-card rounded-xl border border-ice-border overflow-hidden">
@@ -752,7 +911,7 @@ export default function DashboardPage() {
                                     className="px-2 py-1 bg-green-500 text-premium-white rounded font-bold text-[9px] hover:bg-green-600 transition-colors">CONFIRM</button>
                                   <button onClick={() => { cancelReservationLocal(res.id); cancelReservationMutation.mutate(res.id); }}
                                     className="px-2 py-1 bg-white/5 border border-ice-border text-premium-white rounded font-bold text-[9px] hover:bg-white/10 transition-colors">CANCEL</button>
-                                </>
+                                  </>
                               )}
                               {res.status !== 'Pending' && (
                                 <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${badgeClass}`}>{res.status}</span>
@@ -787,14 +946,18 @@ export default function DashboardPage() {
                   <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Dining Date</label>
                   <select value={newResDate} onChange={(e) => setNewResDate(e.target.value as any)}
                     className="w-full bg-canvas-charcoal border border-ice-border rounded-xl px-4 py-2 text-xs text-[#8E939E] focus:outline-none focus:border-[#C58A46] transition-all">
-                    <option value="TONIGHT">Tonight</option><option value="TOMORROW">Tomorrow</option><option value="TUESDAY">Tuesday</option>
+                    <option value="TONIGHT">Tonight</option>
+                    <option value="TOMORROW">Tomorrow</option>
+                    <option value="TUESDAY">Tuesday</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Hour Window</label>
+                  <label className="block font-mono text-[9px] text-[#8E939E] uppercase tracking-wider">Window Hour</label>
                   <select value={newResHour} onChange={(e) => setNewResHour(e.target.value as any)}
                     className="w-full bg-canvas-charcoal border border-ice-border rounded-xl px-4 py-2 text-xs text-[#8E939E] focus:outline-none focus:border-[#C58A46] transition-all">
-                    <option value="18:00">18:00 (Breakfast Riser)</option><option value="20:30">20:30 (Prime Brunch)</option><option value="22:00">22:00 (Late Afternoon)</option>
+                    <option value="18:00">18:00 (6:00 PM)</option>
+                    <option value="20:30">20:30 (8:30 PM)</option>
+                    <option value="22:00">22:00 (10:00 PM)</option>
                   </select>
                 </div>
                 <button type="submit" className="w-full py-3 bg-[#C58A46] text-canvas-charcoal font-bold text-xs rounded-xl hover:brightness-110 transition-all shadow-lg flex items-center justify-center gap-2 icon-btn">

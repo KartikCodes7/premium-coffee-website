@@ -31,13 +31,13 @@ export default function Homepage() {
 
   const signatureDishes = [
     {
-      id: 'nitro-cold-brew',
-      name: 'Nitro Cold Brew',
-      price: 6.20,
+      id: 'bistro-steak',
+      name: 'Aged Angus Bistro Steak',
+      price: 24.50,
       image:
-        'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20nitro%20cold%20brew%20cascading%20in%20a%20tall%20glass%2C%20thick%20creamy%20foam%20head%2C%20moody%20dark%20background%2C%20warm%20highlights%2C%20high%20contrast%2C%208k%20beverage%20photography&image_size=portrait_4_3',
+        'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20gourmet%20pan%20seared%20ribeye%20steak%20on%20dark%20stoneware%20plate%2C%20herb%20butter%20melting%20on%20top%2C%2520rosemary%2520sprig%2C%2520asparagus%2520spears%2C%2520warm%2520cinematic%2520lighting%2C%25208k%2520food%2520photography&image_size=portrait_4_3',
       rating: '4.9',
-      description: 'Cascade pour, creamy head, chocolate-forward cold extraction.'
+      description: 'Prime cut flat iron steak, herb compound butter, charred asparagus, micro-greens.'
     },
     {
       id: 'flat-white-silk',
@@ -46,7 +46,7 @@ export default function Homepage() {
       image:
         'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20flat%20white%20in%20a%20minimalist%20porcelain%20cup%20with%20latte%20art%20rosette%2C%20warm%20amber%20lighting%2C%20cinematic%20shadows%2C%20coffee%20shop%20aesthetic%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
       rating: '4.8',
-      description: 'Ristretto-forward, glossy microfoam, caramel warmth.'
+      description: 'Double ristretto-forward, glossy organic microfoam, natural caramel warmth.'
     },
     {
       id: 'almond-croissant',
@@ -55,21 +55,21 @@ export default function Homepage() {
       image:
         'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ultra%20realistic%20almond%20croissant%20on%20matte%20stone%20plate%2C%20flaky%20layers%2C%20toasted%20almonds%2C%20warm%20cafe%20lighting%2C%20premium%20bakery%20photography%2C%208k%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3',
       rating: '4.8',
-      description: 'Flaky layers, almond cream, toasted finish.'
+      description: 'Flaky multi-layered puff pastry, sweet almond frangipane, toasted almond flakes.'
     }
   ];
 
   const testimonials = [
     {
       name: 'Elena Rostova',
-      role: 'Owner, Aura Hospitality London',
-      text: 'Migrating our ordering stack to RestaurantOS reduced service delays by 42%. AI recommendations lifted add-on sales by 38% within the first month.',
+      role: 'Owner, Aura Grand Bistro & Café London',
+      text: 'Migrating our guest ordering stack to HospitalityOS reduced service delays by 42%. AI recommendations lifted add-on dining sales by 38% within the first month.',
       avatar: '/assets/avatar_manager.png'
     },
     {
       name: 'Marcus Kensington',
       role: 'Chef de Cuisine, Grand Bistro',
-      text: 'Zero ticket mistakes, unified staff telemetry, and real-time dashboard queues. It feels like our kitchen is finally running on a modern B2B operating system.',
+      text: 'Zero ticket mistakes, unified guest service telemetry, and real-time dashboard queues. It feels like our kitchen and dining operations are finally running on a modern B2B platform.',
       avatar: '/assets/avatar_user.png'
     }
   ];
@@ -112,20 +112,19 @@ export default function Homepage() {
             <div className="inline-flex items-center px-3.5 py-1.5 glass-card rounded-full gap-2 border border-ice-border">
               <span className="w-2 h-2 rounded-full bg-[#C58A46] animate-pulse"></span>
               <span className="font-mono text-[9px] text-[#C58A46] uppercase tracking-widest">
-                v2.8 AI Neural Concierge Online
+                v2.8 AI Guest Concierge Online
               </span>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-premium-white leading-tight tracking-tight">
-              The AI Operating System for{' '}
-              <span className="bg-gradient-to-r from-[#C58A46] to-premium-white bg-clip-text text-transparent">
-                Smart Ordering
+              HospitalityOS
+              <span className="block bg-gradient-to-r from-[#C58A46] to-premium-white bg-clip-text text-transparent text-2xl md:text-3xl lg:text-4xl font-semibold mt-4">
+                Smart Guest Experience & Operations Platform
               </span>
-              .
             </h1>
             
             <p className="text-base md:text-lg text-muted-steel max-w-xl leading-relaxed">
-              QR menu + cinematic item modals + AI recommendations — instantly synced to your live kitchen queue and ops dashboard.
+              QR menu + cinematic item modals + AI recommendations — instantly synced to your live operations dashboard and guest request queue.
             </p>
             
             <div className="flex flex-wrap gap-4 pt-2">
@@ -133,14 +132,14 @@ export default function Homepage() {
                 href="/qr"
                 className="bg-[#C58A46] text-canvas-charcoal font-bold px-8 py-4 rounded-xl hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-[#C58A46]/20 flex items-center gap-2 spring-interaction text-sm"
               >
-                Start QR Order
+                Start Guest Order
                 <ArrowRight className="font-bold" size={18} />
               </Link>
               <Link
                 href="/dashboard"
                 className="glass-card text-premium-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 hover:border-[#C58A46]/50 transition-all text-sm border border-ice-border spring-interaction"
               >
-                Open Ops Console
+                Open Operations Dashboard
               </Link>
             </div>
           </motion.div>
@@ -200,7 +199,7 @@ export default function Homepage() {
                   Avg. Pacing: <span className="text-[#E5C158] font-bold">18.4m</span>
                 </span>
                 <Link href="/dashboard" className="text-[#E5C158] hover:underline flex items-center gap-1">
-                  Full Operations console
+                  Full Operations Dashboard
                   <ArrowRight size={16} />
                 </Link>
               </div>
@@ -223,11 +222,11 @@ export default function Homepage() {
           </div>
           <div className="space-y-1">
             <h4 className="text-2xl md:text-3xl font-extrabold text-[#E5C158] font-mono">+38%</h4>
-            <p className="text-[10px] font-mono text-muted-steel uppercase tracking-wider">Beverage Upsell Velocity</p>
+            <p className="text-[10px] font-mono text-muted-steel uppercase tracking-wider">Guest Upsell Velocity</p>
           </div>
           <div className="space-y-1">
             <h4 className="text-2xl md:text-3xl font-extrabold text-premium-white font-mono">2.4M</h4>
-            <p className="text-[10px] font-mono text-muted-steel uppercase tracking-wider">Orders Autonomously Paced</p>
+            <p className="text-[10px] font-mono text-muted-steel uppercase tracking-wider">Guest Requests Autonomously Paced</p>
           </div>
         </div>
       </section>
@@ -249,7 +248,7 @@ export default function Homepage() {
             <div className="w-14 h-14 bg-[#E5C158]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <BrainCircuit className="text-[#E5C158] fill-current" size={32} />
             </div>
-            <h3 className="text-xl font-bold text-premium-white tracking-tight">AI Concierge & Upsell Engine</h3>
+            <h3 className="text-xl font-bold text-premium-white tracking-tight">AI Concierge & Guest Upsell Engine</h3>
             <p className="text-sm text-muted-steel leading-relaxed">
               Answer FAQs instantly, recommend combos, and upsell pairings at the perfect moment — without adding staff workload.
             </p>
@@ -269,10 +268,10 @@ export default function Homepage() {
               <MessageSquare className="text-[#E5C158]" size={32} />
             </div>
             <h3 className="text-xl font-bold text-premium-white tracking-tight font-sans">
-              Operations Telemetry Terminal
+              Operations Dashboard & Telemetry
             </h3>
             <p className="text-sm text-muted-steel leading-relaxed">
-              Frictionless queue pacing. Synchronize cart entries and checkout authorizations directly to kitchen duty commander displays. Zero delay, absolute precision.
+              Frictionless service pacing. Synchronize guest requests and checkout authorizations directly to operations dispatch terminals. Zero delay, absolute precision.
             </p>
             <div className="flex flex-wrap gap-2 text-[10px] font-mono">
               <span className="px-3 py-1 bg-white/5 border border-ice-border rounded-full text-[#E5C158]">
@@ -295,7 +294,7 @@ export default function Homepage() {
                 Selected Experiences
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight mt-1">
-                Menu Highlights (Tap to add)
+                Bistro & Café Highlights (Tap to add)
               </h2>
             </div>
             <Link
@@ -356,7 +355,7 @@ export default function Homepage() {
             Painless Planning
           </span>
           <h2 className="text-3xl font-extrabold text-premium-white tracking-tight">
-            Secure Guest Attendance
+            Secure Guest Reservations
           </h2>
         </div>
 
@@ -418,7 +417,7 @@ export default function Homepage() {
           <div className="bg-white/5 rounded-xl border border-ice-border p-5 space-y-4 flex flex-col justify-center">
             <h4 className="text-xs font-bold text-premium-white">Window Booth Selection</h4>
             <p className="text-xs text-muted-steel">
-              RestaurantOS will generate a smart ordering session tied to your table and route it to the right ops queue.
+              HospitalityOS will generate a smart ordering session tied to your table or room and route it to the operations dashboard.
             </p>
             <div className="h-28 rounded-lg overflow-hidden border border-ice-border relative">
               <Image
@@ -492,16 +491,16 @@ export default function Homepage() {
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-mono tracking-widest text-[#E5C158] uppercase">Premium Subscriptions</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-premium-white tracking-tight">Calibrated SaaS Operational Tiers</h2>
-            <p className="text-sm text-muted-steel">Select the deployment node scale that matches your hospitality footprint.</p>
+            <p className="text-sm text-muted-steel">Select the deployment scale that matches your hospitality footprint.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 items-stretch max-w-[1100px] mx-auto">
             {/* Tier 1 */}
             <div className="glass-card rounded-2xl p-8 border border-ice-border space-y-6 flex flex-col justify-between hover:border-premium-white/10 transition-all">
               <div className="space-y-4">
-                <span className="text-[9px] font-mono text-[#8E939E] uppercase tracking-widest">Bistro Node</span>
-                <h3 className="text-2xl font-bold text-premium-white">Bistro Starter</h3>
-                <p className="text-xs text-muted-steel">Ideal for independent fine dining boutiques starting order automations.</p>
+                <span className="text-[9px] font-mono text-[#8E939E] uppercase tracking-widest">Starter Plan</span>
+                <h3 className="text-2xl font-bold text-premium-white">Starter</h3>
+                <p className="text-xs text-muted-steel">Ideal for independent fine dining boutiques and café stores starting guest ordering integrations.</p>
                 <div className="pt-4 font-mono">
                   <span className="text-3xl font-extrabold text-[#E5C158]">$99</span>
                   <span className="text-xs text-muted-steel"> / month</span>
@@ -513,11 +512,11 @@ export default function Homepage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>AI Concierge</span>
+                    <span>AI Concierge Engine</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>Ops Telemetry Console</span>
+                    <span>Operations Dashboard Console</span>
                   </div>
                 </div>
               </div>
@@ -532,9 +531,9 @@ export default function Homepage() {
                 RECOMMENDED
               </span>
               <div className="space-y-4">
-                <span className="text-[9px] font-mono text-[#E5C158] uppercase tracking-widest">Elite Node</span>
-                <h3 className="text-2xl font-bold text-premium-white">Elite Diner</h3>
-                <p className="text-xs text-muted-steel">Curated for high-density luxury brands requiring unlimited telemetry metrics.</p>
+                <span className="text-[9px] font-mono text-[#E5C158] uppercase tracking-widest">Professional Plan</span>
+                <h3 className="text-2xl font-bold text-premium-white">Professional</h3>
+                <p className="text-xs text-muted-steel">Curated for high-density restaurant brands and boutique hotels requiring full operational telemetry.</p>
                 <div className="pt-4 font-mono">
                   <span className="text-3xl font-extrabold text-[#E5C158]">$249</span>
                   <span className="text-xs text-muted-steel"> / month</span>
@@ -546,29 +545,29 @@ export default function Homepage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>Hyper-personalized LLM Engine</span>
+                    <span>Hyper-personalized LLM Assistant</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>Advanced Retention cohort Analytics</span>
+                    <span>Advanced Retention & Analytics Hub</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>Role-Based Protected Access</span>
+                    <span>Role-Based Secure Operations Access</span>
                   </div>
                 </div>
               </div>
               <Link href="/signup" className="block w-full text-center py-3 bg-[#E5C158] text-canvas-charcoal font-bold text-xs rounded-xl hover:brightness-110 transition-all spring-interaction">
-                Deploy Elite Cluster
+                Deploy Professional
               </Link>
             </div>
 
             {/* Tier 3 */}
             <div className="glass-card rounded-2xl p-8 border border-ice-border space-y-6 flex flex-col justify-between hover:border-premium-white/10 transition-all">
               <div className="space-y-4">
-                <span className="text-[9px] font-mono text-[#8E939E] uppercase tracking-widest">Enterprise Cluster</span>
-                <h3 className="text-2xl font-bold text-premium-white">Enterprise OS</h3>
-                <p className="text-xs text-muted-steel">Fully custom dedicated clusters for international restaurant groups.</p>
+                <span className="text-[9px] font-mono text-[#8E939E] uppercase tracking-widest">Enterprise Plan</span>
+                <h3 className="text-2xl font-bold text-premium-white">Enterprise</h3>
+                <p className="text-xs text-muted-steel">Fully custom dedicated clusters for international restaurant groups and global hotel chains.</p>
                 <div className="pt-4 font-mono">
                   <span className="text-3xl font-extrabold text-[#E5C158]">Custom</span>
                 </div>
@@ -579,7 +578,7 @@ export default function Homepage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
-                    <span>Dedicated cluster & SLA Uptime</span>
+                    <span>Dedicated Cluster & Uptime SLA</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Check className="text-[#E5C158]" size={18} />
@@ -599,15 +598,15 @@ export default function Homepage() {
       <footer className="w-full py-12 bg-canvas-charcoal border-t border-ice-border">
         <div className="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col gap-1">
-            <span className="text-base font-bold text-premium-white">RestaurantOS</span>
+            <span className="text-base font-bold text-premium-white">HospitalityOS</span>
             <span className="text-[10px] font-mono text-muted-steel uppercase tracking-widest leading-none">
-              Enterprise Precision for the Modern Table
+              Smart Guest Experience & Operations Platform
             </span>
           </div>
           
           <div className="flex gap-8 text-[11px] text-[#8E939E] font-mono">
             <Link className="hover:text-[#E5C158] transition-colors" href="/login">
-              HQ Admin
+              Operations Dashboard
             </Link>
             <Link className="hover:text-[#E5C158] transition-colors" href="/chatbot">
               AI Concierge
@@ -620,7 +619,7 @@ export default function Homepage() {
             </Link>
           </div>
 
-          <p className="text-[9px] text-muted-steel/60">© 2026 RestaurantOS. All rights reserved.</p>
+          <p className="text-[9px] text-muted-steel/60">© 2026 HospitalityOS. All rights reserved.</p>
         </div>
       </footer>
     </main>

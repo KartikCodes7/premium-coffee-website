@@ -6,29 +6,29 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "admin@restaurantos.com" },
+        email: { label: "Email", type: "text", placeholder: "admin@hospitalityos.com" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (credentials?.email === "admin@restaurantos.com" && credentials?.password === "admin123") {
+        if (credentials?.email === "admin@hospitalityos.com" && credentials?.password === "admin123") {
           return {
             id: "owner-1",
             name: "Elena Rostova",
-            email: "admin@restaurantos.com",
+            email: "admin@hospitalityos.com",
             role: "OWNER"
           };
-        } else if (credentials?.email === "chef@restaurantos.com" && credentials?.password === "chef123") {
+        } else if (credentials?.email === "chef@hospitalityos.com" && credentials?.password === "chef123") {
           return {
             id: "chef-1",
             name: "Master Chef Pierre",
-            email: "chef@restaurantos.com",
+            email: "chef@hospitalityos.com",
             role: "CHEF"
           };
-        } else if (credentials?.email === "guest@restaurantos.com" && credentials?.password === "guest123") {
+        } else if (credentials?.email === "guest@hospitalityos.com" && credentials?.password === "guest123") {
           return {
             id: "customer-1",
             name: "Julian Vanderbilt",
-            email: "guest@restaurantos.com",
+            email: "guest@hospitalityos.com",
             role: "CUSTOMER"
           };
         }
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 24 * 60 * 60
   },
-  secret: process.env.NEXTAUTH_SECRET || "restaurantos-secret-super-key-12345"
+  secret: process.env.NEXTAUTH_SECRET || "hospitalityos-secret-super-key-12345"
 };
 
 const handler = NextAuth(authOptions);

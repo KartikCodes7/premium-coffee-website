@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
-import { Utensils, ShoppingCart, UserCircle, Coffee, QrCode } from 'lucide-react';
+import { Utensils, ShoppingCart, UserCircle, QrCode, Bell } from 'lucide-react';
 
 interface HeaderProps {
   onOpenCart: () => void;
@@ -12,7 +12,7 @@ interface HeaderProps {
 
 /** Admin-only nav links — hidden when customer is in table mode */
 const adminNavLinks = [
-  { label: 'Ops Terminal', href: '/dashboard' },
+  { label: 'Operations Dashboard', href: '/dashboard' },
   { label: 'Analytics Hub', href: '/analytics' },
   { label: 'QR Generator', href: '/qr-generator' },
 ];
@@ -29,6 +29,14 @@ export default function Header({ onOpenCart }: HeaderProps) {
   const session = useStore((state) => state.session);
   const cartCount = useStore((state) => state.getCartCount());
   const tableNumber = useStore((state) => state.tableNumber);
+  const locationId = useStore((state) => state.locationId);
+  
+  const activeLocation = locationId || tableNumber;
+  const formattedLocation = activeLocation
+    ? (activeLocation.includes('Table') || activeLocation.includes('Room') || activeLocation.includes('Café') || activeLocation.includes('Coffee'))
+      ? activeLocation
+      : `Table ${activeLocation}`
+    : '';
   
   // Prevent hydration mismatch
   const [mounted, setMounted] = useState(false);
@@ -36,7 +44,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
     setMounted(true);
   }, []);
 
-  const isCustomerMode = mounted && !!tableNumber;
+  const isCustomerMode = mounted && !!activeLocation;
 
   // Build nav links based on mode
   const navLinks = isCustomerMode
@@ -53,12 +61,12 @@ export default function Header({ onOpenCart }: HeaderProps) {
             <Utensils className="text-[#C58A46] font-bold" size={32} />
             <div className="flex flex-col">
               <h1 className="font-display-lg text-headline-md font-extrabold text-[#C58A46] tracking-tight leading-none">
-                RestaurantOS
+                HospitalityOS
               </h1>
               {mounted && (
                 <span className="text-[9px] font-mono uppercase tracking-widest text-[#8E939E] mt-0.5">
                   {isCustomerMode
-                    ? `Serving Table ${tableNumber} ☕`
+                    ? `Guest Mode | ${formattedLocation} 🛎️`
                     : session.restaurant}
                 </span>
               )}
@@ -68,9 +76,9 @@ export default function Header({ onOpenCart }: HeaderProps) {
           {/* Customer table badge */}
           {isCustomerMode && (
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C58A46]/10 border border-[#C58A46]/20">
-              <Coffee className="h-3.5 w-3.5 text-[#C58A46]" />
+              <Bell className="h-3.5 w-3.5 text-[#C58A46]" />
               <span className="text-[10px] font-mono font-bold text-[#C58A46] uppercase tracking-widest">
-                Table {tableNumber}
+                {formattedLocation}
               </span>
               <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             </div>
@@ -131,7 +139,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
                 <div className="hidden lg:flex flex-col text-right">
                   <span className="text-xs font-semibold text-premium-white">Guest</span>
                   <span className="text-[9px] font-mono tracking-widest text-[#C58A46] uppercase">
-                    Table {tableNumber} ☕
+                    {formattedLocation} 🛎️
                   </span>
                 </div>
               ) : (
@@ -144,7 +152,7 @@ export default function Header({ onOpenCart }: HeaderProps) {
               )}
               <div className="w-8 h-8 rounded-full border border-ice-border overflow-hidden bg-glass-fill flex items-center justify-center cursor-pointer hover:border-[#C58A46]/50 transition-colors">
                 {isCustomerMode ? (
-                  <Coffee className="text-[#C58A46]" size={20} />
+                  <Bell className="text-[#C58A46]" size={20} />
                 ) : (
                   <UserCircle className="text-[#8E939E]" size={24} />
                 )}

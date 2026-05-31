@@ -6,6 +6,7 @@ import Header from './Header';
 import CartSidebar from './CartSidebar';
 import RoleSwitcher from '../ui/RoleSwitcher';
 import FloatingChatbot from '../chatbot/FloatingChatbot';
+import FloatingAssistance from './FloatingAssistance';
 import { useStore, NotificationItem } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -116,6 +117,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
         {/* Persistent Floating AI Barista Chatbot */}
         <FloatingChatbot />
+
+        {/* Persistent Floating Assistance Bell — Seated Guest Mode */}
+        {isCustomerMode && <FloatingAssistance />}
 
         {/* Toast Notification Container */}
         <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">

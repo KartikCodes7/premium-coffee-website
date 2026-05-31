@@ -81,7 +81,13 @@ exports.createOrder = async (req, res) => {
     items,
     total: parsedTotal,
     status: 'Pending',
-    time
+    time,
+    phone: req.body.phone || '',
+    tableNumber: req.body.tableNumber || '4',
+    paymentMethod: req.body.paymentMethod || 'UPI',
+    specialInstructions: req.body.specialInstructions || '',
+    kotNumber: req.body.kotNumber || ('KOT-' + Math.floor(100 + Math.random() * 900)),
+    createdAt: req.body.createdAt || Date.now()
   };
 
   db.orders.unshift(newOrder);

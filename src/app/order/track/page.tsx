@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Coffee, ArrowRight, ShieldCheck, Compass, Check, Loader2, Sparkles, Award } from 'lucide-react';
+import { Bell, ArrowRight, ShieldCheck, Compass, Check, Loader2, Sparkles, Award } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'Served';
@@ -14,7 +14,7 @@ export default function OrderTrackingPage() {
     <Suspense fallback={
       <main className="pt-nav-height max-w-md mx-auto px-margin-mobile py-10 space-y-8 flex-1 flex flex-col justify-center items-center">
         <Loader2 className="animate-spin text-[#C58A46] w-8 h-8 mb-2" />
-        <span className="text-xs text-muted-steel uppercase tracking-widest font-mono">Synchronizing kitchen queue...</span>
+        <span className="text-xs text-muted-steel uppercase tracking-widest font-mono">Synchronizing active service queue...</span>
       </main>
     }>
       <OrderTrackingContent />
@@ -64,10 +64,10 @@ function OrderTrackingContent() {
 
   // Define steps with clean B2B status colors and descriptions
   const steps = [
-    { label: 'Order Received', status: 'Pending', color: '#D97706', badgeClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20', desc: 'Secure B2B ticket approved and sent to barista terminal.' },
-    { label: 'Preparing', status: 'Preparing', color: '#2563EB', badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20', desc: 'Crafting signature coffee shots and infusing milk.' },
-    { label: 'Ready', status: 'Ready', color: '#16A34A', badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20', desc: 'Orders finished and ready at dispatcher dispatch counter.' },
-    { label: 'Served', status: 'Served', color: '#4B5563', badgeClass: 'bg-white/5 text-muted-steel border-white/10', desc: 'Delivered to Table with barista service.' }
+    { label: 'Request Received', status: 'Pending', color: '#D97706', badgeClass: 'bg-amber-500/10 text-amber-400 border-amber-500/20', desc: 'Secure B2B ticket approved and sent to operations terminal.' },
+    { label: 'Preparing', status: 'Preparing', color: '#2563EB', badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20', desc: 'Prepping ingredients and crafting gourmet dining selections.' },
+    { label: 'Ready', status: 'Ready', color: '#16A34A', badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20', desc: 'Selections finished and packaged at the service counter.' },
+    { label: 'Served', status: 'Served', color: '#4B5563', badgeClass: 'bg-white/5 text-muted-steel border-white/10', desc: 'Delivered to Table with premium service.' }
   ];
 
   const activeIndex = steps.findIndex((s) => s.status === activeOrder.status);
@@ -98,7 +98,7 @@ function OrderTrackingContent() {
   return (
     <main className="pt-nav-height max-w-md mx-auto px-margin-mobile py-10 space-y-8 flex-1 flex flex-col justify-center relative">
       
-      {/* 1. PREMIUM ORDER COMPLETION CELEBRATION */}
+      {/* 1. PREMIUM CELEBRATION */}
       <AnimatePresence>
         {isCompleted && (
           <motion.div
@@ -139,16 +139,16 @@ function OrderTrackingContent() {
         <div className="inline-flex items-center px-3.5 py-1.5 glass-card rounded-full gap-2 border border-ice-border">
           <span className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-[#C58A46] animate-pulse'}`}></span>
           <span className="font-mono text-[9px] uppercase tracking-widest text-premium-white">
-            {isCompleted ? 'Barista Order Dispatched' : 'Active Café Pacing'}
+            {isCompleted ? 'Guest Request Completed' : 'Active Service Pacing'}
           </span>
         </div>
         
         {/* Wording "Your order is being prepared" */}
         <h1 className="text-2xl md:text-3xl font-extrabold text-premium-white tracking-tight leading-tight">
-          {activeOrder.status === 'Pending' && 'Your order is approved ☕'}
-          {activeOrder.status === 'Preparing' && 'Your order is being prepared ☕'}
-          {activeOrder.status === 'Ready' && 'Your order is ready! ⚡'}
-          {activeOrder.status === 'Served' && 'Order successfully served! 🎉'}
+          {activeOrder.status === 'Pending' && 'Your request is approved 🛎️'}
+          {activeOrder.status === 'Preparing' && 'Your request is being prepared 🛎️'}
+          {activeOrder.status === 'Ready' && 'Your request is ready! ⚡'}
+          {activeOrder.status === 'Served' && 'Request successfully served! 🎉'}
         </h1>
 
         {/* ETA countdown bar */}
@@ -159,12 +159,12 @@ function OrderTrackingContent() {
         ) : (
           <p className="text-xs text-green-400 font-bold flex items-center justify-center gap-1">
             <ShieldCheck className="h-4 w-4" />
-            Barista service logged at Table {tableNumber || '4'}
+            Service successfully logged at Table {tableNumber || '4'}
           </p>
         )}
       </section>
 
-      {/* Live progress indicator cup animation */}
+      {/* Live progress indicator bell animation */}
       <section className="flex flex-col items-center justify-center relative py-6 z-10">
         <div className="relative w-28 h-28 flex items-center justify-center rounded-full glass-card border border-ice-border">
           <AnimatePresence>
@@ -173,7 +173,7 @@ function OrderTrackingContent() {
                 key="steam"
                 className="absolute top-4 flex gap-1 justify-center z-10"
               >
-                {/* Simulated coffee cup steam particles */}
+                {/* Simulated service bell steam/glow particles */}
                 {[0.2, 0.6, 1.0].map((delay, idx) => (
                   <motion.div
                     key={idx}
@@ -205,7 +205,7 @@ function OrderTrackingContent() {
             )}
           </AnimatePresence>
 
-          <Coffee className={`h-10 w-10 text-[#C58A46] ${!isCompleted ? 'animate-pulse' : ''}`} />
+          <Bell className={`h-10 w-10 text-[#C58A46] ${!isCompleted ? 'animate-pulse' : ''}`} />
         </div>
 
         {/* Dynamic progress bar countdown indicator */}
@@ -224,12 +224,12 @@ function OrderTrackingContent() {
       <section className="glass-card rounded-2xl p-5 border border-ice-border space-y-4 bg-gradient-to-br from-[#12141C] to-transparent z-10">
         <div className="flex justify-between items-center border-b border-white/5 pb-3">
           <div>
-            <span className="font-mono text-[8px] text-[#8E939E] uppercase tracking-widest block">Table Order Ticket</span>
+            <span className="font-mono text-[8px] text-[#8E939E] uppercase tracking-widest block">Table Request Ticket</span>
             <span className="font-mono text-sm text-[#C58A46] font-bold">{activeOrder.id}</span>
           </div>
           <div>
             <span className="font-mono text-[8px] text-[#8E939E] uppercase tracking-widest block text-right">Tenancy</span>
-            <span className="font-mono text-[10px] text-premium-white font-bold">Aura Café</span>
+            <span className="font-mono text-[10px] text-premium-white font-bold">Aura Grand Bistro</span>
           </div>
         </div>
 
@@ -247,7 +247,7 @@ function OrderTrackingContent() {
 
       {/* B2B Mini Order Timeline */}
       <section className="relative space-y-6 py-4 z-10">
-        <h3 className="text-[10px] font-mono tracking-widest text-muted-steel uppercase">Barista Preparation Steps</h3>
+        <h3 className="text-[10px] font-mono tracking-widest text-muted-steel uppercase">Operations Preparation Steps</h3>
 
         <div className="space-y-4 relative">
           {/* Connector timeline line */}

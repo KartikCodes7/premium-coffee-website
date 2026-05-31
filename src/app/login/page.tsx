@@ -93,7 +93,7 @@ export default function LoginPage() {
             <Link href="/" className="inline-flex items-center gap-2.5 hover:opacity-85 transition-opacity spring-interaction">
               <Utensils className="text-[#E5C158] font-extrabold" size={32} />
               <span className="text-2xl font-extrabold text-premium-white tracking-tight">
-                Restaurant<span className="text-[#E5C158]">OS</span>
+                Hospitality<span className="text-[#E5C158]">OS</span>
               </span>
             </Link>
             <p className="text-[9px] font-mono text-muted-steel uppercase tracking-widest leading-none">
@@ -230,7 +230,7 @@ export default function LoginPage() {
                 TLS 1.3 Secure Operational Node
               </span>
             </div>
-            <p className="text-[9px] text-muted-steel/60">© 2026 RestaurantOS. All operational terms apply.</p>
+            <p className="text-[9px] text-muted-steel/60">© 2026 HospitalityOS. All operational terms apply.</p>
           </footer>
 
         </div>

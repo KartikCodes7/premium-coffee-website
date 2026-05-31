@@ -35,7 +35,17 @@ export function useOrdersQuery() {
 export function useCreateOrderMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (order: { name: string; items: string; total: number }) =>
+    mutationFn: (order: {
+      name: string;
+      items: string;
+      total: number;
+      phone?: string;
+      tableNumber?: string;
+      paymentMethod?: string;
+      specialInstructions?: string;
+      kotNumber?: string;
+      createdAt?: number;
+    }) =>
       apiFetch<LiveOrder>('/orders', {
         method: 'POST',
         body: JSON.stringify(order),

@@ -35,7 +35,7 @@ export default function ChatbotPage() {
     {
       id: 1,
       sender: 'ai',
-      text: "Welcome to **RestaurantOS**. I’m your **AI Concierge** — I can recommend items, build premium combos, and help you order faster. Try: **“something cold and sweet”**, **“best coffee for evening”**, or **“show popular items”**.",
+      text: "Welcome to **HospitalityOS**. I’m your **AI Concierge** — I can recommend exquisite bistro dining options, craft café beverages, premium pairings, and help you order faster. Try: **“something cold and sweet”**, **“best pairing for evening”**, or **“show popular items”**.",
       time: 'Just Now'
     }
   ]);
@@ -65,33 +65,33 @@ export default function ChatbotPage() {
       return items[0] || null;
     };
 
-    if (t.includes('cold') || t.includes('iced') || t.includes('refresh')) {
-      const pick = pickBest((x) => x.category === 'Cold Coffee' || x.category === 'Refreshers');
+    if (t.includes('cold') || t.includes('iced') || t.includes('refresh') || t.includes('drink')) {
+      const pick = pickBest((x) => x.category === 'Café Craft' || x.category === 'Signature Cocktails');
       return {
-        text: `Cold + premium: **${pick ? pick.name : 'Nitro Cold Brew'}**. Want a pairing (bakery or dessert) too?`,
+        text: `Cold + premium craft: **${pick ? pick.name : 'Nitro Craft Brew'}**. Want a pairing (bakery or dessert) too?`,
         upsellItem: pick ? { id: pick.id, name: pick.name, price: pick.price, image: pick.image } : null,
       };
     }
 
     if (t.includes('sweet') || t.includes('dessert') || t.includes('chocolate')) {
-      const pick = pickBest((x) => x.category === 'Desserts' || x.category === 'Bakery');
+      const pick = pickBest((x) => x.category === 'Artisan Desserts' || x.category === 'Pastries & Bakery');
       return {
-        text: `Sweet recommendation: **${pick ? pick.name : 'Espresso Tiramisu'}**. Want me to add it, or build a full combo?`,
+        text: `Sweet recommendation: **${pick ? pick.name : 'Espresso Tiramisu'}**. Want me to add it, or build a custom combo?`,
         upsellItem: pick ? { id: pick.id, name: pick.name, price: pick.price, image: pick.image } : null,
       };
     }
 
-    if (t.includes('popular') || t.includes('trending')) {
+    if (t.includes('popular') || t.includes('trending') || t.includes('best') || t.includes('steak')) {
       const pick = pickBest((x) => x.tags?.includes('Trending') || x.tags?.includes('Popular'));
       return {
-        text: `Top pick right now: **${pick ? pick.name : 'Silk Flat White'}**. Want the drink only, or a pairing?`,
+        text: `Top pick right now: **${pick ? pick.name : 'Aged Angus Bistro Steak'}**. Want the main only, or a pairing?`,
         upsellItem: pick ? { id: pick.id, name: pick.name, price: pick.price, image: pick.image } : null,
       };
     }
 
     const pick = pickBest(() => true);
     return {
-      text: `Tell me what you want: **hot/cold**, **sweet/bold**, and I’ll recommend the best match. Example: “cold and sweet”.`,
+      text: `Tell me what you are in the mood for: **hot/cold**, **savory/sweet**, and I’ll recommend the best match. Example: “something savory”.`,
       upsellItem: pick ? { id: pick.id, name: pick.name, price: pick.price, image: pick.image } : null,
     };
   };
@@ -260,7 +260,7 @@ export default function ChatbotPage() {
               🧊 Cold & Sweet
             </button>
             <button
-              onClick={() => handleSendMessage('Best coffee for evening?')}
+              onClick={() => handleSendMessage('Best pairing for evening?')}
               className="whitespace-nowrap px-4 py-2 rounded-full glass-card text-xs text-premium-white hover:border-[#C58A46]/50 transition-all spring-interaction"
             >
               🌙 Evening Pick
@@ -360,7 +360,7 @@ export default function ChatbotPage() {
                       className="w-full bg-[#C58A46] text-canvas-charcoal py-2.5 rounded-lg text-xs font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2 spring-interaction"
                     >
                       <ShoppingCart className="font-bold" size={18} />
-                      Add to Cart
+                      Add to Bill
                     </button>
                   </div>
                 </div>
@@ -377,7 +377,7 @@ export default function ChatbotPage() {
           
           <div className="space-y-3">
             {cart.length === 0 ? (
-              <p className="text-xs text-muted-steel italic">No items logged on your table yet.</p>
+              <p className="text-xs text-muted-steel italic">No items logged on your table/room yet.</p>
             ) : (
               cart.map((item) => (
                 <div key={item.id} className="flex items-center gap-3">

@@ -20,7 +20,7 @@ import { useStore } from '@/store/useStore';
 import { useSoundFeedback } from '@/hooks/useSoundFeedback';
 
 type CategoryFilter = CoffeeMenuCategory | 'All';
-type QuickChipFilter = 'All' | 'Best Seller' | 'Low Sugar' | 'Cold Drinks' | 'Vegetarian' | 'Trending Today';
+type QuickChipFilter = 'All' | 'Best Seller' | 'Low Calorie' | 'Cold Crafts' | 'Vegetarian' | 'Trending Today';
 
 export default function CoffeeMenuPage() {
   const addToCartStore = useStore((s) => s.addToCart);
@@ -47,7 +47,7 @@ export default function CoffeeMenuPage() {
     setMounted(true);
   }, []);
 
-  // Parse and persist table number from search query parameter
+  // Parse and persist table/room number from search query parameter
   useEffect(() => {
     if (!mounted) return;
     const urlTable = new URLSearchParams(window.location.search).get('table');
@@ -68,7 +68,7 @@ export default function CoffeeMenuPage() {
   }, [qrMenuQuery.data]);
 
   const pageLoading = loading || qrMenuQuery.isLoading;
-  const dataModeLabel = qrMenuQuery.isError || !qrMenuQuery.data?.length ? 'Gourmet Demo Menu' : 'Live Menu Sync';
+  const dataModeLabel = qrMenuQuery.isError || !qrMenuQuery.data?.length ? 'Gourmet Demo Catalog' : 'Live Menu Sync';
   const normalizedQuery = query.trim().toLowerCase();
 
   // Apply search query, category, and quick chip filters
@@ -83,9 +83,9 @@ export default function CoffeeMenuPage() {
       
       // 3. Quick Action Chips
       if (activeChip === 'Best Seller' && it.rating < 4.8) return false;
-      if (activeChip === 'Low Sugar' && it.calories > 150) return false;
-      if (activeChip === 'Cold Drinks' && it.category !== 'Cold Coffee' && it.category !== 'Refreshers') return false;
-      if (activeChip === 'Vegetarian' && it.category === 'Sandwiches' && it.name !== 'Caprese Melt') return false;
+      if (activeChip === 'Low Calorie' && it.calories > 250) return false;
+      if (activeChip === 'Cold Crafts' && it.category !== 'Signature Cocktails' && !it.id.includes('cold') && !it.id.includes('iced')) return false;
+      if (activeChip === 'Vegetarian' && it.category === 'Bistro Dining' && it.name !== 'Caprese Confit Ciabatta') return false;
       if (activeChip === 'Trending Today' && !it.tags.includes('Trending')) return false;
 
       // 4. Text Query search
@@ -105,7 +105,11 @@ export default function CoffeeMenuPage() {
   const aiPicks = useMemo(() => {
     const hour = new Date().getHours();
     const bias: CoffeeMenuCategory[] =
-      hour < 12 ? ['Hot Coffee', 'Bakery'] : hour < 17 ? ['Cold Coffee', 'Desserts'] : ['Signature Drinks', 'Desserts'];
+      hour < 12 
+        ? ['Café Craft', 'Pastries & Bakery'] 
+        : hour < 17 
+        ? ['Café Craft', 'Artisan Desserts'] 
+        : ['Signature Cocktails', 'Bistro Dining'];
 
     const pool = menuItemsSource
       .slice()
@@ -139,7 +143,7 @@ export default function CoffeeMenuPage() {
       options: {
         category: item.category,
         calories: `${item.calories}`,
-        note: 'Quick café selection',
+        note: 'Quick selection',
       },
     });
   };
@@ -156,7 +160,7 @@ export default function CoffeeMenuPage() {
       options: {
         category: selected.category,
         calories: `${selected.calories}`,
-        note: 'Custom coffee order',
+        note: 'Custom guest order',
       },
     });
     setOpen(false);
@@ -183,12 +187,12 @@ export default function CoffeeMenuPage() {
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border border-ice-border">
                   <Sparkles className="h-4 w-4 text-[#C58A46]" />
                   <span className="font-mono text-[9px] uppercase tracking-widest text-[#C58A46]">
-                    Aura Premium CafeOS • {dataModeLabel}
+                    Aura HospitalityOS • {dataModeLabel}
                   </span>
                 </div>
                 {tableNumber && (
                   <span className="font-mono text-[9px] uppercase tracking-widest bg-[#C58A46]/10 text-[#C58A46] px-3 py-1.5 rounded-full border border-[#C58A46]/20 font-bold">
-                    Table {tableNumber}
+                    Table/Room {tableNumber}
                   </span>
                 )}
               </div>
@@ -196,7 +200,7 @@ export default function CoffeeMenuPage() {
                 Order in seconds.
               </h1>
               <p className="text-sm md:text-base text-muted-steel max-w-2xl leading-relaxed">
-                Experience gourmet coffee with cinematic item modals, Apple-grade audio feedback chimes, and instant operations sync.
+                Experience premium bistro dining and craft café brews with cinematic item modals, Apple-grade audio feedback chimes, and instant operations sync.
               </p>
             </div>
 
@@ -207,7 +211,7 @@ export default function CoffeeMenuPage() {
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search coffee, pastries..."
+                  placeholder="Search dishes, craft brews, pastries..."
                   className="h-11 pl-10 bg-black/15 border-white/10 text-premium-white placeholder:text-muted-steel/60 focus-visible:border-[#C58A46]/45"
                 />
               </div>
@@ -234,7 +238,7 @@ export default function CoffeeMenuPage() {
               <Link
                 href="/history"
                 className="h-11 w-11 rounded-xl border border-white/10 bg-black/10 text-premium-white hover:border-[#C58A46]/30 transition-all flex items-center justify-center shrink-0"
-                title="Customer Profile & History"
+                title="Guest Profile & History"
               >
                 <User className="h-4 w-4 text-premium-white hover:text-[#C58A46] transition-colors" />
               </Link>
@@ -255,7 +259,7 @@ export default function CoffeeMenuPage() {
                     onClick={() => { setFilter(c); playSound('pip'); }}
                     className={`whitespace-nowrap px-4 py-2 rounded-full border text-xs font-bold transition-all ${
                       active
-                        ? 'bg-[#C58A46]/12 text-[#C58A46] border-[#C58A46]/35 gold-glow'
+                        ? 'gold-glow bg-[#C58A46]/12 text-[#C58A46] border-[#C58A46]/35'
                         : 'bg-black/10 text-premium-white border-white/10 hover:border-[#C58A46]/25'
                     }`}
                   >
@@ -268,11 +272,11 @@ export default function CoffeeMenuPage() {
             {/* 2. Quick Action Chips */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
               {([
-                { id: 'All', label: 'All Recipes' },
+                { id: 'All', label: 'All Offerings' },
                 { id: 'Best Seller', label: 'Best Seller 🌟' },
-                { id: 'Low Sugar', label: 'Low Sugar 🌿' },
-                { id: 'Cold Drinks', label: 'Cold Coffee & Teas ❄️' },
-                { id: 'Vegetarian', label: 'Vegetarian Brunch 🟢' },
+                { id: 'Low Calorie', label: 'Low Calorie 🌿' },
+                { id: 'Cold Crafts', label: 'Cold Crafts ❄️' },
+                { id: 'Vegetarian', label: 'Vegetarian Plates 🟢' },
                 { id: 'Trending Today', label: 'Trending Today 🔥' }
               ] as { id: QuickChipFilter, label: string }[]).map((chip) => {
                 const active = chip.id === activeChip;
@@ -305,7 +309,7 @@ export default function CoffeeMenuPage() {
               </h2>
             </div>
             <p className="hidden md:block text-xs text-muted-steel max-w-sm text-right">
-              Swipe recipes horizontally — each card has fluid motion effects.
+              Swipe items horizontally — each card has fluid motion effects.
             </p>
           </div>
 
@@ -340,7 +344,7 @@ export default function CoffeeMenuPage() {
               </h2>
             </div>
             <p className="text-xs text-muted-steel max-w-sm text-right">
-              Dynamically calibrated based on current café dining time.
+              Dynamically calibrated based on current dining time.
             </p>
           </div>
 
@@ -363,7 +367,7 @@ export default function CoffeeMenuPage() {
         <section className="space-y-10">
           <div className="flex items-end justify-between gap-6">
             <div>
-              <p className="text-[10px] font-mono tracking-widest uppercase text-[#C58A46]">All Recipes</p>
+              <p className="text-[10px] font-mono tracking-widest uppercase text-[#C58A46]">All Offerings</p>
               <h2 className="text-xl md:text-3xl font-extrabold text-premium-white tracking-tight mt-1">
                 Category gallery
               </h2>
@@ -440,7 +444,7 @@ export default function CoffeeMenuPage() {
         <button
           onClick={handleCallWaiter}
           className="h-12 w-12 bg-[#C58A46] text-canvas-charcoal rounded-full flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 transition-all spring-interaction"
-          title="Call Waiter"
+          title="Request Guest Service"
         >
           <Bell className="h-5 w-5 text-canvas-charcoal font-bold" />
         </button>
@@ -458,7 +462,7 @@ export default function CoffeeMenuPage() {
               <span className="text-xs font-mono font-bold bg-canvas-charcoal text-[#C58A46] w-5 h-5 rounded-full flex items-center justify-center shrink-0">
                 {getCartCount()}
               </span>
-              <span className="text-xs font-extrabold uppercase tracking-wider">Review Ticket</span>
+              <span className="text-xs font-extrabold uppercase tracking-wider">Review Request</span>
             </div>
             <ArrowRight className="font-bold" size={18} />
           </Link>
